@@ -12,22 +12,30 @@ import {
   MenuItem,
   Divider,
   IconButton,
-  Icon,
+  List,
+  Drawer,
+  Box,
+  ListItem,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import styles from "./../src/styles/styles";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AdbIcon from "@mui/icons-material/Adb";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 const Header = () => {
   const currentUser = true;
-  const pages = ["Courses", "Tests", "Blog"];
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  const pages = ["Courses", "Tests", "Blogs"];
+
+  const [showMenu, setShowMenu] = React.useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    setShowMenu(open);
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -53,13 +61,13 @@ const Header = () => {
               "&:hover": styles.glowText,
             }}
           >
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <AdbIcon sx={{ mr: 1 }} />
             <Typography
               variant="h6"
               noWrap
               sx={{
                 mr: 2,
-                display: { xs: "none", md: "flex" },
+
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
@@ -71,12 +79,54 @@ const Header = () => {
             </Typography>
           </Link>
 
+          {/* Reponsive Menu Navigates */}
+          <>
+            <IconButton
+              sx={{
+                display: {
+                  xs: "flex",
+                  md: "none",
+                },
+              }}
+              onClick={toggleDrawer(true)}
+            >
+              <MenuOutlinedIcon />
+            </IconButton>
+            <Drawer
+              anchor={"left"}
+              open={showMenu}
+              onClose={toggleDrawer(false)}
+            >
+              <Box
+                sx={{ width: 250 }}
+                role="presentation"
+                onClick={toggleDrawer(false)}
+              >
+                <List>
+                  {pages.map((text) => (
+                    <>
+                      <ListItem key={text} disablePadding>
+                        <ListItemButton>
+                          <ListItemText primary={text} />
+                        </ListItemButton>
+                      </ListItem>
+                      <Divider />
+                    </>
+                  ))}
+                </List>
+              </Box>
+            </Drawer>
+          </>
+          {/* List Navigates */}
           <Stack direction={"row"} spacing={4} sx={{ flexGrow: 1 }}>
             {pages.map((page) => (
               <Typography
-                color={"warning"}
                 component="a"
                 sx={{
+                  display: {
+                    xs: "none",
+                    md: "flex",
+                  },
                   color: "inherit",
                   "&:hover": {
                     color: "inherit",
@@ -94,6 +144,8 @@ const Header = () => {
               </Typography>
             ))}
           </Stack>
+
+          {/* User Button */}
           <Stack direction={"row"} spacing={2}>
             <IconButton>
               <ShoppingCartOutlinedIcon />
@@ -130,7 +182,10 @@ const Header = () => {
                 <Typography
                   variant="h6"
                   fontSize={"1rem"}
-                  sx={{ display: "flex", placeItems: "center" }}
+                  sx={{
+                    display: { xs: "none", md: "flex" },
+                    placeItems: "center",
+                  }}
                 >
                   Harry Bui
                 </Typography>
@@ -196,9 +251,6 @@ const Header = () => {
                     Logout
                   </MenuItem>
                 </Menu>
-                <IconButton>
-                  <LightModeOutlinedIcon />
-                </IconButton>
               </>
             )}
           </Stack>
