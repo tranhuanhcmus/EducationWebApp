@@ -10,22 +10,18 @@ import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import Home from "../pages/Home";
 import "./App.scss";
+import ScrollButton from "../utils/ScrollButton";
 
 function App() {
   //Check User
   const currentUser = true;
-
-  const ProtectRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to={"/login"} />;
-    } else return children;
-  };
 
   const Layout = () => {
     return (
       <>
         <Header />
         <Outlet />
+        <ScrollButton />
         <Footer />
       </>
     );
@@ -35,11 +31,7 @@ function App() {
   const route = createBrowserRouter([
     {
       path: "/",
-      element: (
-        <ProtectRoute>
-          <Layout />
-        </ProtectRoute>
-      ),
+      element: <Layout />,
       children: [{ path: "/", element: <Home /> }],
     },
     {

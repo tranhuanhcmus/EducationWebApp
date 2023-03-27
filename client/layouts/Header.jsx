@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   AppBar,
   Container,
@@ -29,7 +29,20 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 const Header = () => {
   const currentUser = true;
-  const pages = ["Courses", "Tests", "Blogs"];
+  const pages = [
+    {
+      name: "Courses",
+      href: "/courses",
+    },
+    {
+      name: "Tests",
+      href: "/tests",
+    },
+    {
+      name: "Blogs",
+      href: "/blogs",
+    },
+  ];
 
   const [showMenu, setShowMenu] = React.useState(false);
 
@@ -103,15 +116,17 @@ const Header = () => {
                 onClick={toggleDrawer(false)}
               >
                 <List>
-                  {pages.map((text) => (
-                    <>
-                      <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                          <ListItemText primary={text} />
-                        </ListItemButton>
-                      </ListItem>
+                  {pages.map((page) => (
+                    <Fragment key={page.name}>
+                      <Link href={page.href} sx={styles.link_noDecoration}>
+                        <ListItem disablePadding>
+                          <ListItemButton>
+                            <ListItemText primary={page.name} />
+                          </ListItemButton>
+                        </ListItem>
+                      </Link>
                       <Divider />
-                    </>
+                    </Fragment>
                   ))}
                 </List>
               </Box>
@@ -136,11 +151,11 @@ const Header = () => {
                     transition: "ease 0.2s",
                   },
                 }}
-                href="/"
-                key={page}
+                href={page.href}
+                key={page.name}
                 textAlign={"center"}
               >
-                {page}
+                {page.name}
               </Typography>
             ))}
           </Stack>
@@ -154,6 +169,7 @@ const Header = () => {
               <>
                 <Button
                   variant="contained"
+                  href="/login"
                   sx={{
                     fontWeight: "600",
                     "&:hover": {
@@ -166,6 +182,7 @@ const Header = () => {
                 </Button>
                 <Button
                   variant="contained"
+                  href="/register"
                   sx={{
                     fontWeight: "600",
                     "&:hover": {
@@ -227,22 +244,28 @@ const Header = () => {
                   transformOrigin={{ horizontal: "right", vertical: "top" }}
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  <MenuItem onClick={handleClose}>
-                    <Avatar /> Profile
+                  <MenuItem>
+                    <Link href="/profile" sx={styles.link_noDecoration}>
+                      <Avatar /> Profile
+                    </Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose}>
-                    <LocalLibraryIcon
-                      sx={{ color: "#bdbdbd", margin: "0 8px 0 -4px" }}
-                    />{" "}
-                    My Courses
+                    <Link href="/courses" sx={styles.link_noDecoration}>
+                      <LocalLibraryIcon
+                        sx={{ color: "#bdbdbd", margin: "0 8px 0 -4px" }}
+                      />{" "}
+                      My Courses
+                    </Link>
                   </MenuItem>
                   <Divider />
 
                   <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
+                    <Link href="./settings" sx={styles.link_noDecoration}>
+                      <ListItemIcon>
+                        <Settings fontSize="small" />
+                      </ListItemIcon>
+                      Settings
+                    </Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose}>
                     <ListItemIcon>

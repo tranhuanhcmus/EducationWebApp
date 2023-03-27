@@ -43,12 +43,12 @@ function Footer() {
             </Typography>
             <List>
               <ListItem>
-                <Link href="#" sx={footerStyle.link}>
+                <Link href="/" sx={footerStyle.link}>
                   Home
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="#" sx={footerStyle.link}>
+                <Link href="/courses" sx={footerStyle.link}>
                   Courses
                 </Link>
               </ListItem>
