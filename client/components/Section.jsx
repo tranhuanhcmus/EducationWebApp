@@ -21,7 +21,6 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const Section = ({ Type, index }) => {
-  console.log(index);
   const variants = [
     {
       name: "Python Course",
@@ -106,8 +105,8 @@ const Section = ({ Type, index }) => {
         <Grid container spacing={3}>
           {variants.map((course, index) => {
             return (
-              <Grid item xs={12} sm={6} lg={4}>
-                <Card key={index}>
+              <Grid key={index} item xs={12} sm={6} lg={4}>
+                <Card>
                   <CardActionArea>
                     <CardMedia
                       component="img"

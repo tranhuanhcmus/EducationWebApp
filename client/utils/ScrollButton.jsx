@@ -26,6 +26,7 @@ const ScrollButton = () => {
 
   return (
     <IconButton
+      onClick={scrollToTop}
       sx={{
         display: visible ? "flex" : "none",
         position: "fixed",
@@ -35,7 +36,7 @@ const ScrollButton = () => {
         outline: "solid #1976d2",
       }}
     >
-      <ArrowUpwardIcon onClick={scrollToTop} />
+      <ArrowUpwardIcon />
     </IconButton>
   );
 };
