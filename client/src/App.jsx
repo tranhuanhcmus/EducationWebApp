@@ -11,6 +11,9 @@ import Footer from "../layouts/Footer";
 import Home from "../pages/Home";
 import "./App.scss";
 import ScrollButton from "../utils/ScrollButton";
+import React from "react";
+import CoursesDetails from "../pages/CoursesDetail";
+import Courses from "../pages/Courses";
 
 function App() {
   //Check User
@@ -32,8 +35,19 @@ function App() {
     {
       path: "/",
       element: <Layout />,
-      children: [{ path: "/", element: <Home /> }],
+      children: [
+        { path: "/", element: <Home /> },
+        {
+          path: "/courses",
+          element: <Courses />,
+        },
+        {
+          path: "/coursesdetails",
+          element: <CoursesDetails />,
+        },
+      ],
     },
+
     {
       path: "/login",
       element: <Login />,
