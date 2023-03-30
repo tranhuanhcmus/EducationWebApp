@@ -8,7 +8,14 @@ import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import "./App.scss";
 import ScrollButton from "../utils/ScrollButton";
+
+import React from "react";
+import CoursesDetails from "../pages/CoursesDetail";
+import Courses from "../pages/Courses";
 import Cart from "./../pages/Cart";
+
+
+
 function App() {
   const Layout = () => {
     return (
@@ -28,10 +35,22 @@ function App() {
       element: <Layout />,
       children: [
         { path: "/", element: <Home /> },
+
+        {
+          path: "/courses",
+          element: <Courses />,
+        },
+        {
+          path: "/coursesdetails",
+          element: <CoursesDetails />,
+        },
+
         { path: "/profile", element: <Profile /> },
         { path: "/cart", element: <Cart /> },
+
       ],
     },
+
     {
       path: "/login",
       element: <Login />,
