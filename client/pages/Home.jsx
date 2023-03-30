@@ -2,7 +2,7 @@ import React from "react";
 
 import Carousel from "../components/Carousel";
 import Section from "../components/Section";
-import { Button, Fab } from "@mui/material";
+
 const Home = () => {
   const sectionVariants = ["Courses", "Tests", "Blogs"];
 

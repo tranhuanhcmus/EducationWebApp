@@ -228,7 +228,7 @@ const Register = () => {
                   color="secondary"
                   type="submit"
                 >
-                  Sign In
+                  Register
                 </Button>
                 <Link
                   href="/login"

@@ -19,13 +19,20 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { makeRequest } from "../utils/axios";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/auth";
+
 const theme = createTheme();
+
 const Login = () => {
   const [inputs, setInputs] = React.useState({});
   const [remember, setRemember] = React.useState(false);
   const [msg, setMsg] = React.useState("This is a message");
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
+
+  const dispatch = useDispatch();
+
   const handleInput = (e) => {
     const key = e.target.id;
     const value = e.target.value;
@@ -45,6 +52,7 @@ const Login = () => {
       .then((res) => {
         setMsg(res.data.msg);
         setOpen(true);
+        dispatch(login(res.data));
         window.location.replace("/");
       })
       .catch((err) => {

@@ -1,21 +1,15 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  Outlet,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import Home from "../pages/Home";
+import Profile from "../pages/Profile";
 import "./App.scss";
 import ScrollButton from "../utils/ScrollButton";
-
+import Cart from "./../pages/Cart";
 function App() {
-  //Check User
-  const currentUser = true;
-
   const Layout = () => {
     return (
       <>
@@ -32,7 +26,11 @@ function App() {
     {
       path: "/",
       element: <Layout />,
-      children: [{ path: "/", element: <Home /> }],
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/profile", element: <Profile /> },
+        { path: "/cart", element: <Cart /> },
+      ],
     },
     {
       path: "/login",
