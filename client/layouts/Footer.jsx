@@ -2,12 +2,11 @@ import {
   Box,
   Container,
   Grid,
-  Link,
   List,
   ListItem,
   Typography,
 } from "@mui/material";
-
+import { Link } from "react-router-dom";
 const footerStyle = {
   root: {
     backgroundColor: "#f5f5f5",
@@ -43,23 +42,26 @@ function Footer() {
             </Typography>
             <List>
               <ListItem>
-                <Link href="/" sx={footerStyle.link}>
-                  Home
+                <Link to="/">
+                  <Box sx={footerStyle.link}>Home</Box>
                 </Link>
               </ListItem>
+
               <ListItem>
-                <Link href="/courses" sx={footerStyle.link}>
-                  Courses
+                <Link to="/courses">
+                  <Box sx={footerStyle.link}>Courses</Box>
                 </Link>
               </ListItem>
+
               <ListItem>
-                <Link href="#" sx={footerStyle.link}>
-                  About Us
+                <Link to="/">
+                  <Box sx={footerStyle.link}>About Us</Box>
                 </Link>
               </ListItem>
+
               <ListItem>
-                <Link href="#" sx={footerStyle.link}>
-                  Contact Us
+                <Link to="/">
+                  <Box sx={footerStyle.link}>Contact Us</Box>
                 </Link>
               </ListItem>
             </List>

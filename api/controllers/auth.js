@@ -21,7 +21,9 @@ const controller = {
 
             const token = jwt.sign(others, "secretKey");
 
-            return res.status(200).json({ msg: "Login Success", accessToken: token });
+            return res
+                .status(200)
+                .json({ msg: "Login Success", accessToken: token, user: others });
         });
     },
     register: (req, res) => {

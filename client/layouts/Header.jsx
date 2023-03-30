@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
 import {
   AppBar,
   Container,
@@ -7,7 +8,7 @@ import {
   Stack,
   Button,
   Avatar,
-  Link,
+  Link as LinkUI,
   Menu,
   MenuItem,
   Divider,
@@ -27,8 +28,13 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/auth";
+import utils from "../utils/utils";
 const Header = () => {
-  const currentUser = true;
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.user);
+
   const pages = [
     {
       name: "Courses",
@@ -63,35 +69,34 @@ const Header = () => {
     <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar>
-          <Link
-            to="/"
-            sx={{
-              cursor: "pointer",
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              textDecoration: "none",
-              "&:hover": styles.glowText,
-            }}
-          >
-            <AdbIcon sx={{ mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
+          <Link to="/">
+            <Box
               sx={{
-                mr: 2,
-
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
+                cursor: "pointer",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
                 textDecoration: "none",
+                "&:hover": styles.glowText,
               }}
             >
-              FIE
-            </Typography>
+              <AdbIcon sx={{ mr: 1 }} />
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  mr: 2,
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                FIE
+              </Typography>
+            </Box>
           </Link>
-
           {/* Reponsive Menu Navigates */}
           <>
             <IconButton
@@ -118,12 +123,14 @@ const Header = () => {
                 <List>
                   {pages.map((page) => (
                     <Fragment key={page.name}>
-                      <Link href={page.href} sx={styles.link_noDecoration}>
-                        <ListItem disablePadding>
-                          <ListItemButton>
-                            <ListItemText primary={page.name} />
-                          </ListItemButton>
-                        </ListItem>
+                      <Link to={page.href}>
+                        <Box sx={styles.link_noDecoration}>
+                          <ListItem disablePadding>
+                            <ListItemButton>
+                              <ListItemText primary={page.name} />
+                            </ListItemButton>
+                          </ListItem>
+                        </Box>
                       </Link>
                       <Divider />
                     </Fragment>
@@ -162,10 +169,12 @@ const Header = () => {
 
           {/* User Button */}
           <Stack direction={"row"} spacing={2}>
-            <IconButton>
-              <ShoppingCartOutlinedIcon />
-            </IconButton>
-            {!currentUser ? (
+            <Link to="/Cart">
+              <IconButton>
+                <ShoppingCartOutlinedIcon />
+              </IconButton>
+            </Link>
+            {!utils.checkUser(currentUser) ? (
               <>
                 <Button
                   variant="contained"
@@ -204,10 +213,10 @@ const Header = () => {
                     placeItems: "center",
                   }}
                 >
-                  Harry Bui
+                  {currentUser.NAME}
                 </Typography>
                 <IconButton sx={{ p: "0", m: "0" }} onClick={handleClick}>
-                  <Avatar alt="username" src="https://picsum.photos/200" />
+                  <Avatar alt="username" src={currentUser.AVA} />
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}
@@ -245,29 +254,39 @@ const Header = () => {
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
                   <MenuItem>
-                    <Link href="/profile" sx={styles.link_noDecoration}>
-                      <Avatar /> Profile
+                    <Link to="/profile">
+                      <Box sx={styles.link_noDecoration}>
+                        <Avatar /> Profile
+                      </Box>
                     </Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose}>
-                    <Link href="/courses" sx={styles.link_noDecoration}>
-                      <LocalLibraryIcon
-                        sx={{ color: "#bdbdbd", margin: "0 8px 0 -4px" }}
-                      />{" "}
-                      My Courses
+                    <Link to="/courses">
+                      <Box sx={styles.link_noDecoration}>
+                        <LocalLibraryIcon
+                          sx={{ color: "#bdbdbd", margin: "0 8px 0 -4px" }}
+                        />{" "}
+                        My Courses
+                      </Box>
                     </Link>
                   </MenuItem>
                   <Divider />
 
                   <MenuItem onClick={handleClose}>
-                    <Link href="./settings" sx={styles.link_noDecoration}>
-                      <ListItemIcon>
-                        <Settings fontSize="small" />
-                      </ListItemIcon>
-                      Settings
+                    <Link to="./settings">
+                      <Box sx={styles.link_noDecoration}>
+                        <ListItemIcon>
+                          <Settings fontSize="small" />
+                        </ListItemIcon>
+                        Settings
+                      </Box>
                     </Link>
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem
+                    onClick={() => {
+                      dispatch(logout());
+                    }}
+                  >
                     <ListItemIcon>
                       <Logout fontSize="small" />
                     </ListItemIcon>
