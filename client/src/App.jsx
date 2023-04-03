@@ -1,20 +1,18 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Header from "../layouts/Header";
-import Footer from "../layouts/Footer";
-import Home from "../pages/Home";
-import Profile from "../pages/Profile";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Header from "./layouts/Header";
+import Footer from "./layouts/Footer";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import "./App.scss";
-import ScrollButton from "../utils/ScrollButton";
+import ScrollButton from "./utils/ScrollButton";
 
 import React from "react";
-import CoursesDetails from "../pages/CoursesDetail";
-import Courses from "../pages/Courses";
-import Cart from "./../pages/Cart";
-
-
+import CoursesDetails from "./pages/CoursesDetail";
+import Courses from "./pages/Courses";
+import Cart from "./pages/Cart";
 
 function App() {
   const Layout = () => {
@@ -47,7 +45,6 @@ function App() {
 
         { path: "/profile", element: <Profile /> },
         { path: "/cart", element: <Cart /> },
-
       ],
     },
 

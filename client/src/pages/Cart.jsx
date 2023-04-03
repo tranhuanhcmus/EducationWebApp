@@ -19,7 +19,7 @@ import {
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import styles from "../src/styles/styles";
+import styles from "../styles/styles";
 
 const MessageDialog = ({ open, msg, handleClose }) => {
   <Dialog open={open} onClose={handleClose} color="warning">

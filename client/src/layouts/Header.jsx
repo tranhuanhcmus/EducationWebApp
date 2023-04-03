@@ -20,7 +20,7 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import styles from "./../src/styles/styles";
+import styles from "../styles/styles";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AdbIcon from "@mui/icons-material/Adb";
 import ListItemIcon from "@mui/material/ListItemIcon";

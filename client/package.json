@@ -9,10 +9,10 @@
         "build": "vite build",
         "preview": "vite preview",
         "start": "npm run build:css && react-scripts start",
-    "build": "npm run build:css && react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css"
+        "build": "npm run build:css && react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css"
     },
     "dependencies": {
         "@emotion/react": "^11.10.6",
@@ -28,18 +28,18 @@
         "react-router-dom": "^6.9.0",
         "redux-persist": "^6.0.0",
         "sass": "^1.60.0",
-        "react-select": "^5.7.2",
-    
+        "react-select": "^5.7.2"
+
     },
     "devDependencies": {
-       "@tailwindcss/forms": "^0.5.3",
-      "@types/react": "^18.0.28",
-      "@types/react-dom": "^18.0.11",
-      "@vitejs/plugin-react": "^3.1.0",
-      "autoprefixer": "^10.4.14",
-      "postcss": "^8.4.21",
-      "tailwindcss": "^3.3.0",
-      "vite": "^4.2.0"
+        "@tailwindcss/forms": "^0.5.3",
+        "@types/react": "^18.0.28",
+        "@types/react-dom": "^18.0.11",
+        "@vitejs/plugin-react": "^3.1.0",
+        "autoprefixer": "^10.4.14",
+        "postcss": "^8.4.21",
+        "tailwindcss": "^3.3.0",
+        "vite": "^4.2.0"
     }
 
 }

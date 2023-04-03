@@ -139,19 +139,15 @@ ul li a {
     .mobile-menu {
         display: block;
     }
-
     .header-row {
         width: 100% !important;
     }
-
     .display-block {
         display: block;
     }
-
     .display-none {
         display: none;
     }
-
     .common-row-list>ul {
         padding-left: 10px;
         padding-right: 10px;

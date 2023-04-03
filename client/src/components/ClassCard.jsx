@@ -26,9 +26,7 @@ const ClassCard = (props) => {
               <div
                 class="bg-blue-600 h-3 rounded-full dark:bg-blue-500 text-xs text-center"
                 style={{ width: "45%" }}
-              >
-                45%
-              </div>
+              ></div>
             </div>
 
             <Text
