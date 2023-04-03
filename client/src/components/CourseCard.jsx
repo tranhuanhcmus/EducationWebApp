@@ -46,7 +46,7 @@ const CourseCard = (props) => {
 };
 
 CourseCard.defaultProps = {
-  image: "./public/anh5.png",
+  image: "/anh5.png",
   courseName: "Ielts 3.0-5.0",
   price: "$40.00",
 };

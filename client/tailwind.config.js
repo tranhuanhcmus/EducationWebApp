@@ -1,10 +1,6 @@
 module.exports = {
     mode: "jit",
-    content: [
-        "pages/*.{html,js,jsx}",
-        "components/*.{html,js,jsx}",
-        "index.html",
-    ],
+    content: ["./src/**/*.{html,jsx,js}"],
 
     theme: {
         screens: { md: { max: "1050px" }, sm: { max: "550px" } },

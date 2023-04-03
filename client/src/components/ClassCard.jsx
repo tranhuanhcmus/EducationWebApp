@@ -22,9 +22,9 @@ const ClassCard = (props) => {
               {props?.standard}
             </Text>
 
-            <div class="w-full bg-gray-200 rounded-full h-3 mb-4 dark:bg-gray-700">
+            <div className="w-full bg-gray-200 rounded-full h-3 mb-4 dark:bg-gray-700">
               <div
-                class="bg-blue-600 h-3 rounded-full dark:bg-blue-500 text-xs text-center"
+                className="bg-blue-600 h-3 rounded-full dark:bg-blue-500 text-xs text-center"
                 style={{ width: "45%" }}
               ></div>
             </div>

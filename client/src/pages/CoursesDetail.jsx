@@ -9,18 +9,18 @@ import Text from "../components/Text";
 import { useNavigate } from "react-router-dom";
 
 const Data = [
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "./public/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
 ];
 
 const CoursesDetails = () => {

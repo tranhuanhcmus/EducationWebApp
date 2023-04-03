@@ -6,13 +6,14 @@ import Header from "./layouts/Header";
 import Footer from "./layouts/Footer";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import "./App.scss";
 import ScrollButton from "./utils/ScrollButton";
 
+import "../public/dist/output.css";
 import React from "react";
 import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
 import Cart from "./pages/Cart";
+import Test from "./components/Test";
 
 function App() {
   const Layout = () => {
@@ -42,9 +43,9 @@ function App() {
           path: "/coursesdetails",
           element: <CoursesDetails />,
         },
-
         { path: "/profile", element: <Profile /> },
         { path: "/cart", element: <Cart /> },
+        { path: "/test", element: <Test /> },
       ],
     },
 
