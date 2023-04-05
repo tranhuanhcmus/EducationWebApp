@@ -3,7 +3,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, IconButton } from "@mui/material";
 import Comment from "../components/Comment";
-import Quiz from "./../components/Quiz";
+import Quiz from "./../components/Quiz/Quiz";
 const buttonStyle = {
   border: "solid 1px black",
   color: "black",
@@ -38,6 +38,22 @@ const data = [
     image: "/anh1.png",
     name: "Title of lesson 5",
     time: "15:00",
+  },
+];
+const questionBank = [
+  {
+    question: "1+1=?",
+    options: ["1", "2", "3", "4"],
+    answer: -1,
+    key: 1,
+    check: false,
+  },
+  {
+    question: "1+2=?",
+    options: ["1", "2", "3", "4"],
+    answer: -1,
+    key: 2,
+    check: false,
   },
 ];
 const Lesson = () => {
@@ -82,7 +98,7 @@ const Lesson = () => {
             <b>Content</b>
           </h3>
         </div>
-        <div className="text-lg font-note font-[300] mt-3 text-justify m-4 md:m-6">
+        <div className="text-lg font-note font-[300] mt-3 text-left word-break m-4 md:m-6">
           {lesson.content}
         </div>
       </section>
@@ -102,7 +118,7 @@ const Lesson = () => {
             <b>Quiz</b>
           </h3>
         </div>
-        <Quiz />
+        <Quiz data={questionBank} />
       </section>
       <section className="container">
         <div className="mx-3 pt-2 text-indigo-500 flex items-center border-b-4 border-solid border-red-800 ">
@@ -111,7 +127,7 @@ const Lesson = () => {
           </h3>
         </div>
         <textarea
-          className="text-lg font-note font-[300] mt-3 text-justify m-4 md:m-6 w-[80%] "
+          className="text-lg font-note font-[300] mt-3 text-left m-4 md:m-6 w-[80%] "
           value={lesson.note}
         ></textarea>
       </section>
