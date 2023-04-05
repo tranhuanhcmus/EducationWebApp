@@ -18,7 +18,7 @@ app.use(cookieParser());
 //app permit access from client
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: true,
     })
 );
 

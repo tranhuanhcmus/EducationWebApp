@@ -3,7 +3,6 @@ module.exports = {
     content: ["./src/**/*.{html,jsx,js}"],
 
     theme: {
-        screens: { md: { max: "1050px" }, sm: { max: "550px" } },
         extend: {
             colors: {
                 green_300: "#82b378",
@@ -108,9 +107,10 @@ module.exports = {
                 bluegray_901: "#3d302a",
             },
             fontFamily: {
-                inter: "Inter",
-                metropolis: "Metropolis",
-                airbnbcerealapp: "Airbnb Cereal App",
+                Bebas: "Bebas Neue",
+                note: "Inconsolata, monospace",
+                poppins: "Poppins",
+                roboto: "Roboto Slab",
             },
             boxShadow: {
                 bs2: "0px 15px  50px 0px #ff665233",

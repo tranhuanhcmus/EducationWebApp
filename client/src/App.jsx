@@ -14,6 +14,7 @@ import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
 import Cart from "./pages/Cart";
 import Test from "./components/Test";
+import Lesson from "./pages/Lesson";
 
 function App() {
   const Layout = () => {
@@ -46,6 +47,7 @@ function App() {
         { path: "/profile", element: <Profile /> },
         { path: "/cart", element: <Cart /> },
         { path: "/test", element: <Test /> },
+        { path: "/lesson/:id", element: <Lesson /> },
       ],
     },
 
