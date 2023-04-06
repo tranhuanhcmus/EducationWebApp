@@ -25,7 +25,7 @@ const PaginationCard = (props) => {
           {props?.one}
         </Button>
         <List
-          className="font-inter font-medium text-gray_900 text-left w-[auto]"
+          className="font-inter font-medium text-gray_900 text-left w-[auto] m-1"
           variant="body4"
         >
           {props?.ofCounter}

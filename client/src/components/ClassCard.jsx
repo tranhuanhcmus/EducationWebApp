@@ -46,7 +46,7 @@ const ClassCard = (props) => {
 };
 
 ClassCard.defaultProps = {
-  standardCountImage: "./public/img_download.svg",
+  standardCountImage: "../../public/img_download.svg",
   standard: "Band 3.0-5.0",
   studyDetail: "Academy by Nguyen Van A",
 };

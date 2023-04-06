@@ -24,7 +24,7 @@ const CourseCard = (props) => {
               {props?.courseName}
             </List>
             <Img
-              src="./public/anh2.svg"
+              src="../../public/anh2.svg"
               className="h-[20px] w-[112px]"
               alt="star"
             />
@@ -38,7 +38,7 @@ const CourseCard = (props) => {
           </div>
         </div>
         <Button className="bg-red_50 flex h-[44px] items-center justify-center p-[10px] rounded-[6px] w-[44px]">
-          <Img src="./public/imgBag.svg" className="h-[24px]" alt="bag" />
+          <Img src="../../public/imgBag.svg" className="h-[24px]" alt="bag" />
         </Button>
       </div>
     </>

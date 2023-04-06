@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import Img from "../components/Img";
 import Input from "../components/Input";
@@ -6,21 +6,97 @@ import Button from "../components/Button";
 import CourseCard from "../components/CourseCard";
 import List from "../components/List";
 import Text from "../components/Text";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ReactPlayer from "react-player";
+import Example from "./example";
+import GoogleForm from "./googleform";
 
 const Data = [
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
-  { src: "/anh4.png", namecourse: "Introduction", time: "15:00" },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction",
+    time: "11:00",
+    video: "../../public/flowbite.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-1",
+    time: "12:00",
+    video: "../../public/video1.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-2",
+    time: "13:00",
+    video: "../../public/video2.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-3",
+    time: "14:00",
+    video: "../../public/flowbite.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-4",
+    time: "15:00",
+    video: "../../public/flowbite.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-5",
+    time: "16:00",
+    video: "../../public/flowbite.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-6",
+    time: "17:00",
+    video: "../../public/flowbite.mp4",
+    type: "text",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-7",
+    time: "18:00",
+    video: "../../public/flowbite.mp4",
+    type: "form",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-8",
+    time: "19:00",
+    video: "../../public/video3.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-9",
+    time: "15:00",
+    video: "../../public/video4.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-10",
+    time: "15:00",
+    video: "../../public/flowbite.mp4",
+    type: "video",
+  },
+  {
+    src: "/anh4.png",
+    namecourse: "Introduction-11",
+    time: "15:00",
+    video: "../../public/flowbite.mp4",
+    type: "video",
+  },
 ];
 
 const CoursesDetails = () => {
@@ -32,7 +108,7 @@ const CoursesDetails = () => {
         <div className="flex flex-col gap-[48px] items-start justify-start w-[100%]">
           <div className="flex items-start justify-start sm:px-[20px] md:px-[40px] px-[80px] w-[100%]">
             <div className="bg-gray_200 flex items-start justify-start max-w-[1280px] mx-[auto] md:px-[20px] px-[30px] py-[25px] rounded-[20px] w-[100%]">
-              <div className="flex md:flex-col flex-row md:gap-[40px] gap-[68px] items-start justify-start w-[100%]">
+              <div className="flex md:flex-col flex-row md:gap-[30px] gap-[30px] items-start justify-start w-[100%]">
                 <div className="flex flex-1 flex-col gap-[30px] items-start justify-start w-[100%]">
                   <Text
                     className="font-medium text-black_900 text-left tracking-[0.48px] w-[auto]"
@@ -55,14 +131,7 @@ const CoursesDetails = () => {
                         />
                       </Button>
                     </div>
-                    <Text
-                      className="text-black_900 text-left w-[auto]"
-                      as="h5"
-                      variant="h5"
-                    >
-                      IELTS band 5 - for Standard 3 Students | Episode 2
-                    </Text>
-                  </div>
+                  )}
                 </div>
                 <div className="overflow-auto flex sm:flex-1 flex-col gap-[15px] h-[545px] md:h-[auto] items-start justify-between sm:w-[100%] w-[382px]">
                   <Text
@@ -256,12 +325,12 @@ const CoursesDetails = () => {
                   >
                     Instructor
                   </Text>
-                  <a
+                  <Link
+                    to="/Author"
                     className="font-semibold text-[20px] text-black_900 text-right underline w-[auto]"
-                    href="javascript:"
                   >
                     Wade Warren
-                  </a>
+                  </Link>
                 </div>
                 <div className="flex flex-row items-center justify-between w-[100%]">
                   <Text

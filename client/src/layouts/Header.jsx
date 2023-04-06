@@ -32,9 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth";
 import utils from "../utils/utils";
 const Header = () => {
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.auth.user);
-
+  const currentUser = true;
   const pages = [
     {
       name: "Courses",

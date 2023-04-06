@@ -10,11 +10,8 @@ import ScrollButton from "./utils/ScrollButton";
 
 import "../public/dist/output.css";
 import React from "react";
-import CoursesDetails from "./pages/CoursesDetail";
-import Courses from "./pages/Courses";
-import Cart from "./pages/Cart";
-import Test from "./components/Test";
-import Lesson from "./pages/Lesson";
+import CoursesDetails from "../pages/CoursesDetail";
+import Courses from "../pages/Courses";
 
 function App() {
   const Layout = () => {
@@ -39,6 +36,14 @@ function App() {
         {
           path: "/courses",
           element: <Courses />,
+        },
+        {
+          path: "/courses/:courseId",
+          element: <Courses />,
+        },
+        {
+          path: "/coursesdetails/:courseId",
+          element: <CoursesDetails />,
         },
         {
           path: "/coursesdetails",
