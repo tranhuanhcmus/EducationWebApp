@@ -7,14 +7,14 @@ import Footer from "./layouts/Footer";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import ScrollButton from "./utils/ScrollButton";
-
+import Cart from "./pages/Cart";
+import Test from "./components/Test";
 import "../public/dist/output.css";
+import Lesson from "./pages/Lesson";
+import ErrorPage from "./pages/404page";
 import React from "react";
 import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
-import Cart from "./pages/Cart";
-import Test from "./components/Test";
-import Lesson from "./pages/Lesson";
 
 function App() {
   const Layout = () => {
@@ -33,12 +33,21 @@ function App() {
     {
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorPage />,
       children: [
         { path: "/", element: <Home /> },
 
         {
           path: "/courses",
           element: <Courses />,
+        },
+        {
+          path: "/courses/:courseId",
+          element: <Courses />,
+        },
+        {
+          path: "/coursesdetails/:courseId",
+          element: <CoursesDetails />,
         },
         {
           path: "/coursesdetails",

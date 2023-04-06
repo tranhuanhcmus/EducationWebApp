@@ -23,37 +23,74 @@ const EduviCoursesPage = () => {
       setValue(e.target.value);
     }
   };
-
+  React.useEffect(() => {
+    const indetifier = setTimeout(() => {
+      //navigate(`/courses/${valuePage}`);
+    }, 500);
+    return () => {
+      clearTimeout(indetifier);
+    };
+  }, [valuePage]);
   const [inputvalue, setInputvalue] = React.useState("");
   const Coures = [
     {
-      image: "./public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher ABC",
+      image: "../../public/anh5.png",
+      courseName: "Ielts 3.0-5.0 Teacher 1",
       price: "$40.00",
     },
     {
-      image: "./public/anh5.png",
-      courseName: "Ielts 2.0-3.0 Teacher A",
+      image: "../../public/anh5.png",
+      courseName: "Ielts 2.0-3.0 Teacher 2",
       price: "$40.00",
     },
     {
-      image: "./public/anh5.png",
-      courseName: "Ielts 5.0-6.0 Teacher B",
+      image: "../../public/anh5.png",
+      courseName: "Ielts 5.0-6.0 Teacher 3",
       price: "$40.00",
     },
     {
-      image: "./public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher B",
+      image: "../../public/anh5.png",
+      courseName: "Ielts 3.0-5.0 Teacher 4",
       price: "$40.00",
     },
     {
-      image: "./public/anh5.png",
-      courseName: "Ielts 6.0-7.0 Teacher E",
+      image: "../../public/anh5.png",
+      courseName: "Ielts 6.0-7.0 Teacher 5",
       price: "$40.00",
     },
     {
-      image: "./public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher F",
+      image: "../../public/anh5.png",
+      courseName: "Ielts 3.0-5.0 Teacher 6",
+      price: "$40.00",
+    },
+    {
+      image: "../../public/anh5.png",
+      courseName: "Ielts 3.0-5.0 Teacher 7",
+      price: "$40.00",
+    },
+    {
+      image: "../../public/anh5.png",
+      courseName: "Ielts 2.0-3.0 Teacher 8",
+      price: "$40.00",
+    },
+    {
+      image: "../../public/anh5.png",
+      courseName: "Ielts 5.0-6.0 Teacher 9",
+      price: "$40.00",
+    },
+    {
+      image: "../../public/anh5.png",
+      courseName: "Ielts 3.0-5.0 Teacher 10",
+      price: "$40.00",
+    },
+    {
+      image: "../../public/anh5.png",
+      courseName: "Ielts 6.0-7.0 Teacher 11",
+      price: "$40.00",
+    },
+    {
+      image: "../../public/anh5.png",
+      courseName: "Ielts 3.0-5.0 Teacher 12",
       price: "$40.00",
     },
   ];
@@ -144,7 +181,7 @@ const EduviCoursesPage = () => {
           <div className="flex items-center justify-start sm:px-[20px] md:px-[40px] px-[80px] w-[100%]">
             <div
               className="flex flex-col gap-[24px] items-center justify-start max-w-[1280px] mx-[auto] w-[100%]"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/coursesdetails")}
             >
               <Text
                 className="font-semibold text-gray_900 text-left w-[auto]"
@@ -199,7 +236,7 @@ const EduviCoursesPage = () => {
                         />
                       ) : (
                         <Img
-                          src="./public/find.png"
+                          src="../../public/find.png"
                           className="cursor-pointer ml-[35px] my-[auto]"
                           alt="search"
                         />
@@ -215,7 +252,7 @@ const EduviCoursesPage = () => {
                     isMulti={false}
                     indicator={
                       <Img
-                        src="./public/down-arrow.png"
+                        src="../../public/down-arrow.png"
                         className="h-[24px] w-[24px]"
                         alt="arrow_down"
                       />
@@ -225,16 +262,22 @@ const EduviCoursesPage = () => {
               </div>
               <div className="flex items-start justify-start w-[100%]">
                 <div className="md:gap-[20px] gap-[40px] grid md:grid-cols-1 grid-cols-2 justify-center min-h-[auto] w-[100%]">
-                  {Coures.map((props, index) => (
-                    <React.Fragment key={`CourseCard${index}`}>
-                      <div onClick={() => navigate("/coursesdetails")}>
-                        <CourseCard
-                          className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
-                          {...props}
-                        />
-                      </div>
-                    </React.Fragment>
-                  ))}
+                  {Coures.map((props, index) => {
+                    if (6 * valuePage <= index && index < 6 * (valuePage + 1)) {
+                      console.log(valuePage);
+                      //console.log(index);
+                      return (
+                        <React.Fragment key={`CourseCard${index}`}>
+                          <div onClick={() => navigate("/coursesdetails")}>
+                            <CourseCard
+                              className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
+                              {...props}
+                            />
+                          </div>
+                        </React.Fragment>
+                      );
+                    }
+                  })}
                 </div>
               </div>
             </div>
@@ -242,12 +285,15 @@ const EduviCoursesPage = () => {
               className="flex flex-row items-center justify-center w-[100%]"
               page="Page"
               one={valuePage}
-              ofCounter="of 80"
+              ofCounter={Coures.length / 6 - 1}
               handlenext={() => {
-                setValuePage(valuePage + 1);
+                if (valuePage < Coures.length / 6 - 1)
+                  setValuePage(valuePage + 1);
               }}
               handleprev={() => {
-                setValuePage(valuePage - 1);
+                if (valuePage > 0) {
+                  setValuePage(valuePage - 1);
+                }
               }}
             />
           </div>
