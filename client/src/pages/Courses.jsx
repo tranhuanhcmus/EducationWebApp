@@ -181,7 +181,7 @@ const EduviCoursesPage = () => {
           <div className="flex items-center justify-start sm:px-[20px] md:px-[40px] px-[80px] w-[100%]">
             <div
               className="flex flex-col gap-[24px] items-center justify-start max-w-[1280px] mx-[auto] w-[100%]"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/coursesdetails")}
             >
               <Text
                 className="font-semibold text-gray_900 text-left w-[auto]"
