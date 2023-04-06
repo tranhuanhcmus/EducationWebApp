@@ -99,8 +99,62 @@ const Data = [
   },
 ];
 
+function secondsToHms(d) {
+  d = Number(d);
+  var h = Math.floor(d / 3600);
+  var m = Math.floor((d % 3600) / 60);
+  var s = Math.floor((d % 3600) % 60);
+
+  var hDisplay = h > 0 ? h + (h == 1 ? "h" : "h") : "";
+  var mDisplay = m > 0 ? m + (m == 1 ? "m" : "m") : "";
+  var sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "";
+  return hDisplay + mDisplay + sDisplay;
+}
+
+Data.map((item) => {
+  if (item.type === "video") {
+    const videoElement = document.createElement("video");
+    videoElement.src = item.video;
+    //Data[index].time = `00:${parseInt(videoElement.duration, 10).toString()}`;
+    videoElement.addEventListener("loadedmetadata", () => {
+      item.time = `${secondsToHms(
+        parseInt(videoElement.duration, 10)
+      ).toString()}`;
+    });
+  }
+});
+
 const CoursesDetails = () => {
+  const params = useParams();
+
   const navigate = useNavigate();
+  const [valueButton, setValue] = React.useState(parseInt(params.courseId));
+  const myref = useRef([]);
+
+  const [currentVideo, setCurrentVideo] = React.useState(0);
+
+  const playNextVideo = () => {
+    if (parseInt(params.courseId) >= 0 && currentVideo < Data.length) {
+      setCurrentVideo(parseInt(params.courseId));
+    }
+  };
+  const CourseHandle = (e) => {
+    // if (e.target.value !== valueButton) {
+    //   //setValue(e.target.value);
+
+    // }
+    console.log(e);
+  };
+  React.useEffect(() => {
+    const indetifier = setTimeout(() => {
+      playNextVideo();
+
+      setValue(params.courseId);
+    }, 500);
+    return () => {
+      clearTimeout(indetifier);
+    };
+  }, [params.courseId]);
 
   return (
     <>
@@ -116,24 +170,118 @@ const CoursesDetails = () => {
                   >
                     Home | Courses | Course Details
                   </Text>
-                  <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
-                    <div className="h-[455px] relative w-[100%]">
-                      <Img
-                        src="./public/anh4.png"
-                        className="h-[455px] m-[auto] object-cover rounded-[20px] w-[100%]"
-                        alt="pexelsvanessaga"
-                      />
-                      <Button className="absolute bg-red_300 flex h-[60px] inset-[0] items-center justify-center m-[auto] rounded-[50%] w-[60px]">
-                        <Img
-                          src="images/img_play_white_a700.svg"
-                          className="h-[16px]"
-                          alt="play"
-                        />
-                      </Button>
+                  {parseInt(params.courseId) >= 0 ? (
+                    parseInt(params.courseId) < 4 ? (
+                      <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
+                        <div className="aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
+                          {/* <iframe
+                        className="w-full aspect-video md:aspect-square"
+                        src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                        autoplay
+                        controls
+                      ></iframe> */}
+
+                          {/* <video
+                          className="w-100% h-100% max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
+                          autoPlay
+                          controls
+                          onEnded={playNextVideo}
+                          url={Data[currentVideo].video}
+                        >
+                          <source
+                            src={Data[currentVideo].video}
+                            type="video/mp4"
+                          />
+                          Your browser does not support the video tag.
+                        </video> */}
+                          <ReactPlayer
+                            className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
+                            height="100%"
+                            width="100%"
+                            playing={true}
+                            controls
+                            onEnded={() => {
+                              if (currentVideo < Data.length - 1) {
+                                navigate(`/coursesdetails/${currentVideo + 1}`);
+                              }
+                            }}
+                            url={Data[currentVideo].video}
+                          />
+                        </div>
+                        <Text
+                          className="text-black_900 text-left w-[auto]"
+                          as="h5"
+                          variant="h5"
+                        >
+                          {Data[parseInt(params.courseId)].namecourse}
+                        </Text>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
+                        <div className="aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
+                          {Data[parseInt(params.courseId)].type === "video" && (
+                            <ReactPlayer
+                              className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
+                              height="100%"
+                              width="100%"
+                              playing={true}
+                              controls
+                              onEnded={() => {
+                                if (currentVideo < Data.length - 1) {
+                                  navigate(
+                                    `/coursesdetails/${currentVideo + 1}`
+                                  );
+                                }
+                              }}
+                              url={Data[currentVideo].video}
+                            />
+                          )}
+                          {Data[parseInt(params.courseId)].type === "text" && (
+                            <Example></Example>
+                          )}
+                          {Data[parseInt(params.courseId)].type === "form" && (
+                            <GoogleForm />
+                          )}
+                        </div>
+                        <Text
+                          className="text-black_900 text-left w-[auto]"
+                          as="h5"
+                          variant="h5"
+                        >
+                          {Data[parseInt(params.courseId)].namecourse}
+                        </Text>
+                      </div>
+                    )
+                  ) : (
+                    <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
+                      <div className="h-[455px] relative w-[100%]">
+                        {/* <iframe
+                        className="w-full aspect-video md:aspect-square"
+                        src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                        autoplay
+                        controls
+                      ></iframe> */}
+
+                        <video
+                          className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700l overflow-hidden"
+                          autoPlay
+                          controls
+                        >
+                          <source src={Data[0].video} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                      <Text
+                        className="text-black_900 text-left w-[auto]"
+                        as="h5"
+                        variant="h5"
+                      >
+                        {Data[0].namecourse}
+                      </Text>
                     </div>
                   )}
                 </div>
-                <div className="overflow-auto flex sm:flex-1 flex-col gap-[15px] h-[545px] md:h-[auto] items-start justify-between sm:w-[100%] w-[382px]">
+                <div className=" flex sm:flex-1 flex-col gap-[15px] h-[545px] md:h-[auto] items-start justify-between sm:w-[100%] w-[382px]">
                   <Text
                     className="text-black_900 text-left w-[auto]"
                     as="h5"
@@ -141,13 +289,33 @@ const CoursesDetails = () => {
                   >
                     Course Playlists
                   </Text>
-                  <div className="flex items-start justify-start w-[100%]">
+                  <div className="overflow-auto flex items-start justify-start w-[100%]">
                     <List
                       className="flex-col gap-[16px] grid items-start w-[100%]"
                       orientation="vertical"
                     >
-                      {Data.map((leucture) => (
-                        <div className="bg-white_A700 hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%]">
+                      {Data.map((leucture, index) => (
+                        <div
+                          ref={(element) => {
+                            myref.current[index] = element;
+                          }}
+                          key={index}
+                          onClick={() => {
+                            setValue(index.toString());
+                            myref.current[index].scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                            });
+
+                            //location.href = `/coursesdetails/${index}`;
+                            navigate(`/coursesdetails/${index}`);
+                          }}
+                          className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
+                            valueButton === index.toString()
+                              ? "choose"
+                              : "bg-white"
+                          }`}
+                        >
                           <div className="flex flex-row gap-[10px] items-center justify-start self-stretch w-[auto]">
                             <Img
                               src={leucture.src}
@@ -194,17 +362,30 @@ const CoursesDetails = () => {
                   variant="body4"
                 >
                   <>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Quis ipsum suspendisse ultrices gravida. Risus
-                    commodo viverra maecenas accumsan lacus vel facilisis
-                    consectetur adipiscing elit.
+                    This course is fully up-to-date with React 18 (the latest
+                    version of React)! It was completely updated and re-recorded
+                    from the ground up - it teaches the very latest version of
+                    React with all the core, modern features you need to know!
+                    --- This course also comes with two paths which you can
+                    take: The "complete" path (full 40h course) and the
+                    "summary" path (~4h summary module) - you can choose the
+                    path that best fits your time requirements! :- --- React.js
+                    is THE most popular JavaScript library you can use and learn
+                    these days to build modern, reactive user interfaces for the
+                    web. This course teaches you React in-depth, from the ground
+                    up, step by step by diving into all the core basics,
+                    exploring tons of examples and also introducing you to
+                    advanced concepts as well. You'll get all the theory, tons
+                    of examples and demos, assignments and exercises and tons of
+                    important knowledge that is skipped by most other resources
+                    - after all, there is a reason why this course is that huge!
+                    : And in case you don't even know why you would want to
+                    learn React and you're just here because of some ad or "the
+                    algorithm" - no worries: ReactJS is a key technology as a
+                    web developer and in this course I will also explain WHY
+                    it's that important!
                     <br />
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Quis ipsum suspendisse ultrices gravida. Risus
-                    commodo viverra maecenas accumsan lacus vel facilisis
-                    consectetur adipiscing elit.
+                    Get Udemy certificate by completing entire course
                   </>
                 </Text>
               </div>
@@ -220,11 +401,7 @@ const CoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis consectetur adipiscing
-                  elit.
+                  Get Udemy certificate by completing entire course
                 </Text>
               </div>
               <div className="flex flex-col gap-[9px] items-start justify-start w-[100%]">
@@ -239,11 +416,13 @@ const CoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis consectetur adipiscing
-                  elit.
+                  You don't need any prior React knowledge! This course starts
+                  with zero knowledge assumed! All you need is basic web
+                  development and JavaScript knowledge (though the course even
+                  includes a brief JavaScript refresher to ensure that we're all
+                  on the same page!). Check out the full curriculum, the free
+                  preview videos and join the course risk-free thanks to the
+                  30-day money-back guarantee!
                 </Text>
               </div>
               <div className="flex flex-col gap-[10px] items-start justify-start w-[100%]">
@@ -453,7 +632,7 @@ const CoursesDetails = () => {
                 {new Array(4).fill({}).map((props, index) => (
                   <React.Fragment key={`CourseCard${index}`}>
                     <CourseCard
-                      className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 shadow-bs1 hover:w-[100%] w-[100%]"
+                      className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 shadow-bs w-full"
                       {...props}
                     />
                   </React.Fragment>
