@@ -104,8 +104,8 @@ function secondsToHms(d) {
   return hDisplay + mDisplay + sDisplay;
 }
 
-Data.map((item) => {
-  if (item.type === "video") {
+Data.forEach((item) => {
+  if (item.type === "video" || item.type === "listening") {
     const videoElement = document.createElement("video");
     videoElement.src = item.video;
     //Data[index].time = `00:${parseInt(videoElement.duration, 10).toString()}`;
