@@ -8,12 +8,12 @@ const Comment = () => {
       <div className="header pb-2 flex items-center border-b-2 border-slate-600">
         <div className="user flex items-center flex-1">
           <img
-            className="w-10 h-10 rounded-full ring-2 ring-indigo-600"
-            src="/anh5.png"
+            className="w-10 h-10 rounded-full ring-2 ring-indigo-600 object-center object-contain"
+            src="/anh4.png"
             alt="user avater"
           />
           <span className="text-xl font-Bebas font-semibold ml-2">
-            Username
+            Harry Potter
           </span>
         </div>
         <div className="actions flex items-center ">
@@ -29,9 +29,7 @@ const Comment = () => {
       </div>
 
       <div className="content my-2 ml-6 p-2 bg-slate-400/50 rounded-md  font-roboto">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem dolore
-        voluptates quaerat explicabo eaque deleniti aperiam! Qui omnis libero
-        dolore!
+        Love it! the tips in video and quiz very helpful ❤️
       </div>
     </div>
   );

@@ -16,8 +16,8 @@ const Data = [
   {
     src: "/anh4.png",
     namecourse: "Introduction",
-    time: "11:00",
-    video: "../../public/flowbite.mp4",
+    time: "7:37",
+    video: "/video/lesson1.mp4",
     type: "video",
   },
   {
@@ -194,6 +194,13 @@ const CoursesDetails = () => {
                           />
                           Your browser does not support the video tag.
                         </video> */}
+                          <Text
+                            className="text-black_900 text-left w-[auto]"
+                            as="h5"
+                            variant="h5"
+                          >
+                            {Data[parseInt(params.courseId)].namecourse}
+                          </Text>
                           <ReactPlayer
                             className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
                             height="100%"
@@ -208,13 +215,13 @@ const CoursesDetails = () => {
                             url={Data[currentVideo].video}
                           />
                         </div>
-                        <Text
-                          className="text-black_900 text-left w-[auto]"
-                          as="h5"
-                          variant="h5"
+
+                        <Button
+                          className=" self-center py-3 px-2 bg-indigo-600 font-note font-bold md:text-sm text-md text-white uppercase rounded-3xl md:w-[25%] w-[200px]  hover:bg-deep_purple_A201 hover:ring-yellow-400 ring-2 "
+                          onClick={() => navigate("/lesson/1")}
                         >
-                          {Data[parseInt(params.courseId)].namecourse}
-                        </Text>
+                          Move to lesson
+                        </Button>
                       </div>
                     ) : (
                       <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
@@ -307,7 +314,6 @@ const CoursesDetails = () => {
                               block: "center",
                             });
 
-                            //location.href = `/coursesdetails/${index}`;
                             navigate(`/coursesdetails/${index}`);
                           }}
                           className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
@@ -385,7 +391,8 @@ const CoursesDetails = () => {
                     web developer and in this course I will also explain WHY
                     it's that important!
                     <br />
-                    Get Udemy certificate by completing entire course
+                    import Lesson from './Lesson'; Get Udemy certificate by
+                    completing entire course
                   </>
                 </Text>
               </div>

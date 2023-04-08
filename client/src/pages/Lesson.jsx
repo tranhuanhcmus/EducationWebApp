@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, IconButton } from "@mui/material";
 import Comment from "../components/Comment";
 import Quiz from "./../components/Quiz/Quiz";
+import { useNavigate } from "react-router-dom";
 const buttonStyle = {
   border: "solid 1px black",
   color: "black",
@@ -15,26 +16,31 @@ const buttonStyle = {
 };
 const data = [
   {
+    id: 1,
     image: "/anh5.png",
     name: "Title of lesson 1",
     time: "15:00",
   },
   {
+    id: 2,
     image: "/anh1.png",
     name: "Title of lesson 2",
     time: "15:00",
   },
   {
+    id: 3,
     image: "/anh1.png",
     name: "Title of lesson 3",
     time: "15:00",
   },
   {
+    id: 4,
     image: "/anh1.png",
     name: "Title of lesson 4",
     time: "15:00",
   },
   {
+    id: 5,
     image: "/anh1.png",
     name: "Title of lesson 5",
     time: "15:00",
@@ -42,29 +48,77 @@ const data = [
 ];
 const questionBank = [
   {
-    question: "1+1=?",
-    options: ["1", "2", "3", "4"],
+    question:
+      "The total length for the writing exam is 1 hour. How many minutes should you spend on the essay?",
+    options: ["20", "30", "40", "60"],
     answer: -1,
-    key: 1,
+    keyIndex: 2,
+    key: "It is recommended to spend 40 mins on the essay and 20 mins on the graph / letter. The essay is longer and is worth more points",
     check: false,
   },
   {
-    question: "1+2=?",
-    options: ["1", "2", "3", "4"],
+    question:
+      "The more you write in the essay, the more likely you are to get a higher score?",
+    options: ["true", "false"],
     answer: -1,
-    key: 2,
+    keyIndex: 1,
+    key: "It's about quality, not quantity. You must exceed to 250 word minimum and have adequate support for your ideas, but writing a lot does not necessarily mean you will get a high score.",
+    check: false,
+  },
+  {
+    question:
+      "You should start writing as soon as you have read the essay question ?",
+    options: ["true", "false"],
+    answer: -1,
+    keyIndex: 1,
+    key: "You should check you fully understand the question, brainstorm some ideas, and do a brief plan before you start writing.",
+    check: false,
+  },
+  {
+    question:
+      "Your essay is judged on four criteria. Which one of these four criteria is incorrect ?",
+    options: [
+      "Task Response",
+      "Coherence and Cohesion",
+      "Academic Style",
+      "Grammatical Range and Accuracy",
+    ],
+    answer: -1,
+    keyIndex: 2,
+    key: "It's 'Lexical Resource'. This refers to your vocabulary and how you use it.",
+    check: false,
+  },
+  {
+    question: "Spelling is not that important in IELTS writing?",
+    options: ["true", "false"],
+    answer: -1,
+    keyIndex: 1,
+    key: "It's very important as you are graded on your spelling.",
+
+    check: false,
+  },
+  {
+    question: "You can write all of your essay in capital letters if you like?",
+    options: ["true", "false"],
+    answer: -1,
+    keyIndex: 0,
+    key: "You can but there is no reason to unless you have very bad joined up writing. Writing in capitals takes some people longer.",
     check: false,
   },
 ];
 const Lesson = () => {
   const lesson = {
-    name: "Listening Band 6.0",
+    name: "Writing Band 5.0",
     author: "Harry Bui",
-    video: "/video.mp4",
+    video: "/video/lesson1.mp4",
     content:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quia temporibus est animi, ex dolores ad provident dignissimos voluptas nemo Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quia temporibus est animi, ex dolores ad provident dignissimos voluptas nemo Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quia temporibus est animi, ex dolores ad provident dignissimos voluptas nemo Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quia temporibus est animi, ex dolores ad provident dignissimos voluptas nemo Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quia temporibus est animi, ex dolores ad provident dignissimos voluptas nemo.",
+      "This lesson will tell about some information and tips you should know in a writing test. Beside that i will analysis  an example writing test ",
     attachment: "a article link",
     note: "this lesson is so interesting ...",
+  };
+  const [notes, setNotes] = useState(lesson.note);
+  const handleWriteNote = (e) => {
+    setNotes((notes) => e.target.value);
   };
   return (
     <>
@@ -74,7 +128,7 @@ const Lesson = () => {
             <ArrowBackIosIcon />
           </IconButton>
         </div>
-        <video width={"80%"} controls autoPlay poster="/anh1.png">
+        <video width={"80%"} controls autoPlay="true" poster="/anh1.png">
           <source src={lesson.video} type="video/mp4" />
         </video>
         <div className="flex items-center flex-1 justify-center">
@@ -98,7 +152,7 @@ const Lesson = () => {
             <b>Content</b>
           </h3>
         </div>
-        <div className="text-lg font-note font-[300] mt-3 text-left word-break m-4 md:m-6">
+        <div className="text-lg font-note font-[300] mt-3 text-left word-break md:m-4 m-6">
           {lesson.content}
         </div>
       </section>
@@ -108,7 +162,7 @@ const Lesson = () => {
             <b>Navigations</b>
           </h3>
         </div>
-        <div className="text-lg font-note font-[300] mt-3 text-justify m-4 md:m-6">
+        <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
           {lesson.attachment}
         </div>
       </section>
@@ -127,17 +181,18 @@ const Lesson = () => {
           </h3>
         </div>
         <textarea
-          className="text-lg font-note font-[300] mt-3 text-left m-4 md:m-6 w-[80%] "
-          value={lesson.note}
+          className="text-lg font-note font-[300] mt-3 text-left md:m-4 m-6 w-[80%] "
+          value={notes}
+          onChange={handleWriteNote}
         ></textarea>
       </section>
       <section className="container">
         <div className="mx-3 pt-2 text-indigo-500 flex items-center border-b-4 border-solid border-red-800 ">
-          <h3 className="text-2xl font-Bebas uppercase mr-4         ">
+          <h3 className="text-2xl font-Bebas uppercase mr-4 ">
             <b>Comments</b>
           </h3>
         </div>
-        <div className="text-lg font-note font-[300] mt-3 text-justify m-4 md:m-6">
+        <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
           <div className="mb-3">
             <textarea className="m-0 p-2 text-lg font-note font-[300] text-justify  w-full h-32"></textarea>
             <div className="flex justify-end">
@@ -154,6 +209,8 @@ const Lesson = () => {
 };
 
 const LessonList = ({ data }) => {
+  const navigate = useNavigate();
+
   const [list, setList] = React.useState(data);
   const [key, setKey] = React.useState("");
 
@@ -167,16 +224,17 @@ const LessonList = ({ data }) => {
         onChange={(e) => setKey(e.target.value)}
       />
 
-      <div className="w-full p-2 grid grid-flow-col  auto-cols-[50%] lg:auto-cols-[20%] md:auto-cols-[25%] sm:auto-cols-[33%] items-center overflow-scroll gap-2">
+      <div className="w-full p-2 grid grid-flow-col  sm:auto-cols-[50%]   md:auto-cols-[33%] items-center overflow-scroll gap-2">
         {list.map((item) => {
           if (item.name.toLowerCase().includes(key))
             return (
               <div
                 className="item border-2 p-2 border-solid border-indigo-300 hover:-translate-y-1 hover:cursor-pointer hover:bg-slate-500 hover:text-amber-400 transition-all duration-200"
-                key={item.name}
+                key={item.id}
+                onClick={() => navigate(`/lesson/${item.id}`)}
               >
                 <img
-                  className="object-cover object-center h-[100px] md:h-[132px] border-b-4 p-2 border-solid border-red-800"
+                  className="object-cover object-center md:h-[100px] h-[132px] border-b-4 p-2 border-solid border-red-800"
                   src={item.image}
                   width={"inherit"}
                   alt="thumbnail-lesson"
