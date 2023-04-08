@@ -7,7 +7,7 @@ import CourseCard from "../components/CourseCard";
 import List from "../components/List";
 import Text from "../components/Text";
 import { Link, useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import Example from "./example";
 import GoogleForm from "./googleform";
@@ -22,77 +22,70 @@ const Data = [
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-1",
+    namecourse: "Reading 01",
     time: "12:00",
     video: "../../public/video1.mp4",
     type: "video",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-2",
+    namecourse: "Listening 02",
     time: "13:00",
     video: "../../public/video2.mp4",
     type: "video",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-3",
+    namecourse: "Reading 02",
     time: "14:00",
     video: "../../public/flowbite.mp4",
     type: "video",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-4",
+    namecourse: "Listening 03",
     time: "15:00",
-    video: "../../public/flowbite.mp4",
-    type: "video",
+    video: "../../public/video4.mp4",
+    type: "listening",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-5",
+    namecourse: "Reading 03",
     time: "16:00",
     video: "../../public/flowbite.mp4",
     type: "video",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-6",
+    namecourse: "Reading 04",
     time: "17:00",
     video: "../../public/flowbite.mp4",
     type: "text",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-7",
+    namecourse: "Reading 04_1",
     time: "18:00",
     video: "../../public/flowbite.mp4",
     type: "form",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-8",
+    namecourse: "Listening 05",
     time: "19:00",
     video: "../../public/video3.mp4",
     type: "video",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-9",
+    namecourse: "Reading 05",
     time: "15:00",
     video: "../../public/video4.mp4",
     type: "video",
   },
   {
     src: "/anh4.png",
-    namecourse: "Introduction-10",
-    time: "15:00",
-    video: "../../public/flowbite.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Introduction-11",
+    namecourse: "Revision 01",
     time: "15:00",
     video: "../../public/flowbite.mp4",
     type: "video",
@@ -127,6 +120,7 @@ Data.map((item) => {
 const CoursesDetails = () => {
   const params = useParams();
 
+  const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
   const [valueButton, setValue] = React.useState(parseInt(params.courseId));
   const myref = useRef([]);
@@ -171,36 +165,9 @@ const CoursesDetails = () => {
                     Home | Courses | Course Details
                   </Text>
                   {parseInt(params.courseId) >= 0 ? (
-                    parseInt(params.courseId) < 4 ? (
+                    parseInt(params.courseId) < 2 ? (
                       <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
                         <div className="aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
-                          {/* <iframe
-                        className="w-full aspect-video md:aspect-square"
-                        src="https://www.youtube.com/embed/tgbNymZ7vqY"
-                        autoplay
-                        controls
-                      ></iframe> */}
-
-                          {/* <video
-                          className="w-100% h-100% max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
-                          autoPlay
-                          controls
-                          onEnded={playNextVideo}
-                          url={Data[currentVideo].video}
-                        >
-                          <source
-                            src={Data[currentVideo].video}
-                            type="video/mp4"
-                          />
-                          Your browser does not support the video tag.
-                        </video> */}
-                          <Text
-                            className="text-black_900 text-left w-[auto]"
-                            as="h5"
-                            variant="h5"
-                          >
-                            {Data[parseInt(params.courseId)].namecourse}
-                          </Text>
                           <ReactPlayer
                             className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
                             height="100%"
@@ -243,6 +210,22 @@ const CoursesDetails = () => {
                               url={Data[currentVideo].video}
                             />
                           )}
+                          {Data[parseInt(params.courseId)].type ===
+                            "listening" &&
+                            searchParams.get("text") !== "ok" && (
+                              <ReactPlayer
+                                className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
+                                height="100%"
+                                width="100%"
+                                playing={true}
+                                controls
+                                onEnded={() => {
+                                  setSearchParams({ text: "ok" });
+                                }}
+                                url={Data[currentVideo].video}
+                              />
+                            )}
+                          {searchParams.get("text") === "ok" && <GoogleForm />}
                           {Data[parseInt(params.courseId)].type === "text" && (
                             <Example></Example>
                           )}
@@ -368,28 +351,32 @@ const CoursesDetails = () => {
                   variant="body4"
                 >
                   <>
-                    This course is fully up-to-date with React 18 (the latest
-                    version of React)! It was completely updated and re-recorded
-                    from the ground up - it teaches the very latest version of
-                    React with all the core, modern features you need to know!
-                    --- This course also comes with two paths which you can
-                    take: The "complete" path (full 40h course) and the
-                    "summary" path (~4h summary module) - you can choose the
-                    path that best fits your time requirements! :- --- React.js
-                    is THE most popular JavaScript library you can use and learn
-                    these days to build modern, reactive user interfaces for the
-                    web. This course teaches you React in-depth, from the ground
-                    up, step by step by diving into all the core basics,
-                    exploring tons of examples and also introducing you to
-                    advanced concepts as well. You'll get all the theory, tons
-                    of examples and demos, assignments and exercises and tons of
-                    important knowledge that is skipped by most other resources
-                    - after all, there is a reason why this course is that huge!
-                    : And in case you don't even know why you would want to
-                    learn React and you're just here because of some ad or "the
-                    algorithm" - no worries: ReactJS is a key technology as a
-                    web developer and in this course I will also explain WHY
-                    it's that important!
+                    Dear our beloved students at FIE English, First and
+                    foremost, FIE English would like to express our sincerest
+                    gratude to all of our students for believing and choosing
+                    TW. This publication, Junior. Students Workbook, you are
+                    holding right now is a brilliant combination of carefuly
+                    selected intellectual products, created by none other than
+                    our team at FIE English. As an embodiment of our mission
+                    which is to not only help our students improve their English
+                    and develop the language beyond classroom context but also
+                    enable them to conquer the IELTS exam, this workbook shall
+                    act as a constant companion to allow students to make the
+                    most of in-class lessons. Therefore, FIE truly hopes that
+                    our students can allocate their time and energy to complete
+                    all tasks provided in this workbook so as to achieve the
+                    perfect result for each and every course they take at FIE
+                    English. Essentially complementary to this workbook is a
+                    splendidly crafted CELTA-standard visual syllabus, a product
+                    jointly owned by an elite team of teachers at FIE English
+                    and critically reviewed under the guidance and supervision
+                    of numerous IELTS experts, masters in linguistics, masters
+                    in pedagogy and many other holders of bachelor's and
+                    master's degree in Education who had studied in England and
+                    Australia. We will use our last word to thank you for
+                    placing your trust in us, whereby becoming an integral part
+                    of our success. We hope that you enjoy your time with us.
+                    FIE English Golden Standard for IELTS Preparation
                     <br />
                     import Lesson from './Lesson'; Get Udemy certificate by
                     completing entire course
@@ -408,7 +395,7 @@ const CoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  Get Udemy certificate by completing entire course
+                  Get FIE certificate by completing entire course
                 </Text>
               </div>
               <div className="flex flex-col gap-[9px] items-start justify-start w-[100%]">
@@ -423,13 +410,27 @@ const CoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  You don't need any prior React knowledge! This course starts
-                  with zero knowledge assumed! All you need is basic web
-                  development and JavaScript knowledge (though the course even
-                  includes a brief JavaScript refresher to ensure that we're all
-                  on the same page!). Check out the full curriculum, the free
-                  preview videos and join the course risk-free thanks to the
-                  30-day money-back guarantee!
+                  This course is suitable for individuals who have scored
+                  between 4.0 and 5.0 on the IELTS test, or for those who have
+                  taken a placement test and have been assessed at this level.
+                  The course will focus on developing the specific language
+                  skills required to improve the individual's overall IELTS
+                  score. This may include improving vocabulary, grammar, and
+                  pronunciation, as well as building reading, writing,
+                  listening, and speaking skills. The IELTS 4.0-5.0 course is
+                  typically offered by language schools, universities, or
+                  private language institutes. It may be taught in-person or
+                  online, and can be tailored to the needs of specific groups,
+                  such as business professionals or healthcare workers.
+                  Individuals who take the IELTS 4.0-5.0 course can expect to
+                  improve their English language proficiency and feel more
+                  confident in their ability to communicate effectively in
+                  English. They will also be better prepared to achieve their
+                  goals in academic, professional, or immigration contexts that
+                  require a higher level of English language proficiency.
+                  Overall, the IELTS 4.0-5.0 course is a valuable investment for
+                  non-native English speakers seeking to improve their English
+                  language skills and achieve success in their chosen field.
                 </Text>
               </div>
               <div className="flex flex-col gap-[10px] items-start justify-start w-[100%]">
@@ -446,7 +447,9 @@ const CoursesDetails = () => {
                     className="font-normal not-italic text-black_900 text-left w-[auto]"
                     variant="body4"
                   >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    Vocabulary: You will learn new words and phrases that are
+                    commonly used in academic, professional, or immigration
+                    contexts.
                   </Text>
                 </div>
                 <div className="flex sm:flex-col flex-row gap-[10px] items-center justify-start w-[100%]">
@@ -455,7 +458,9 @@ const CoursesDetails = () => {
                     className="font-normal not-italic text-black_900 text-left w-[auto]"
                     variant="body4"
                   >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    Reading: You will practice reading academic and general
+                    texts, and develop strategies for skimming and scanning to
+                    improve your reading speed and comprehension.
                   </Text>
                 </div>
                 <div className="flex sm:flex-col flex-row gap-[10px] items-center justify-start w-[100%]">
@@ -464,7 +469,9 @@ const CoursesDetails = () => {
                     className="font-normal not-italic text-black_900 text-left w-[auto]"
                     variant="body4"
                   >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    Writing: You will learn how to write effective essays and
+                    reports, with a focus on organization, coherence, and
+                    clarity.
                   </Text>
                 </div>
                 <div className="flex sm:flex-col flex-row gap-[10px] items-center justify-start w-[100%]">
@@ -473,7 +480,8 @@ const CoursesDetails = () => {
                     className="font-normal not-italic text-black_900 text-left w-[auto]"
                     variant="body4"
                   >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    Listening: You will practice listening to academic and
+                    general texts, and develop strategies for understanding
                   </Text>
                 </div>
                 <div className="flex sm:flex-col flex-row gap-[10px] items-center justify-start w-[100%]">
@@ -482,7 +490,9 @@ const CoursesDetails = () => {
                     className="font-normal not-italic text-black_900 text-left w-[auto]"
                     variant="body4"
                   >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    Speaking: You will practice speaking English in a variety of
+                    contexts, including discussions, presentations, and
+                    interviews.
                   </Text>
                 </div>
               </div>

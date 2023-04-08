@@ -34,7 +34,7 @@ const EduviCoursesPage = () => {
   const [inputvalue, setInputvalue] = React.useState("");
   const Coures = [
     {
-      image: "../../public/anh5.png",
+      image: "/anh5.png",
       courseName: "Ielts 3.0-5.0 Teacher 1",
       price: "$40.00",
     },
