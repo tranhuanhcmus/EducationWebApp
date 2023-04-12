@@ -1,4 +1,4 @@
-import db from "./../connect.js";
+import db from "../config.js";
 import bcryptjs from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";

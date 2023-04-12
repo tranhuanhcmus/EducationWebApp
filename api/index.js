@@ -1,10 +1,10 @@
-import Express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import db from "./connect.js";
+import db from "./config.js";
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
-const app = Express();
+import express from "express";
+const app = express();
 
 //setting header
 app.use((req, res, next) => {
@@ -23,14 +23,16 @@ app.use(
 );
 
 //app can read json file
-app.use(Express.json());
+app.use(express.json());
 
 //routes
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
+
+
 //connect to DB
 db.connect((error) => {
     if (error) return console.log(error);
     console.log("Connect to DB success");
-    app.listen(5000, () => console.log("Server Work!"));
+    app.listen(5000, () => console.log("Server work on url http://localhost:5000"));
 });

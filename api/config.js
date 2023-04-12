@@ -1,8 +1,10 @@
-import mysql from "mysql";
+import mysql from 'mysql2';
+
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "123456",
-    database: "educationapp",
+    password: "Chou.huog5459",
+    database: "ielts",
 });
+
 export default db;
