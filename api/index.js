@@ -3,6 +3,7 @@ import cors from "cors";
 import db from "./config.js";
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
+import Route from "./routes/Route.js";
 import express from "express";
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(express.json());
 //routes
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
-
+app.use("/api", Route);
 
 //connect to DB
 db.connect((error) => {
