@@ -93,6 +93,21 @@ DELIMITER ;
 -- CALL CourseList();
 
 /*==============================================================*/
+/* Proc: Get course by name                                              */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetCourseByName`$$
+CREATE PROCEDURE GetCourseByName(
+	CourseName TEXT
+)
+BEGIN
+	SELECT * FROM COURSE WHERE NAME LIKE CourseName; 
+END $$
+DELIMITER ;
+
+-- CALL GetCourseByName();
+
+/*==============================================================*/
 /* Func: uuid_v4                                             */
 /*==============================================================*/
 -- DELIMITER $$  
@@ -124,40 +139,44 @@ DELIMITER ;
 /*==============================================================*/
 /* Proc: Add course                                             */
 /*==============================================================*/
--- DELIMITER $$
--- DROP PROCEDURE IF EXISTS `AddCourse`$$
--- CREATE PROCEDURE AddCourse(
---     IN NAME TEXT,
---     IN CATEGORY VARCHAR(20),
---     IN DESCRIPTION TEXT,
---     IN PRICE FLOAT,
---     IN IMG varchar(100)
--- )
--- BEGIN
---     DECLARE ID varchar(12);
---     -- DECLARE image_data LONGBLOB;
---     SET ID = REPLACE(left(uuid_v4(), 12), '-', '');
---     -- SET image_data = LOAD_FILE(IMG);
---     insert into COURSE (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG) VALUES (ID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG);
--- END $$
--- DELIMITER ;
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddCourse`$$
+CREATE PROCEDURE AddCourse(
+    CID varchar(22),
+    NAME TEXT,
+    CATEGORY VARCHAR(20),
+    DESCRIPTION TEXT,
+    PRICE FLOAT,
+    IMG varchar(100)
+)
+BEGIN
+    insert into COURSE (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG) VALUES (ID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG);
+END $$
+DELIMITER ;
 
 -- CALL AddCourse('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
--- set CID = REPLACE(left(uuid_v4(), 12), '-', '');
--- set image_data = LOAD_FILE('D:/TKPM/TH/EducationWebApp/database/bth.jpg');
--- insert into COURSE (`CID`, `NAME`, `CATEGORY`, `DESCRIPTION`, `PRICE`, `IMG`) VALUES (REPLACE(left(uuid_v4(), 12), '-', ''), 'LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', image_data);
--- -- SELECT @CID := REPLACE(left(uuid_v4(), 12), '-', '');
--- select LOAD_FILE('D:/TKPM/TH/EducationWebApp/database/bth.jpg');
--- SELECT * FROM COURSE;
 
 /*==============================================================*/
 /* Proc: Update course                                             */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `UpdateCourse`$$
-CREATE PROCEDURE UpdateCourse()
+CREATE PROCEDURE UpdateCourse(
+	CourseID varchar(22),
+    NNAME TEXT,
+    NCATEGORY VARCHAR(20),
+    NDESCRIPTION TEXT,
+    NPRICE FLOAT,
+    NIMG varchar(100)
+)	
 BEGIN
-	SELECT * FROM COURSE;
+	UPDATE COURSE     
+	SET NAME = NNAME,   
+        CATEGORY = NCATEGORY,
+		DESCRIPTION = NDESCRIPTION,
+        PRICE = NPRICE, 
+        IMG = NIMG 
+	WHERE CID = CourseID; 
 END $$
 DELIMITER ;
 
@@ -168,9 +187,11 @@ DELIMITER ;
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `DeleteCourse`$$
-CREATE PROCEDURE DeleteCourse()
+CREATE PROCEDURE DeleteCourse(
+	CourseID varchar(22)
+)
 BEGIN
-	SELECT * FROM COURSE;
+	DELETE FROM COURSE WHERE CID = CourseID;  
 END $$
 DELIMITER ;
 
@@ -296,7 +317,6 @@ CREATE ROLE IF NOT EXISTS 'visitor';
 GRANT SELECT ON IELTS.FORUM TO visitor;
 GRANT SELECT ON IELTS.COURSE TO visitor;
 GRANT SELECT ON IELTS.COMMENT TO visitor;
-GRANT EXECUTE ON PROCEDURE AllCourse TO visitor;
 -- SHOW GRANTS FOR visitor;
 
 /*==============================================================*/

@@ -36,6 +36,7 @@ create table COURSE
    DESCRIPTION          text not null  comment '',
    PRICE                float not null  comment '',
    IMG                  varchar(100) not null  comment '',
+   OWNERID              varchar(22) not null  comment '',
    primary key (CID)
 );
 
@@ -95,24 +96,13 @@ create table NOTE
 );
 
 /*==============================================================*/
-/* Table: OWNER                                                 */
-/*==============================================================*/
-drop table if exists OWNER;
-create table OWNER
-(
-   ID                   varchar(22) not null  comment '',
-   CID                  varchar(22) not null  comment '',
-   primary key (ID, CID)
-);
-
-/*==============================================================*/
 /* Table: TEST                                                  */
 /*==============================================================*/
 drop table if exists TEST;
 create table TEST
 (
    TID                  varchar(22) not null  comment '',
-   CID                  varchar(22)  comment '',
+   LID                  varchar(22)  comment '',
    TITLE                text not null  comment '',
    DESCRIPTION          text  comment '',
    DURATION             time not null  comment '',
@@ -230,11 +220,8 @@ alter table NOTE add constraint FK_NOTE_LESSON foreign key (LID)
 alter table NOTE add constraint FK_NOTE_ACCOUNT foreign key (ID)
       references ACCOUNT (ID) on delete restrict on update restrict;
 
-alter table OWNER add constraint FK_OWNER_ACCOUNT foreign key (ID)
+alter table COURSE add constraint FK_COURSE_ACCOUNT foreign key (OWNERID)
       references ACCOUNT (ID) on delete restrict on update restrict;
-
-alter table OWNER add constraint FK_OWNER_COURSE foreign key (CID)
-      references COURSE (CID) on delete restrict on update restrict;
 
 alter table QUESTION add constraint FK_QUESTION_TEST foreign key (TID)
       references TEST (TID) on delete restrict on update restrict;
@@ -242,7 +229,7 @@ alter table QUESTION add constraint FK_QUESTION_TEST foreign key (TID)
 alter table SOLUTION add constraint FK_SOL_QUESTION foreign key (QID)
       references QUESTION (QID) on delete restrict on update restrict;
 
-alter table TEST add constraint FK_TEST_COURSE foreign key (CID)
-      references COURSE (CID) on delete restrict on update restrict;
+alter table TEST add constraint FK_TEST_LESSON foreign key (LID)
+      references LESSON (LID) on delete restrict on update restrict;
 
 
