@@ -147,11 +147,12 @@ CREATE PROCEDURE AddCourse(
     CATEGORY VARCHAR(20),
     DESCRIPTION TEXT,
     PRICE FLOAT,
-    IMG varchar(100)
+    IMG varchar(100),
+    OWNERID varchar(22)
 )
 BEGIN
-    insert into COURSE (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG) VALUES (ID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG);
-END $$
+    INSERT INTO COURSE VALUES (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG, OWNERID);
+    SELECT 'Course inserts successfully' AS RESULT;
 DELIMITER ;
 
 -- CALL AddCourse('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
@@ -167,7 +168,8 @@ CREATE PROCEDURE UpdateCourse(
     NCATEGORY VARCHAR(20),
     NDESCRIPTION TEXT,
     NPRICE FLOAT,
-    NIMG varchar(100)
+    NIMG varchar(100),
+    NOWNERID varchar(22)
 )	
 BEGIN
 	UPDATE COURSE     
@@ -175,8 +177,10 @@ BEGIN
         CATEGORY = NCATEGORY,
 		DESCRIPTION = NDESCRIPTION,
         PRICE = NPRICE, 
-        IMG = NIMG 
+        IMG = NIMG, 
+        OWNERID = NOWNERID
 	WHERE CID = CourseID; 
+    SELECT 'Course updates successfully' AS RESULT;
 END $$
 DELIMITER ;
 
@@ -192,6 +196,7 @@ CREATE PROCEDURE DeleteCourse(
 )
 BEGIN
 	DELETE FROM COURSE WHERE CID = CourseID;  
+    SELECT 'Course deletes successfully' AS RESULT;
 END $$
 DELIMITER ;
 
@@ -216,6 +221,70 @@ END $$
 DELIMITER ;
 
 -- CALL GetLesson('8a1285eaceae11edb47');
+
+/*==============================================================*/
+/* Proc: Add lesson                                             */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddLesson`$$
+CREATE PROCEDURE AddLesson(
+	LID varchar(22),
+	CID varchar(22),
+	NAME text,
+	CONTENT text,
+	VIDEO varchar(100),
+	ATTACHMENT varchar(100)
+)
+BEGIN
+    INSERT INTO LESSON VALUES (LID, CID, NAME, CONTENT, VIDEO, ATTACHMENT);
+    SELECT 'Lesson inserts successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL AddLesson('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
+
+/*==============================================================*/
+/* Proc: Update lesson                                             */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateLesson`$$
+CREATE PROCEDURE UpdateLesson(
+	LID varchar(22),
+	NCID varchar(22),
+	NNAME text,
+	NCONTENT text,
+	NVIDEO varchar(100),
+	NATTACHMENT varchar(100)
+)	
+BEGIN
+	UPDATE LESSON     
+	SET CID = NCID,
+		NAME = NNAME,   
+        CONTENT = NCONTENT,
+		VIDEO = NVIDEO,
+        ATTACHMENT = NATTACHMENT
+	WHERE LID = LessonID; 
+    SELECT 'Lesson updates successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateLesson();
+
+/*==============================================================*/
+/* Proc: Delete lesson                                             */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteCourse`$$
+CREATE PROCEDURE DeleteCourse(
+	LessonID varchar(22)
+)
+BEGIN
+	DELETE FROM LESSON WHERE LID = LessonID; 
+    SELECT 'Lesson deletes successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteCourse();
 
 /*============================================================================================================================*/
 /*                                                            CART                                                            */
