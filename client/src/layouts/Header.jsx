@@ -80,7 +80,7 @@ const Header = () => {
                 "&:hover": styles.glowText,
               }}
             >
-              <AdbIcon sx={{ mr: 1 }} />
+              <img className="w-[30px] mr-2" src="/icon/pie.png" />
               <Typography
                 variant="h6"
                 noWrap
@@ -93,7 +93,7 @@ const Header = () => {
                   textDecoration: "none",
                 }}
               >
-                FIE
+                PIE
               </Typography>
             </Box>
           </Link>

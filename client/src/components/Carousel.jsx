@@ -48,7 +48,7 @@ const Carousel = ({ backgrounds }) => {
           display: "flex",
           alignItems: "center",
           width: "100%",
-          background: `url(${bgs[pos]})  no-repeat center/cover `,
+          background: `url(${bgs[pos]})  no-repeat center/contain `,
           transition: "background-image ease 0.5s",
         }}
       >

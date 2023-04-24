@@ -18,31 +18,49 @@ const data = [
   {
     id: 1,
     image: "/anh5.png",
-    name: "Title of lesson 1",
+    name: "Lesson 1",
     time: "15:00",
   },
   {
     id: 2,
     image: "/anh1.png",
-    name: "Title of lesson 2",
+    name: "Lesson 2",
     time: "15:00",
   },
   {
     id: 3,
     image: "/anh1.png",
-    name: "Title of lesson 3",
+    name: "Lesson 3",
     time: "15:00",
   },
   {
     id: 4,
     image: "/anh1.png",
-    name: "Title of lesson 4",
+    name: "Lesson 4",
     time: "15:00",
   },
   {
     id: 5,
     image: "/anh1.png",
-    name: "Title of lesson 5",
+    name: "Lesson 5",
+    time: "15:00",
+  },
+  {
+    id: 6,
+    image: "/anh1.png",
+    name: "Lesson 6",
+    time: "15:00",
+  },
+  {
+    id: 7,
+    image: "/anh1.png",
+    name: "Lesson 7",
+    time: "15:00",
+  },
+  {
+    id: 8,
+    image: "/anh1.png",
+    name: "Lesson 8",
     time: "15:00",
   },
 ];
@@ -113,7 +131,7 @@ const Lesson = () => {
     video: "/video/lesson1.mp4",
     content:
       "This lesson will tell about some information and tips you should know in a writing test. Beside that i will analysis  an example writing test ",
-    attachment: "a article link",
+    attachment: "Move to test",
     note: "this lesson is so interesting ...",
   };
   const [notes, setNotes] = useState(lesson.note);
@@ -159,11 +177,14 @@ const Lesson = () => {
       <section className="container">
         <div className="mx-3 pt-2 text-indigo-500 flex items-center border-b-4 border-solid border-red-800 ">
           <h3 className="text-2xl font-Bebas uppercase mr-4         ">
-            <b>Navigations</b>
+            <b>Test</b>
           </h3>
         </div>
         <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
-          {lesson.attachment}
+          <a href="" className="hover:text-indigo-600">
+            {" "}
+            {lesson.attachment}
+          </a>
         </div>
       </section>
       <section className="container">
@@ -224,7 +245,7 @@ const LessonList = ({ data }) => {
         onChange={(e) => setKey(e.target.value)}
       />
 
-      <div className="w-full p-2 grid grid-flow-col  sm:auto-cols-[50%]   md:auto-cols-[33%] items-center overflow-scroll gap-2">
+      <div className="w-full p-2 grid grid-flow-col  sm:auto-cols-[50%]  md:auto-cols-[33%] auto-cols-[20%] items-center overflow-scroll gap-2">
         {list.map((item) => {
           if (item.name.toLowerCase().includes(key))
             return (

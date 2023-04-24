@@ -34,22 +34,22 @@ const Quiz = ({ data }) => {
   };
 
   return (
-    <div className=" mx-auto w-[50%] p-4 ring-1 ring-slate-300  bg-white shadow-lg my-4 rounded-md">
+    <div className=" mx-auto w-[50%] p-4 ring-1 ring-slate-300  bg-white shadow-lg my-4 rounded-md ">
       <h1 className=" uppercase text-center text-3xl font-[900] font-roboto w-full text-indigo-900">
         Quiz Lesson
       </h1>
-      <div className="content flex justify-center flex-col gap-4">
+      <div className="content flex justify-center flex-col gap-4  ">
         <h1 className="px-4 uppercase  text-lg font-[900] font-Bebas w-full text-black underline">
           Question {currentQ + 1}:
         </h1>
-        <div className=" p-8 text-3xl text-amber-900 text-center no-underline font-note bg-yellow-400 rounded-md ring-8 ring-amber-900 break-word">
+        <div className=" p-8 sm:text-sm text-3xl text-amber-900 text-center no-underline font-note bg-yellow-400 rounded-md ring-8 ring-amber-900 break-word">
           {questions[currentQ].question}
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-1 grid-cols-2 grid-row-2 auto-rows-max ">
           {questions[currentQ].options.map((item, index) => (
             <p
               key={index}
-              className={`option p-2 flex justify-center items-center break-all text-md text-amber-900 font-note ${
+              className={`option p-2 flex justify-center items-center break-all sm:text-sm text-md text-amber-900 font-note ${
                 showKey
                   ? index == questions[currentQ].answer
                     ? questions[currentQ].check == true
@@ -66,7 +66,7 @@ const Quiz = ({ data }) => {
         </div>
 
         {showKey && (
-          <div className="p-4 text-xl text-amber-900 text-center no-underline font-note  rounded-md ring-2  break-word">
+          <div className="p-4 sm:text-sm text-xl text-amber-900 text-center no-underline font-note  rounded-md ring-2  break-word">
             {questions[currentQ].key}
           </div>
         )}
