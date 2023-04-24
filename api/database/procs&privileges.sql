@@ -32,33 +32,20 @@ DELIMITER ;
 /*                                                           COURSE                                                           */
 /*============================================================================================================================*/
 /*==============================================================*/
-/* Proc: All course                                             */
-/*==============================================================*/
-DELIMITER $$
-DROP PROCEDURE IF EXISTS `AllCourse`$$
-CREATE PROCEDURE AllCourse()
-BEGIN
-	SELECT * FROM COURSE;
-END $$
-DELIMITER ;
-
--- CALL AllCourse();
-
-/*==============================================================*/
 /* Proc: Get course                                             */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `GetCourse`$$
 CREATE PROCEDURE GetCourse(
-	UID binary(22)
+	UID varchar(22)
 )
 BEGIN
 	SELECT * FROM COURSE 
-    WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = 'PAID');
+    WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = true);
 END $$
 DELIMITER ;
 
--- CALL GetCourse('8a1285eaceae11edb47');
+-- CALL GetCourse('20127237');
 
 /*==============================================================*/
 /* Proc: Get cart                                               */
@@ -66,11 +53,11 @@ DELIMITER ;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `GetCart`$$
 CREATE PROCEDURE GetCart(
-	UID binary(22)
+	UID varchar(22)
 )
 BEGIN
 	SELECT * FROM COURSE 
-    WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = 'UNPAID');
+    WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = false);
 END $$
 DELIMITER ;
 
@@ -82,7 +69,7 @@ DELIMITER ;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `GetClass`$$
 CREATE PROCEDURE GetClass(
-	UID binary(22)
+	UID varchar(22)
 )
 BEGIN
 	SELECT * FROM COURSE 
@@ -91,6 +78,19 @@ END $$
 DELIMITER ;
 
 -- CALL GetClass('8a1285eaceae11edb47');
+
+/*==============================================================*/
+/* Proc: Get course list                                              */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `CourseList`$$
+CREATE PROCEDURE CourseList()
+BEGIN
+	SELECT * FROM COURSE; 
+END $$
+DELIMITER ;
+
+-- CALL CourseList();
 
 /*==============================================================*/
 /* Func: uuid_v4                                             */
@@ -134,7 +134,7 @@ DELIMITER ;
 --     IN IMG varchar(100)
 -- )
 -- BEGIN
---     DECLARE ID BINARY(12);
+--     DECLARE ID varchar(12);
 --     -- DECLARE image_data LONGBLOB;
 --     SET ID = REPLACE(left(uuid_v4(), 12), '-', '');
 --     -- SET image_data = LOAD_FILE(IMG);
@@ -186,7 +186,7 @@ DELIMITER ;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `GetLesson`$$
 CREATE PROCEDURE GetLesson(
-	CID binary(22)
+	CID varchar(22)
 )
 BEGIN
 	SELECT * FROM LESSON L 
@@ -195,6 +195,58 @@ END $$
 DELIMITER ;
 
 -- CALL GetLesson('8a1285eaceae11edb47');
+
+/*============================================================================================================================*/
+/*                                                            CART                                                            */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Add course to cart                                     */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddToCart`$$
+CREATE PROCEDURE AddToCart(
+	CourseID varchar(22),
+    UID varchar(22)
+)
+BEGIN
+	IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
+		SELECT 'This course has already existed' AS RESULT;
+	ELSE
+		INSERT INTO CART VALUES (CID, UID, false);
+        SELECT 'Add successfully' AS RESULT;
+	END IF;
+END $$
+DELIMITER ;
+
+/*==============================================================*/
+/* Proc: Delete course from cart                                */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteFromCart`$$
+CREATE PROCEDURE DeleteFromCart(
+	CourseID varchar(22),
+    UID varchar(22)
+)
+BEGIN
+	DELETE FROM CART WHERE CID = CourseID AND ID = UID;
+    SELECT 'Delete successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+/*==============================================================*/
+/* Proc: Pay                                                    */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `Pay`$$
+CREATE PROCEDURE Pay(
+	CourseID varchar(22),
+    UID varchar(22)
+)
+BEGIN
+	UPDATE CART SET STATUS = true WHERE CID = CourseID AND ID = UID;
+    SELECT 'Update successfully' AS RESULT;
+END $$
+DELIMITER ;
 
 /*==============================================================*/
 /* Proc: Create users                                           */
