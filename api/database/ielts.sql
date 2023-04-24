@@ -13,7 +13,7 @@ USE IELTS;
 drop table if exists ACCOUNT;
 create table ACCOUNT
 (
-   ID                   binary(22) not null  comment '',
+   ID                   varchar(22) not null  comment '',
    USERNAME             varchar(30) not null  comment '',
    PASSWORD             varchar(255) not null  comment '',
    NAME                 text not null  comment '',
@@ -30,7 +30,7 @@ create table ACCOUNT
 drop table if exists COURSE;
 create table COURSE
 (
-   CID                  binary(22) not null  comment '',
+   CID                  varchar(22) not null  comment '',
    NAME                 text not null  comment '',
    CATEGORY             varchar(20) not null  comment '',
    DESCRIPTION          text not null  comment '',
@@ -45,8 +45,8 @@ create table COURSE
 drop table if exists CART;
 create table CART
 (
-   CID                  binary(22) not null  comment '',
-   ID                   binary(22) not null  comment '',
+   CID                  varchar(22) not null  comment '',
+   ID                   varchar(22) not null  comment '',
    STATUS               bool not null  comment '',
    primary key (CID, ID)
 );
@@ -57,8 +57,8 @@ create table CART
 drop table if exists FORUM;
 create table FORUM
 (
-   FID                  binary(22) not null  comment '',
-   ID                   binary(22) not null  comment '',
+   FID                  varchar(22) not null  comment '',
+   ID                   varchar(22) not null  comment '',
    TITLE                text not null  comment '',
    DATE_ESTABLISHED     datetime not null  comment '',
    CONTENT              text not null  comment '',
@@ -72,8 +72,8 @@ create table FORUM
 drop table if exists LESSON;
 create table LESSON
 (
-   LID                  binary(22) not null  comment '',
-   CID                  binary(22) not null  comment '',
+   LID                  varchar(22) not null  comment '',
+   CID                  varchar(22) not null  comment '',
    NAME                 text not null  comment '',
    CONTENT              text not null  comment '',
    VIDEO                varchar(100) not null  comment '',
@@ -87,9 +87,9 @@ create table LESSON
 drop table if exists NOTE;
 create table NOTE
 (
-   NID                  binary(22) not null  comment '',
-   LID                  binary(22) not null  comment '',
-   ID                   binary(22) not null  comment '',
+   NID                  varchar(22) not null  comment '',
+   LID                  varchar(22) not null  comment '',
+   ID                   varchar(22) not null  comment '',
    CONTENT              text not null  comment '',
    primary key (NID)
 );
@@ -100,8 +100,8 @@ create table NOTE
 drop table if exists OWNER;
 create table OWNER
 (
-   ID                   binary(22) not null  comment '',
-   CID                  binary(22) not null  comment '',
+   ID                   varchar(22) not null  comment '',
+   CID                  varchar(22) not null  comment '',
    primary key (ID, CID)
 );
 
@@ -111,8 +111,8 @@ create table OWNER
 drop table if exists TEST;
 create table TEST
 (
-   TID                  binary(22) not null  comment '',
-   CID                  binary(22)  comment '',
+   TID                  varchar(22) not null  comment '',
+   CID                  varchar(22)  comment '',
    TITLE                text not null  comment '',
    DESCRIPTION          text  comment '',
    DURATION             time not null  comment '',
@@ -125,8 +125,8 @@ create table TEST
 drop table if exists QUESTION;
 create table QUESTION
 (
-   QID                  binary(22) not null  comment '',
-   TID                  binary(22) not null  comment '',
+   QID                  varchar(22) not null  comment '',
+   TID                  varchar(22) not null  comment '',
    CONTENT              text not null  comment '',
    IMG                  varchar(100)  comment '',
    AUDIO                varchar(100)  comment '',
@@ -139,9 +139,9 @@ create table QUESTION
 drop table if exists ASSIGNMENT;
 create table ASSIGNMENT
 (
-   ASSID                binary(22) not null  comment '',
-   TID                  binary(22) not null  comment '',
-   ID                   binary(22) not null  comment '',
+   ASSID                varchar(22) not null  comment '',
+   TID                  varchar(22) not null  comment '',
+   ID                   varchar(22) not null  comment '',
    DATE_SUBMITED        datetime not null  comment '',
    SCORE                float  comment '',
    primary key (ASSID)
@@ -153,9 +153,9 @@ create table ASSIGNMENT
 drop table if exists ANSWER;
 create table ANSWER
 (
-   AID                  binary(22) not null  comment '',
-   QID                  binary(22) not null  comment '',
-   ASSID                binary(22) not null  comment '',
+   AID                  varchar(22) not null  comment '',
+   QID                  varchar(22) not null  comment '',
+   ASSID                varchar(22) not null  comment '',
    CONTENT              text not null  comment '',
    primary key (AID)
 );
@@ -166,8 +166,8 @@ create table ANSWER
 drop table if exists SOLUTION;
 create table SOLUTION
 (
-   SID                  binary(22) not null  comment '',
-   QID                  binary(22) not null  comment '',
+   SID                  varchar(22) not null  comment '',
+   QID                  varchar(22) not null  comment '',
    CONTENT              text not null  comment '',
    primary key (SID)
 );
@@ -179,11 +179,11 @@ create table SOLUTION
 drop table if exists COMMENT;
 create table COMMENT
 (
-   CMTID                binary(22) not null  comment '',
-   FID                  binary(22)  comment '',
-   ID                   binary(22) not null  comment '',
-   CID                  binary(22)  comment '',
-   TID                  binary(22)  comment '',
+   CMTID                varchar(22) not null  comment '',
+   FID                  varchar(22)  comment '',
+   ID                   varchar(22) not null  comment '',
+   CID                  varchar(22)  comment '',
+   TID                  varchar(22)  comment '',
    CONTENT              text not null  comment '',
    primary key (CMTID)
 );
