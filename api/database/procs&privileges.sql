@@ -4,6 +4,9 @@ USE IELTS;
 -- Select user from mysql.user;
 -- Select current_user();
 
+/*============================================================================================================================*/
+/*                                                           ACCOUNT                                                          */
+/*============================================================================================================================*/
 /*==============================================================*/
 /* Proc: Login                                                  */
 /*==============================================================*/
@@ -25,8 +28,78 @@ DELIMITER ;
 
 -- CALL Login('mipu', 'mi');
 -- insert into account values(REPLACE(left(UUID(), 22), '-', ''), 'mipu', 'mi', 'pmp', '113', '@gmail.com', '', 'student');
--- SELECT USERNAME, PASSWORD FROM ACCOUNT;
 -- SELECT * FROM ACCOUNT;
+
+/*==============================================================*/
+/* Proc: Add account                                            */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddAccount`$$
+CREATE PROCEDURE AddAccount(
+	ID varchar(22),
+	USERNAME varchar(30),
+	PASSWORD varchar(30),
+	NAME text,
+	PHONE varchar(15),
+	MAIL varchar(30),
+	AVA varchar(100),
+	ROLE varchar(12)
+)
+BEGIN
+    INSERT INTO ACCOUNT VALUES (ID, USERNAME, PASSWORD, NAME, PHONE, MAIL, AVA, ROLE);
+    SELECT 'Account inserts successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL AddAccount("20127403", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "student");
+
+/*==============================================================*/
+/* Proc: Update account                                         */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateAccount`$$
+CREATE PROCEDURE UpdateAccount(
+	UserID varchar(22),
+	NUSERNAME varchar(30),
+	NPASSWORD varchar(30),
+	NNAME text,
+	NPHONE varchar(15),
+	NMAIL varchar(30),
+	NAVA varchar(100),
+	NROLE varchar(12)
+)	
+BEGIN
+	UPDATE ACCOUNT     
+	SET USERNAME = NUSERNAME,   
+        PASSWORD = NPASSWORD,
+		NAME = NNAME,
+        PHONE = NPHONE, 
+        MAIL = NMAIL, 
+        AVA = NAVA,
+        ROLE = NROLE
+	WHERE ID = UserID; 
+    SELECT 'Account updates successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateAccount();
+
+/*==============================================================*/
+/* Proc: Delete account                                         */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteAccount`$$
+CREATE PROCEDURE DeleteAccount(
+	UserID varchar(22)
+)
+BEGIN
+	DELETE FROM CART WHERE ID = UserID;  
+    DELETE FROM ACCOUNT WHERE ID = UserID;  
+    SELECT 'Account deletes successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteAccount();
 
 /*============================================================================================================================*/
 /*                                                           COURSE                                                           */
@@ -80,7 +153,7 @@ DELIMITER ;
 -- CALL GetClass('8a1285eaceae11edb47');
 
 /*==============================================================*/
-/* Proc: Get course list                                              */
+/* Proc: Get course list                                        */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `CourseList`$$
@@ -108,7 +181,7 @@ DELIMITER ;
 -- CALL GetCourseByName();
 
 /*==============================================================*/
-/* Func: uuid_v4                                             */
+/* Func: uuid_v4                                                */
 /*==============================================================*/
 -- DELIMITER $$  
 -- DROP FUNCTION IF EXISTS uuid_v4;
@@ -153,12 +226,13 @@ CREATE PROCEDURE AddCourse(
 BEGIN
     INSERT INTO COURSE VALUES (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG, OWNERID);
     SELECT 'Course inserts successfully' AS RESULT;
+END $$
 DELIMITER ;
 
 -- CALL AddCourse('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
 
 /*==============================================================*/
-/* Proc: Update course                                             */
+/* Proc: Update course                                          */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `UpdateCourse`$$
@@ -187,7 +261,7 @@ DELIMITER ;
 -- CALL UpdateCourse();
 
 /*==============================================================*/
-/* Proc: Delete course                                             */
+/* Proc: Delete course                                          */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `DeleteCourse`$$
@@ -195,6 +269,7 @@ CREATE PROCEDURE DeleteCourse(
 	CourseID varchar(22)
 )
 BEGIN
+	DELETE FROM CART WHERE CID = CourseID;  
 	DELETE FROM COURSE WHERE CID = CourseID;  
     SELECT 'Course deletes successfully' AS RESULT;
 END $$
@@ -244,7 +319,7 @@ DELIMITER ;
 -- CALL AddLesson('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
 
 /*==============================================================*/
-/* Proc: Update lesson                                             */
+/* Proc: Update lesson                                          */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `UpdateLesson`$$
@@ -271,11 +346,11 @@ DELIMITER ;
 -- CALL UpdateLesson();
 
 /*==============================================================*/
-/* Proc: Delete lesson                                             */
+/* Proc: Delete lesson                                          */
 /*==============================================================*/
 DELIMITER $$
-DROP PROCEDURE IF EXISTS `DeleteCourse`$$
-CREATE PROCEDURE DeleteCourse(
+DROP PROCEDURE IF EXISTS `DeleteLesson`$$
+CREATE PROCEDURE DeleteLesson(
 	LessonID varchar(22)
 )
 BEGIN
@@ -284,7 +359,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CALL DeleteCourse();
+-- CALL DeleteLesson();
 
 /*============================================================================================================================*/
 /*                                                            CART                                                            */
@@ -337,6 +412,86 @@ BEGIN
     SELECT 'Update successfully' AS RESULT;
 END $$
 DELIMITER ;
+
+/*============================================================================================================================*/
+/*                                                            TEST                                                            */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Get test                                               */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetTest`$$
+CREATE PROCEDURE GetTest(
+	CID varchar(22)
+)
+BEGIN
+	SELECT * FROM LESSON L 
+    WHERE L.CID = CID;
+END $$
+DELIMITER ;
+
+-- CALL GetTest('8a1285eaceae11edb47');
+
+/*==============================================================*/
+/* Proc: Add test                                               */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddTest`$$
+CREATE PROCEDURE AddTest(
+	TID varchar(22),
+	LID varchar(22),
+	TITLE text,
+	DESCRIPTION text,
+	DURATION time
+)
+BEGIN
+    INSERT INTO TEST VALUES (TID, LID, TITLE, DESCRIPTION, DURATION);
+    SELECT 'Test inserts successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL AddTest('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
+
+/*==============================================================*/
+/* Proc: Update test                                            */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateTest`$$
+CREATE PROCEDURE UpdateTest(
+	TestID varchar(22),
+	LessonID varchar(22),
+	NTITLE text,
+	NDESCRIPTION text,
+	NDURATION time
+)	
+BEGIN
+	UPDATE TEST     
+	SET TITLE = NTITLE,   
+        DESCRIPTION = NDESCRIPTION,
+		DURATION = NDURATION
+	WHERE TID = TestID AND LID = LessonID; 
+    SELECT 'Test updates successfully' AS RESULT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateTest();
+
+/*==============================================================*/
+/* Proc: Delete test                                          */
+/*==============================================================*/
+-- DELIMITER $$
+-- DROP PROCEDURE IF EXISTS `DeleteTest`$$
+-- CREATE PROCEDURE DeleteTest(
+-- 	TestID varchar(22)
+-- )
+-- BEGIN
+-- 	DELETE FROM TEST WHERE TID = TestID; 
+--     SELECT 'Test deletes successfully' AS RESULT;
+-- END $$
+-- DELIMITER ;
+
+-- CALL DeleteTest();
+
 
 /*==============================================================*/
 /* Proc: Create users                                           */

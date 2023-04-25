@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 
 const controller = {
+    //------------------------------------COURSE------------------------------------//
     course: async (req, res) => {
         try{
             const courseList = await model.course();
@@ -53,10 +54,41 @@ const controller = {
             res.status(400).json({msg: error.message});
         }
     },
+    addCourse: async (req, res) => {
+        try{
+            const data = req.body;
+            const result = await model.addCourse(data);
+            res.status(200).json(result);
+        }
+        catch (error){
+            res.status(400).json({msg: error.message});
+        }
+    },
+    updateCourse: async (req, res) => {
+        try{
+            const data = req.body;
+            const result = await model.updateCourse(data);
+            res.status(200).json(result);
+        }
+        catch (error){
+            res.status(400).json({msg: error.message});
+        }
+    },
+    deleteCourse: async (req, res) => {
+        try{
+            const CourseID = req.params.id;
+            const result = await model.deleteCourse(CourseID);
+            res.status(200).json(result);
+        }
+        catch (error){
+            res.status(400).json({msg: error.message});
+        }
+    },
+    //------------------------------------CART------------------------------------//
     addToCart: async (req, res) => {
         try{
             const data = req.body;
-            const result = await model.myClass(data);
+            const result = await model.addToCart(data);
             res.status(200).json(result);
         }
         catch (error){
@@ -66,7 +98,7 @@ const controller = {
     deleteFromCart: async (req, res) => {
         try{
             const data = req.body;
-            const result = await model.myClass(data);
+            const result = await model.deleteFromCart(data);
             res.status(200).json(result);
         }
         catch (error){
@@ -76,15 +108,44 @@ const controller = {
     enrollCourse: async (req, res) => {
         try{
             const data = req.body;
-            const result = await model.myClass(data);
+            const result = await model.enrollCourse(data);
             res.status(200).json(result);
         }
         catch (error){
             res.status(400).json({msg: error.message});
         }
     },
-    
-
+    //------------------------------------LESSON------------------------------------//
+    addLesson: async (req, res) => {
+        try{
+            const data = req.body;
+            const result = await model.addLesson(data);
+            res.status(200).json(result);
+        }
+        catch (error){
+            res.status(400).json({msg: error.message});
+        }
+    },
+    updateLesson: async (req, res) => {
+        try{
+            const data = req.body;
+            const result = await model.updateLesson(data);
+            res.status(200).json(result);
+        }
+        catch (error){
+            res.status(400).json({msg: error.message});
+        }
+    },
+    deleteLesson: async (req, res) => {
+        try{
+            const LessonID = req.params.id;
+            const result = await model.deleteLesson(LessonID);
+            res.status(200).json(result);
+        }
+        catch (error){
+            res.status(400).json({msg: error.message});
+        }
+    },
 };
 
 export default controller;

@@ -3,6 +3,7 @@ USE IELTS;
 INSERT INTO ACCOUNT VALUES("20127237", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "student");
 INSERT INTO ACCOUNT VALUES("20127063", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "teacher");
 INSERT INTO ACCOUNT VALUES("20127507", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "student");
+-- CALL DeleteAccount("20127063");
 
 -- Course
 INSERT INTO COURSE VALUES ("999","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
