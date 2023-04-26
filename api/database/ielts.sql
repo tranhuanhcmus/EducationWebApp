@@ -15,7 +15,7 @@ create table ACCOUNT
 (
    ID                   varchar(22) not null  comment '',
    USERNAME             varchar(30) not null  comment '',
-   PASSWORD             varchar(30) not null  comment '',
+   PASSWORD             varchar(255) not null  comment '',
    NAME                 text not null  comment '',
    PHONE                varchar(15) not null  comment '',
    MAIL                 varchar(30)  comment '',

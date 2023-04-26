@@ -1,6 +1,7 @@
-import express from 'express';
-import controller from  "../controllers/Controller.js";
+import express from "express";
+import controller from "../controllers/Controller.js";
 const router = express.Router();
+
 
 //------------------------------------COURSE------------------------------------//
 router.get('/course', controller.course);                       //toàn bộ course
@@ -19,5 +20,7 @@ router.delete('/deletefromcart', controller.deleteFromCart);    //xóa course kh
 router.post('/addlesson', controller.addLesson);                //thêm lesson
 router.put('/updatelesson', controller.updateLesson);           //cập nhật lesson
 router.delete('/deletelesson', controller.deleteLesson);        //xóa lesson
+router.post("/image", controller.getImage); //lấy ảnh từ database
+
 
 export default router;          

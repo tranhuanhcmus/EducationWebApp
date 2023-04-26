@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, IconButton } from "@mui/material";
-import Comment from "../components/Comment";
+import CommentList from "../components/CommentList";
 import Quiz from "./../components/Quiz/Quiz";
 import { useNavigate } from "react-router-dom";
 const buttonStyle = {
@@ -222,7 +222,7 @@ const Lesson = () => {
               </Button>
             </div>
           </div>
-          <Comment />
+          <CommentList />
         </div>
       </section>
     </>
