@@ -1,9 +1,13 @@
 import React from "react";
 import Carousel from "../components/Carousel";
 import Section from "../components/Section";
+import { makeRequest } from "./../utils/axios";
 
 const Home = () => {
   const sectionVariants = ["Courses", "Tests", "Blogs"];
+  const [courses, setCourses] = React.useState([]);
+  const [tests, setTests] = React.useState([]);
+  const [blogs, setBlogs] = React.useState([]);
   const discount = [
     "/discount/discount3.jpg",
     "/discount/discount1.jpg",
@@ -34,13 +38,36 @@ const Home = () => {
 
   //   getRandomImages();
   // }, []);
-  React.useEffect(() => setBgs(discount), []);
+  React.useEffect(() => {
+    setBgs(discount);
+
+    //get Courses
+    const data_courses = makeRequest({
+      url: "/course",
+      method: "get",
+    })
+      .then((res) => res.data)
+      .then((data) => setCourses(data));
+  }, []);
 
   return (
     <>
       <Carousel backgrounds={bgs} />
       {sectionVariants.map((variant, index) => {
-        return <Section key={index} Type={variant} index={index} />;
+        return (
+          <Section
+            key={index}
+            Type={variant}
+            index={index}
+            data={
+              variant == "Courses"
+                ? courses
+                : variant == "Tests"
+                ? tests
+                : blogs
+            }
+          />
+        );
       })}
     </>
   );

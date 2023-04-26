@@ -1,6 +1,7 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import Login from "./pages/Login";
+import Blogs from "./pages/Blogs";
 import Register from "./pages/Register";
 import Header from "./layouts/Header";
 import Footer from "./layouts/Footer";
@@ -15,6 +16,7 @@ import ErrorPage from "./pages/404page";
 import React from "react";
 import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
+import BlogDetails from "./pages/BlogDetails";
 
 function App() {
   const Layout = () => {
@@ -56,6 +58,8 @@ function App() {
         { path: "/profile", element: <Profile /> },
         { path: "/cart", element: <Cart /> },
         { path: "/test", element: <Test /> },
+        { path: "/blogs", element: <Blogs /> },
+        { path: "/BlogDetails", element: <BlogDetails /> },
         { path: "/lesson/:id", element: <Lesson /> },
       ],
     },
