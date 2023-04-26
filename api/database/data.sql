@@ -1,13 +1,14 @@
 USE IELTS;
--- Course
-INSERT INTO COURSE VALUES ("999","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg");
-INSERT INTO COURSE VALUES ("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg");
-INSERT INTO COURSE VALUES ("113","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg");
-
 -- Account
 INSERT INTO ACCOUNT VALUES("20127237", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "student");
 INSERT INTO ACCOUNT VALUES("20127063", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "teacher");
 INSERT INTO ACCOUNT VALUES("20127507", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "student");
+-- CALL DeleteAccount("20127063");
+
+-- Course
+INSERT INTO COURSE VALUES ("999","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
+INSERT INTO COURSE VALUES ("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
+INSERT INTO COURSE VALUES ("113","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
 
 -- Lesson
 INSERT INTO LESSON VALUES("227", "111", "STARTER", "GROUP6", "vid1.mp4", "TL.pdf");
@@ -15,16 +16,12 @@ INSERT INTO LESSON VALUES("222", "999", "MOVER", "GROUP6", "vid2.mp4", "TL.pdf")
 INSERT INTO LESSON VALUES("232", "113", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf");
 INSERT INTO LESSON VALUES("666", "113", "KET", "GROUP6", "vid3.mp4", "TL.pdf");
 INSERT INTO LESSON VALUES("999", "113", "PET", "GROUP6", "vid3.mp4", "TL.pdf");
+-- DELETE FROM LESSON WHERE CID = "113"; 
 
 -- Note
 INSERT INTO NOTE VALUES("123", "222", "20127237", "GROUP6");
 INSERT INTO NOTE VALUES("456", "666", "20127063", "GROUP6");
 INSERT INTO NOTE VALUES("789", "999", "20127507", "GROUP6");
-
--- Owner
-INSERT INTO OWNER VALUES("20127063", "999");
-INSERT INTO OWNER VALUES("20127063", "113");
-INSERT INTO OWNER VALUES("20127063", "111");
 
 -- Cart
 INSERT INTO CART VALUES("111", "20127237", true);
@@ -40,9 +37,11 @@ INSERT INTO FORUM VALUES ("888","20127507", "RELATIVE CLAUSE", "2020-03-06", "9+
 INSERT INTO FORUM VALUES ("000","20127237", "PERFECT TENSE", "2019-01-03", "9+", "bth.jpg");
 
 -- Test
-INSERT INTO TEST VALUES ("001","999", "LISTENING", "Quizzes", "00:15:00");
-INSERT INTO TEST VALUES ("002","111", "PHRASED VERB", "Quizzes", "00:20:00");
-INSERT INTO TEST VALUES ("003","113", "PERFECT TENSE", "Listening", "00:15:00");
+
+INSERT INTO TEST VALUES ("001","227", "LISTENING", "Quizzes", "00:15:00");
+INSERT INTO TEST VALUES ("002","232", "PHRASED VERD", "Quizzes", "00:20:00");
+INSERT INTO TEST VALUES ("003","227", "PERFECT TENSE", "Listening", "00:15:00");
+
 
 -- Question
 INSERT INTO QUESTION VALUES ("001","001", "In 1967, One Hundred Years of Solitude was published in?| Spanish| Italian| French", "", "100-years-of-solitude.mp3");

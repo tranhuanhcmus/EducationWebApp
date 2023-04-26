@@ -4,6 +4,9 @@ USE IELTS;
 -- Select user from mysql.user;
 -- Select current_user();
 
+/*============================================================================================================================*/
+/*                                                           ACCOUNT                                                          */
+/*============================================================================================================================*/
 /*==============================================================*/
 /* Proc: Login                                                  */
 /*==============================================================*/
@@ -25,8 +28,88 @@ DELIMITER ;
 
 -- CALL Login('mipu', 'mi');
 -- insert into account values(REPLACE(left(UUID(), 22), '-', ''), 'mipu', 'mi', 'pmp', '113', '@gmail.com', '', 'student');
--- SELECT USERNAME, PASSWORD FROM ACCOUNT;
 -- SELECT * FROM ACCOUNT;
+
+/*==============================================================*/
+/* Proc: Add account                                            */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddAccount`$$
+CREATE PROCEDURE AddAccount(
+	ID varchar(22),
+	USERNAME varchar(30),
+	PASSWORD varchar(30),
+	NAME text,
+	PHONE varchar(15),
+	MAIL varchar(30),
+	AVA varchar(100),
+	ROLE varchar(12)
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO ACCOUNT VALUES (ID, USERNAME, PASSWORD, NAME, PHONE, MAIL, AVA, ROLE);
+		SELECT 'Account inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddAccount("20127403", "mipu", "mipu", "pmp", "113", "@gmail.com", "bth.jpg", "student");
+
+/*==============================================================*/
+/* Proc: Update account                                         */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateAccount`$$
+CREATE PROCEDURE UpdateAccount(
+	UserID varchar(22),
+	NUSERNAME varchar(30),
+	NPASSWORD varchar(30),
+	NNAME text,
+	NPHONE varchar(15),
+	NMAIL varchar(30),
+	NAVA varchar(100),
+	NROLE varchar(12)
+)	
+BEGIN
+	START TRANSACTION;
+		UPDATE ACCOUNT     
+		SET USERNAME = NUSERNAME,   
+			PASSWORD = NPASSWORD,
+			NAME = NNAME,
+			PHONE = NPHONE, 
+			MAIL = NMAIL, 
+			AVA = NAVA,
+			ROLE = NROLE
+		WHERE ID = UserID; 
+		SELECT 'Account updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateAccount();
+
+/*==============================================================*/
+/* Proc: Delete account                                         */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteAccount`$$
+CREATE PROCEDURE DeleteAccount(
+	UserID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM CART WHERE ID = UserID;
+        DELETE FROM COMMENT WHERE ID = UserID; 
+        DELETE FROM FORUM WHERE ID = UserID;  
+        DELETE FROM ANSWER WHERE ASSID IN (SELECT ASSID FROM ASSIGNMENT WHERE ID = UserID);
+		DELETE FROM ASSIGNMENT WHERE ID = UserID;
+		DELETE FROM ACCOUNT WHERE ID = UserID;  
+		SELECT 'Account deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteAccount();
 
 /*============================================================================================================================*/
 /*                                                           COURSE                                                           */
@@ -40,8 +123,10 @@ CREATE PROCEDURE GetCourse(
 	UID varchar(22)
 )
 BEGIN
-	SELECT * FROM COURSE 
-    WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = true);
+	START TRANSACTION;
+		SELECT * FROM COURSE 
+		WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = true);
+    COMMIT;
 END $$
 DELIMITER ;
 
@@ -56,8 +141,10 @@ CREATE PROCEDURE GetCart(
 	UID varchar(22)
 )
 BEGIN
-	SELECT * FROM COURSE 
-    WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = false);
+	START TRANSACTION;
+		SELECT * FROM COURSE 
+		WHERE CID IN (SELECT CID FROM CART WHERE ID = UID AND STATUS = false);
+    COMMIT;
 END $$
 DELIMITER ;
 
@@ -72,28 +159,49 @@ CREATE PROCEDURE GetClass(
 	UID varchar(22)
 )
 BEGIN
-	SELECT * FROM COURSE 
-    WHERE CID IN (SELECT CID FROM OWNER WHERE ID = UID);
+	START TRANSACTION;
+		SELECT * FROM COURSE 
+		WHERE OWNERID =  UID;
+    COMMIT;
 END $$
 DELIMITER ;
 
 -- CALL GetClass('8a1285eaceae11edb47');
 
 /*==============================================================*/
-/* Proc: Get course list                                              */
+/* Proc: Get course list                                        */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `CourseList`$$
 CREATE PROCEDURE CourseList()
 BEGIN
-	SELECT * FROM COURSE; 
+	START TRANSACTION;
+		SELECT * FROM COURSE; 
+    COMMIT;
 END $$
 DELIMITER ;
 
 -- CALL CourseList();
 
 /*==============================================================*/
-/* Func: uuid_v4                                             */
+/* Proc: Get course by name                                              */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetCourseByName`$$
+CREATE PROCEDURE GetCourseByName(
+	CourseName TEXT
+)
+BEGIN
+	START TRANSACTION;
+		SELECT * FROM COURSE WHERE NAME LIKE CourseName; 
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL GetCourseByName();
+
+/*==============================================================*/
+/* Func: uuid_v4                                                */
 /*==============================================================*/
 -- DELIMITER $$  
 -- DROP FUNCTION IF EXISTS uuid_v4;
@@ -124,53 +232,73 @@ DELIMITER ;
 /*==============================================================*/
 /* Proc: Add course                                             */
 /*==============================================================*/
--- DELIMITER $$
--- DROP PROCEDURE IF EXISTS `AddCourse`$$
--- CREATE PROCEDURE AddCourse(
---     IN NAME TEXT,
---     IN CATEGORY VARCHAR(20),
---     IN DESCRIPTION TEXT,
---     IN PRICE FLOAT,
---     IN IMG varchar(100)
--- )
--- BEGIN
---     DECLARE ID varchar(12);
---     -- DECLARE image_data LONGBLOB;
---     SET ID = REPLACE(left(uuid_v4(), 12), '-', '');
---     -- SET image_data = LOAD_FILE(IMG);
---     insert into COURSE (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG) VALUES (ID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG);
--- END $$
--- DELIMITER ;
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddCourse`$$
+CREATE PROCEDURE AddCourse(
+    CID varchar(22),
+    NAME TEXT,
+    CATEGORY VARCHAR(20),
+    DESCRIPTION TEXT,
+    PRICE FLOAT,
+    IMG varchar(100),
+    OWNERID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO COURSE VALUES (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG, OWNERID);
+		SELECT 'Course inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
 
 -- CALL AddCourse('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
--- set CID = REPLACE(left(uuid_v4(), 12), '-', '');
--- set image_data = LOAD_FILE('D:/TKPM/TH/EducationWebApp/database/bth.jpg');
--- insert into COURSE (`CID`, `NAME`, `CATEGORY`, `DESCRIPTION`, `PRICE`, `IMG`) VALUES (REPLACE(left(uuid_v4(), 12), '-', ''), 'LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', image_data);
--- -- SELECT @CID := REPLACE(left(uuid_v4(), 12), '-', '');
--- select LOAD_FILE('D:/TKPM/TH/EducationWebApp/database/bth.jpg');
--- SELECT * FROM COURSE;
 
 /*==============================================================*/
-/* Proc: Update course                                             */
+/* Proc: Update course                                          */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `UpdateCourse`$$
-CREATE PROCEDURE UpdateCourse()
+CREATE PROCEDURE UpdateCourse(
+	CourseID varchar(22),
+    NNAME TEXT,
+    NCATEGORY VARCHAR(20),
+    NDESCRIPTION TEXT,
+    NPRICE FLOAT,
+    NIMG varchar(100),
+    NOWNERID varchar(22)
+)	
 BEGIN
-	SELECT * FROM COURSE;
+	START TRANSACTION;
+		UPDATE COURSE     
+		SET NAME = NNAME,   
+			CATEGORY = NCATEGORY,
+			DESCRIPTION = NDESCRIPTION,
+			PRICE = NPRICE, 
+			IMG = NIMG, 
+			OWNERID = NOWNERID
+		WHERE CID = CourseID; 
+		SELECT 'Course updates successfully' AS RESULT;
+    COMMIT;
 END $$
 DELIMITER ;
 
 -- CALL UpdateCourse();
 
 /*==============================================================*/
-/* Proc: Delete course                                             */
+/* Proc: Delete course                                          */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `DeleteCourse`$$
-CREATE PROCEDURE DeleteCourse()
+CREATE PROCEDURE DeleteCourse(
+	CourseID varchar(22)
+)
 BEGIN
-	SELECT * FROM COURSE;
+	START TRANSACTION;
+		DELETE FROM CART WHERE CID = CourseID; 
+		DELETE FROM LESSON WHERE CID = CourseID; 
+		DELETE FROM COURSE WHERE CID = CourseID;  
+		SELECT 'Course deletes successfully' AS RESULT;
+    COMMIT;
 END $$
 DELIMITER ;
 
@@ -189,12 +317,85 @@ CREATE PROCEDURE GetLesson(
 	CID varchar(22)
 )
 BEGIN
-	SELECT * FROM LESSON L 
-    WHERE L.CID = CID;
+	START TRANSACTION;
+		SELECT * FROM LESSON L 
+		WHERE L.CID = CID;
+    COMMIT;
 END $$
 DELIMITER ;
 
 -- CALL GetLesson('8a1285eaceae11edb47');
+
+/*==============================================================*/
+/* Proc: Add lesson                                             */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddLesson`$$
+CREATE PROCEDURE AddLesson(
+	LID varchar(22),
+	CID varchar(22),
+	NAME text,
+	CONTENT text,
+	VIDEO varchar(100),
+	ATTACHMENT varchar(100)
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO LESSON VALUES (LID, CID, NAME, CONTENT, VIDEO, ATTACHMENT);
+		SELECT 'Lesson inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddLesson('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
+
+/*==============================================================*/
+/* Proc: Update lesson                                          */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateLesson`$$
+CREATE PROCEDURE UpdateLesson(
+	LID varchar(22),
+	NCID varchar(22),
+	NNAME text,
+	NCONTENT text,
+	NVIDEO varchar(100),
+	NATTACHMENT varchar(100)
+)	
+BEGIN
+	START TRANSACTION;
+		UPDATE LESSON     
+		SET CID = NCID,
+			NAME = NNAME,   
+			CONTENT = NCONTENT,
+			VIDEO = NVIDEO,
+			ATTACHMENT = NATTACHMENT
+		WHERE LID = LessonID; 
+		SELECT 'Lesson updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateLesson();
+
+/*==============================================================*/
+/* Proc: Delete lesson                                          */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteLesson`$$
+CREATE PROCEDURE DeleteLesson(
+	LessonID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM NOTE WHERE LID = LessonID; 
+		DELETE FROM LESSON WHERE LID = LessonID; 
+		SELECT 'Lesson deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteLesson();
 
 /*============================================================================================================================*/
 /*                                                            CART                                                            */
@@ -209,12 +410,14 @@ CREATE PROCEDURE AddToCart(
     UID varchar(22)
 )
 BEGIN
-	IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
-		SELECT 'This course has already existed' AS RESULT;
-	ELSE
-		INSERT INTO CART VALUES (CID, UID, false);
-        SELECT 'Add successfully' AS RESULT;
-	END IF;
+	START TRANSACTION;
+		IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
+			SELECT 'This course has already existed' AS RESULT;
+		ELSE
+			INSERT INTO CART VALUES (CID, UID, false);
+			SELECT 'Add successfully' AS RESULT;
+		END IF;
+    COMMIT;
 END $$
 DELIMITER ;
 
@@ -228,8 +431,10 @@ CREATE PROCEDURE DeleteFromCart(
     UID varchar(22)
 )
 BEGIN
-	DELETE FROM CART WHERE CID = CourseID AND ID = UID;
-    SELECT 'Delete successfully' AS RESULT;
+	START TRANSACTION;
+		DELETE FROM CART WHERE CID = CourseID AND ID = UID;
+		SELECT 'Delete successfully' AS RESULT;
+    COMMIT;
 END $$
 DELIMITER ;
 
@@ -243,10 +448,105 @@ CREATE PROCEDURE Pay(
     UID varchar(22)
 )
 BEGIN
-	UPDATE CART SET STATUS = true WHERE CID = CourseID AND ID = UID;
-    SELECT 'Update successfully' AS RESULT;
+	START TRANSACTION;
+		UPDATE CART SET STATUS = true WHERE CID = CourseID AND ID = UID;
+		SELECT 'Update successfully' AS RESULT;
+    COMMIT;
 END $$
 DELIMITER ;
+
+/*============================================================================================================================*/
+/*                                                            TEST                                                            */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Get test                                               */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetTest`$$
+CREATE PROCEDURE GetTest(
+	CID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT * FROM LESSON L 
+		WHERE L.CID = CID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL GetTest('8a1285eaceae11edb47');
+
+/*==============================================================*/
+/* Proc: Add test                                               */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddTest`$$
+CREATE PROCEDURE AddTest(
+	TID varchar(22),
+	LID varchar(22),
+	TITLE text,
+	DESCRIPTION text,
+	DURATION time
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO TEST VALUES (TID, LID, TITLE, DESCRIPTION, DURATION);
+		SELECT 'Test inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddTest('LIS 9.0', 'LISTENING-9.0', 'EZ 9+', '50.00', 'D:/TKPM/TH/EducationWebApp/database/bth.jpg');
+
+/*==============================================================*/
+/* Proc: Update test                                            */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateTest`$$
+CREATE PROCEDURE UpdateTest(
+	TestID varchar(22),
+	LessonID varchar(22),
+	NTITLE text,
+	NDESCRIPTION text,
+	NDURATION time
+)	
+BEGIN
+	START TRANSACTION;
+		UPDATE TEST     
+		SET TITLE = NTITLE,   
+			DESCRIPTION = NDESCRIPTION,
+			DURATION = NDURATION
+		WHERE TID = TestID AND LID = LessonID; 
+		SELECT 'Test updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateTest();
+
+/*==============================================================*/
+/* Proc: Delete test                                          */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteTest`$$
+CREATE PROCEDURE DeleteTest(
+	TestID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM SOLUTION WHERE QID IN (SELECT QID FROM QUESTION WHERE TID = TestID);
+        DELETE FROM QUESTION WHERE TID = TestID;
+        DELETE FROM ANSWER WHERE ASSID IN (SELECT ASSID FROM ASSIGNMENT WHERE TID = TestID);
+		DELETE FROM ASSIGNMENT WHERE TID = TestID; 
+		DELETE FROM TEST WHERE TID = TestID; 
+		SELECT 'Test deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteTest();
+
+
 
 /*==============================================================*/
 /* Proc: Create users                                           */
@@ -296,7 +596,6 @@ CREATE ROLE IF NOT EXISTS 'visitor';
 GRANT SELECT ON IELTS.FORUM TO visitor;
 GRANT SELECT ON IELTS.COURSE TO visitor;
 GRANT SELECT ON IELTS.COMMENT TO visitor;
-GRANT EXECUTE ON PROCEDURE AllCourse TO visitor;
 -- SHOW GRANTS FOR visitor;
 
 /*==============================================================*/
