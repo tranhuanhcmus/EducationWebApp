@@ -533,7 +533,7 @@ DELIMITER ;
 -- CALL UpdateTest();
 
 /*==============================================================*/
-/* Proc: Delete test                                          */
+/* Proc: Delete test                                            */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `DeleteTest`$$
@@ -574,7 +574,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL GetForumComment('888');
+-- CALL GetForumComment('888');
 
 /*==============================================================*/
 /* Proc: Get Course Comment                                     */
@@ -617,16 +617,66 @@ DELIMITER ;
 /*==============================================================*/
 /* Proc: Add Forum Comment                                      */
 /*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddForumComment`$$
+CREATE PROCEDURE AddForumComment(
+	CMTID varchar(22),
+	FID varchar(22),
+	ID varchar(22),
+	CONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO COMMENT VALUES (CMTID, FID, ID, null, null, CONTENT, NOW());
+		SELECT 'Comment inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
 
+-- CALL AddForumComment('');
 
 /*==============================================================*/
 /* Proc: Add Course Comment                                     */
 /*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddCourseComment`$$
+CREATE PROCEDURE AddCourseComment(
+	CMTID varchar(22),
+	CID varchar(22),
+	ID varchar(22),
+	CONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO COMMENT VALUES (CMTID, null, ID, CID, null, CONTENT, NOW());
+		SELECT 'Comment inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
 
+-- CALL AddCourseComment('');
 
 /*==============================================================*/
 /* Proc: Add Test Comment                                       */
 /*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddTestComment`$$
+CREATE PROCEDURE AddTestComment(
+	CMTID varchar(22),
+	TID varchar(22),
+	ID varchar(22),
+	CONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO COMMENT VALUES (CMTID, null, ID, null, TID, CONTENT, NOW());
+		SELECT 'Comment inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddTestComment('');
+
 
 /*==============================================================*/
 /* Proc: Create users                                           */

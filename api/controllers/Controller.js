@@ -132,7 +132,6 @@ const controller = {
             res.status(400).json({ msg: error.message });
         }
     },
-
     getImage: (req, res) => {
         try {
             const { name } = req.body;
@@ -149,7 +148,6 @@ const controller = {
             res.status(400).json({ msg: error.message });
         }
     },
-
     getVideo: async(req, res) => {
         const { name } = req.params;
 
