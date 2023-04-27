@@ -17,6 +17,7 @@ import React from "react";
 import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
 import BlogDetails from "./pages/BlogDetails";
+import Pay from "./pages/Pay";
 
 function App() {
   const Layout = () => {
@@ -61,6 +62,7 @@ function App() {
         { path: "/blogs", element: <Blogs /> },
         { path: "/BlogDetails", element: <BlogDetails /> },
         { path: "/lesson/:id", element: <Lesson /> },
+        { path: "/pay", element: <Pay /> },
       ],
     },
 

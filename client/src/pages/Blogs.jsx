@@ -137,7 +137,7 @@ const Blogs = () => {
         <section className="latest flex flex-col border-b-2 border-slate-600 border-dashed pb-2">
           <span className="ml-3 text-sm md:text-md py-3 rounded-xl font-semibold font-mono uppercase text-slate-600">
             <i className="mr-2 fa-solid fa-star"></i>
-            Must-read posts
+            Latest posts
           </span>
 
           <ul className="link-list p-1 font-Poppins">
