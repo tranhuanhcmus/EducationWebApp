@@ -82,7 +82,11 @@ const Carousel = ({ backgrounds }) => {
         <Stack direction={"row"}>
           {bgs.map((bg, index) => {
             return (
-              <IconButton key={index} color={index == pos ? "primary" : ""}>
+              <IconButton
+                onClick={() => setPos(index)}
+                key={index}
+                color={index == pos ? "primary" : ""}
+              >
                 <CircleIcon sx={{ fontSize: "0.75rem" }} />
               </IconButton>
             );

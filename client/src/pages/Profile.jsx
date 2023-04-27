@@ -176,10 +176,10 @@ const Profile = () => {
               }
             ></CardHeader>
             <CardMedia
+              sx={{ objectFit: "contain" }}
               component={"img"}
               title="avatar"
               image={image}
-              height="30%"
             />
             <CardContent>
               <Stack

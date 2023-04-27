@@ -26,7 +26,7 @@ const Section = ({ Type, index, data }) => {
       sx={{
         width: "100%",
         py: "1.5rem",
-        my: "1rem",
+
         bgcolor: `${index % 2 == 0 ? "#f5f5f5" : ""}`,
       }}
     >

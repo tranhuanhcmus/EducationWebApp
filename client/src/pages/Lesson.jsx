@@ -240,10 +240,11 @@ const Lesson = () => {
             <b>Test</b>
           </h3>
         </div>
-        <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
-          <a href="" className="hover:text-indigo-600">
+        <div className="text-lg font-note font-[300] mt-3 text-center  duration-300 px-3 py-2 hover:text-yellow-400 hover:font-bold bg-indigo-500 w-[400px] sm:w-[90%] mx-auto">
+          <a href={data[position].ATTACHMENT} target={"_blank"}>
             {" "}
-            {data[position].ATTACHMENT}
+            <i class="mr-2 fa-solid fa-graduation-cap"></i>
+            MOVE TO TEST OF {data[position].NAME}
           </a>
         </div>
       </section>

@@ -1,5 +1,7 @@
 import React from "react";
-import Quiz from "./Quiz/Quiz";
 
-const Test = () => <Quiz />;
+const Test = () => {
+  return <div>Test</div>;
+};
+
 export default Test;
