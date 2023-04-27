@@ -29,10 +29,10 @@ const CommentList = () => {
         <hr />
         <div className="actions flex gap-4 items-center p-3">
           <div>
-            15 <i class="fa-regular fa-thumbs-up"></i>
+            15 <i className="fa-regular fa-thumbs-up"></i>
           </div>
           <div>
-            15 <i class="fa-regular fa-thumbs-up rotate-180"></i>
+            15 <i className="fa-regular fa-thumbs-up rotate-180"></i>
           </div>
         </div>
       </div>

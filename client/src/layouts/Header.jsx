@@ -22,7 +22,6 @@ import {
 } from "@mui/material";
 import styles from "../styles/styles";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import AdbIcon from "@mui/icons-material/Adb";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
@@ -31,6 +30,8 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth";
 import utils from "../utils/utils";
+import { getImage } from "../utils/fetchData";
+
 const Header = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.user);
@@ -65,6 +66,14 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const [image, setImage] = React.useState("not yet");
+  React.useEffect(() => {
+    const loadImage = async () => {
+      const newImage = await getImage(`${currentUser.ID}.png`);
+      setImage(newImage);
+    };
+    loadImage();
+  }, []);
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -216,7 +225,7 @@ const Header = () => {
                   {currentUser.NAME}
                 </Typography>
                 <IconButton sx={{ p: "0", m: "0" }} onClick={handleClick}>
-                  <Avatar alt="username" src={currentUser.AVA} />
+                  <Avatar alt="username" src={image} />
                 </IconButton>
                 <Menu
                   anchorEl={anchorEl}

@@ -19,8 +19,7 @@ import {
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
-import { makeRequest } from "./../utils/axios";
-import { Buffer } from "buffer";
+import { getImage } from "../utils/fetchData";
 const Section = ({ Type, index, data }) => {
   return (
     <Box
@@ -62,25 +61,11 @@ const Section = ({ Type, index, data }) => {
               const [image, setImage] = React.useState("");
 
               React.useEffect(() => {
-                const getImageData = async (name) => {
-                  try {
-                    await makeRequest({
-                      url: "/image",
-                      method: "post",
-                      data: {
-                        name: name,
-                      },
-                    })
-                      .then((res) => res.data)
-                      .then((data) => {
-                        const image = `data:image/jpeg;base64, ${data}`;
-                        setImage(image);
-                      });
-                  } catch (error) {
-                    console.error(error);
-                  }
+                const loadImage = async () => {
+                  const data = await getImage(course.IMG);
+                  setImage(data);
                 };
-                getImageData(course.IMG);
+                loadImage();
               }, []);
 
               return (

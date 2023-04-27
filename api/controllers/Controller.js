@@ -4,10 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import fs from "fs";
 const controller = {
-
     course: async(req, res) => {
         try {
-
             const courseList = await model.course();
             res.status(200).json(courseList);
         } catch (error) {
@@ -51,40 +49,36 @@ const controller = {
         }
     },
 
-    addCourse: async (req, res) => {
-        try{
+    addCourse: async(req, res) => {
+        try {
             const data = req.body;
             const result = await model.addCourse(data);
             res.status(200).json(result);
-        }
-        catch (error){
-            res.status(400).json({msg: error.message});
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
         }
     },
-    updateCourse: async (req, res) => {
-        try{
+    updateCourse: async(req, res) => {
+        try {
             const data = req.body;
             const result = await model.updateCourse(data);
             res.status(200).json(result);
-        }
-        catch (error){
-            res.status(400).json({msg: error.message});
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
         }
     },
-    deleteCourse: async (req, res) => {
-        try{
+    deleteCourse: async(req, res) => {
+        try {
             const CourseID = req.params.id;
             const result = await model.deleteCourse(CourseID);
             res.status(200).json(result);
-        }
-        catch (error){
-            res.status(400).json({msg: error.message});
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
         }
     },
     //------------------------------------CART------------------------------------//
-    addToCart: async (req, res) => {
-        try{
-
+    addToCart: async(req, res) => {
+        try {
             const data = req.body;
             const result = await model.addToCart(data);
             res.status(200).json(result);
@@ -106,34 +100,31 @@ const controller = {
             const data = req.body;
             const result = await model.enrollCourse(data);
             res.status(200).json(result);
-        }
-        catch (error){
-            res.status(400).json({msg: error.message});
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
         }
     },
     //------------------------------------LESSON------------------------------------//
-    addLesson: async (req, res) => {
-        try{
+    addLesson: async(req, res) => {
+        try {
             const data = req.body;
             const result = await model.addLesson(data);
             res.status(200).json(result);
-        }
-        catch (error){
-            res.status(400).json({msg: error.message});
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
         }
     },
-    updateLesson: async (req, res) => {
-        try{
+    updateLesson: async(req, res) => {
+        try {
             const data = req.body;
             const result = await model.updateLesson(data);
             res.status(200).json(result);
-        }
-        catch (error){
-            res.status(400).json({msg: error.message});
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
         }
     },
-    deleteLesson: async (req, res) => {
-        try{
+    deleteLesson: async(req, res) => {
+        try {
             const LessonID = req.params.id;
             const result = await model.deleteLesson(LessonID);
             res.status(200).json(result);
@@ -159,6 +150,39 @@ const controller = {
         }
     },
 
+    getVideo: async(req, res) => {
+        const { name } = req.params;
+
+        const videoPath = `database/video/${name}`;
+        const stat = fs.statSync(videoPath);
+        const fileSize = stat.size;
+        const range = req.headers.range;
+
+        if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+            const chunksize = end - start + 1;
+            const file = fs.createReadStream(videoPath, { start, end });
+            const head = {
+                "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+                "Accept-Ranges": "bytes",
+                "Content-Length": chunksize,
+                "Content-Type": "video/mp4",
+            };
+
+            res.writeHead(206, head);
+            file.pipe(res);
+        } else {
+            const head = {
+                "Content-Length": fileSize,
+                "Content-Type": "video/mp4",
+            };
+
+            res.writeHead(200, head);
+            fs.createReadStream(videoPath).pipe(res);
+        }
+    },
 };
 
 export default controller;

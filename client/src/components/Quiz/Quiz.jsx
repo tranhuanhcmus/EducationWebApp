@@ -5,7 +5,6 @@ const Quiz = ({ data }) => {
   const [questions, setQuestion] = useState(data);
   const [score, setScore] = useState(0);
   const [showKey, setShowKey] = useState(false);
-  console.log(score);
   const handleClick = () => {
     if (currentQ < questions.length - 1) {
       setShowKey(false);
