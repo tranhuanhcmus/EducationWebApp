@@ -337,11 +337,12 @@ CREATE PROCEDURE AddLesson(
 	NAME text,
 	CONTENT text,
 	VIDEO varchar(100),
-	ATTACHMENT varchar(100)
+	ATTACHMENT varchar(100),
+    DURATION time
 )
 BEGIN
 	START TRANSACTION;
-		INSERT INTO LESSON VALUES (LID, CID, NAME, CONTENT, VIDEO, ATTACHMENT);
+		INSERT INTO LESSON VALUES (LID, CID, NAME, CONTENT, VIDEO, ATTACHMENT, DURATION);
 		SELECT 'Lesson inserts successfully' AS RESULT;
     COMMIT;
 END $$
@@ -360,7 +361,8 @@ CREATE PROCEDURE UpdateLesson(
 	NNAME text,
 	NCONTENT text,
 	NVIDEO varchar(100),
-	NATTACHMENT varchar(100)
+	NATTACHMENT varchar(100),
+    NDURATION time
 )	
 BEGIN
 	START TRANSACTION;
@@ -369,7 +371,8 @@ BEGIN
 			NAME = NNAME,   
 			CONTENT = NCONTENT,
 			VIDEO = NVIDEO,
-			ATTACHMENT = NATTACHMENT
+			ATTACHMENT = NATTACHMENT,
+            DURATION = NDURATION
 		WHERE LID = LessonID; 
 		SELECT 'Lesson updates successfully' AS RESULT;
     COMMIT;
@@ -389,6 +392,8 @@ CREATE PROCEDURE DeleteLesson(
 BEGIN
 	START TRANSACTION;
 		DELETE FROM NOTE WHERE LID = LessonID; 
+        DELETE FROM SOLUTION WHERE QID IN (SELECT QID FROM QUESTION WHERE LID = LessonID);
+        DELETE FROM QUESTION WHERE LID = LessonID;
 		DELETE FROM LESSON WHERE LID = LessonID; 
 		SELECT 'Lesson deletes successfully' AS RESULT;
     COMMIT;
@@ -414,7 +419,7 @@ BEGIN
 		IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
 			SELECT 'This course has already existed' AS RESULT;
 		ELSE
-			INSERT INTO CART VALUES (CID, UID, false);
+			INSERT INTO CART VALUES (CID, UID, false, null);
 			SELECT 'Add successfully' AS RESULT;
 		END IF;
     COMMIT;
@@ -449,7 +454,10 @@ CREATE PROCEDURE Pay(
 )
 BEGIN
 	START TRANSACTION;
-		UPDATE CART SET STATUS = true WHERE CID = CourseID AND ID = UID;
+		UPDATE CART 
+        SET STATUS = true,
+			PURCHASE_DAY = NOW()
+        WHERE CID = CourseID AND ID = UID;
 		SELECT 'Update successfully' AS RESULT;
     COMMIT;
 END $$
@@ -545,8 +553,6 @@ END $$
 DELIMITER ;
 
 -- CALL DeleteTest();
-
-
 
 /*==============================================================*/
 /* Proc: Create users                                           */

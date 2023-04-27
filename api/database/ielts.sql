@@ -49,6 +49,7 @@ create table CART
    CID                  varchar(22) not null  comment '',
    ID                   varchar(22) not null  comment '',
    STATUS               bool not null  comment '',
+   PURCHASE_DAY         datetime comment '',
    primary key (CID, ID)
 );
 
@@ -79,6 +80,7 @@ create table LESSON
    CONTENT              text not null  comment '',
    VIDEO                varchar(100) not null  comment '',
    ATTACHMENT           varchar(100) not null  comment '',
+   DURATION             time not null  comment '', -- numbers of days
    primary key (LID)
 );
 
@@ -116,7 +118,8 @@ drop table if exists QUESTION;
 create table QUESTION
 (
    QID                  varchar(22) not null  comment '',
-   TID                  varchar(22) not null  comment '',
+   -- TID                  varchar(22) comment '',
+   LID                  varchar(22) comment '',
    CONTENT              text not null  comment '',
    IMG                  varchar(100)  comment '',
    AUDIO                varchar(100)  comment '',
@@ -223,8 +226,11 @@ alter table NOTE add constraint FK_NOTE_ACCOUNT foreign key (ID)
 alter table COURSE add constraint FK_COURSE_ACCOUNT foreign key (OWNERID)
       references ACCOUNT (ID) on delete restrict on update restrict;
 
-alter table QUESTION add constraint FK_QUESTION_TEST foreign key (TID)
-      references TEST (TID) on delete restrict on update restrict;
+-- alter table QUESTION add constraint FK_QUESTION_TEST foreign key (TID)
+--       references TEST (TID) on delete restrict on update restrict;
+
+alter table QUESTION add constraint FK_QUESTION_LESSON foreign key (LID)
+      references LESSON (LID) on delete restrict on update restrict;
 
 alter table SOLUTION add constraint FK_SOL_QUESTION foreign key (QID)
       references QUESTION (QID) on delete restrict on update restrict;

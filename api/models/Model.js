@@ -154,7 +154,7 @@ const model = {
         try {
             const sqlQuery = await loadSqlQueries('request');
             const [rows, fields] = await db.promise()
-                                        .query(sqlQuery.AddLesson, [data.LessonID, data.CourseID, data.Name, data.Content, data.Video, data.Attachment]);
+                                        .query(sqlQuery.AddLesson, [data.LessonID, data.CourseID, data.Name, data.Content, data.Video, data.Attachment, data.Duration]);
             console.log(rows);
             return rows[0];
         }   
@@ -180,7 +180,7 @@ const model = {
         try {
             const sqlQuery = await loadSqlQueries('request');
             const [rows, fields] = await db.promise()
-                                        .query(sqlQuery.UpdateLesson, [data.LessonID, data.CourseID, data.Name, data.Content, data.Video, data.Attachment]);
+                                        .query(sqlQuery.UpdateLesson, [data.LessonID, data.CourseID, data.Name, data.Content, data.Video, data.Attachment, data.Duration]);
             console.log(rows);
             return rows[0];
         }   
