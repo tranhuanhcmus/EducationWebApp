@@ -178,6 +178,7 @@ create table COMMENT
    CID                  varchar(22)  comment '',
    TID                  varchar(22)  comment '',
    CONTENT              text not null  comment '',
+   CMT_TIME         	datetime not null comment '',
    primary key (CMTID)
 );
 

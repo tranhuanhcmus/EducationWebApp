@@ -554,6 +554,80 @@ DELIMITER ;
 
 -- CALL DeleteTest();
 
+/*============================================================================================================================*/
+/*                                                           COMMENT                                                          */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Get Forum Comment                                      */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetForumComment`$$
+CREATE PROCEDURE GetForumComment(
+	FID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT C.*, A.NAME
+        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
+		WHERE C.FID = FID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+CALL GetForumComment('888');
+
+/*==============================================================*/
+/* Proc: Get Course Comment                                     */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetCourseComment`$$
+CREATE PROCEDURE GetCourseComment(
+	CID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT C.*, A.NAME
+        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
+		WHERE C.CID = CID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL GetCourseComment('');
+
+/*==============================================================*/
+/* Proc: Get Test Comment                                       */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetTestComment`$$
+CREATE PROCEDURE GetTestComment(
+	TID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT C.*, A.NAME
+        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
+		WHERE C.TID = TID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL GetTestComment('');
+
+/*==============================================================*/
+/* Proc: Add Forum Comment                                      */
+/*==============================================================*/
+
+
+/*==============================================================*/
+/* Proc: Add Course Comment                                     */
+/*==============================================================*/
+
+
+/*==============================================================*/
+/* Proc: Add Test Comment                                       */
+/*==============================================================*/
+
 /*==============================================================*/
 /* Proc: Create users                                           */
 /*==============================================================*/

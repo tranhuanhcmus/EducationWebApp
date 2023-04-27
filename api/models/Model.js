@@ -189,5 +189,44 @@ const model = {
             return error.message;
         }
     },
+    getForumComment: async(ForumId) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.GetForumComment, [ForumId]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    getCourseComment: async(CourseID) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.GetCourseComment, [CourseID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    getTestComment: async(TestId) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.GetTestComment, [TestId]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
 };
 export default model;

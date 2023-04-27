@@ -183,6 +183,33 @@ const controller = {
             fs.createReadStream(videoPath).pipe(res);
         }
     },
+    getForumComment: async(req, res) => {
+        try {
+            const ForumId = req.params.id;
+            const result = await model.deleteLesson(ForumId);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    getCourseComment: async(req, res) => {
+        try {
+            const CourseID = req.params.id;
+            const result = await model.deleteLesson(CourseID);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    getTestComment: async(req, res) => {
+        try {
+            const TestId = req.params.id;
+            const result = await model.deleteLesson(TestId);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
 };
 
 export default controller;
