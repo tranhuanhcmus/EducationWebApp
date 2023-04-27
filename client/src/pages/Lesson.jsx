@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, IconButton } from "@mui/material";
 import CommentList from "../components/CommentList";
 import Quiz from "./../components/Quiz/Quiz";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { makeRequest } from "./../utils/axios";
+
+import Loading from "../utils/Loading";
+import { getVideo } from "../utils/fetchData";
+
 const buttonStyle = {
   border: "solid 1px black",
   color: "black",
@@ -14,56 +19,7 @@ const buttonStyle = {
     backgroundColor: "black",
   },
 };
-const data = [
-  {
-    id: 1,
-    image: "/anh5.png",
-    name: "Lesson 1",
-    time: "15:00",
-  },
-  {
-    id: 2,
-    image: "/anh1.png",
-    name: "Lesson 2",
-    time: "15:00",
-  },
-  {
-    id: 3,
-    image: "/anh1.png",
-    name: "Lesson 3",
-    time: "15:00",
-  },
-  {
-    id: 4,
-    image: "/anh1.png",
-    name: "Lesson 4",
-    time: "15:00",
-  },
-  {
-    id: 5,
-    image: "/anh1.png",
-    name: "Lesson 5",
-    time: "15:00",
-  },
-  {
-    id: 6,
-    image: "/anh1.png",
-    name: "Lesson 6",
-    time: "15:00",
-  },
-  {
-    id: 7,
-    image: "/anh1.png",
-    name: "Lesson 7",
-    time: "15:00",
-  },
-  {
-    id: 8,
-    image: "/anh1.png",
-    name: "Lesson 8",
-    time: "15:00",
-  },
-];
+
 const questionBank = [
   {
     question:
@@ -125,32 +81,104 @@ const questionBank = [
   },
 ];
 const Lesson = () => {
-  const lesson = {
-    name: "Writing Band 5.0",
-    author: "Harry Bui",
-    video: "/video/lesson1.mp4",
-    content:
-      "This lesson will tell about some information and tips you should know in a writing test. Beside that i will analysis  an example writing test ",
-    attachment: "Move to test",
-    note: "this lesson is so interesting ...",
+  const author = "Harry Bui";
+  const courseImage = "/anh1.png";
+  const [notes, setNotes] = useState("");
+  const [data, setData] = useState([]);
+  const [bending, setBending] = useState(true);
+  const [videoURL, setVideoURL] = useState("");
+  const location = useLocation();
+  const CID = location.pathname.split("/")[2];
+
+  const [position, setPosition] = useState(null);
+
+  const [key, setKey] = React.useState("");
+  const handleCLick = (arg) => {
+    if (typeof arg !== "number") {
+      switch (arg) {
+        case "next":
+          if (position < data.length - 1) setPosition((pos) => pos + 1);
+          break;
+
+        case "prev":
+          if (position > 0) setPosition((pos) => pos - 1);
+          break;
+
+        default:
+          return;
+      }
+    } else setPosition((pos) => arg);
   };
-  const [notes, setNotes] = useState(lesson.note);
+
+  //fetching lessons
+  useEffect(() => {
+    setBending(true);
+    makeRequest({
+      url: `/course/${CID}`,
+      method: "get",
+    })
+      .then((res) => setData(res.data))
+      .then(() => setBending(false))
+      .then(() => setPosition(0))
+      .catch(() => console.log("Error when get lessons"));
+  }, []);
+
+  //fetching video
+  useEffect(() => {
+    const loadVideo = async () => {
+      const URL = await getVideo(data[position].VIDEO);
+      setVideoURL(URL);
+    };
+    if (!bending) {
+      loadVideo();
+    }
+  }, [position]);
+
+  //fetching note
   const handleWriteNote = (e) => {
     setNotes((notes) => e.target.value);
   };
-  return (
-    <>
+
+  //fetching comments
+
+  const handleSave = () => {
+    setBending(true);
+  };
+  const handleComment = () => {
+    setBending(true);
+  };
+
+  return !bending ? (
+    <div>
       <div className="container flex justify-center">
         <div className="flex items-center flex-1 justify-center">
-          <IconButton size="small" sx={buttonStyle}>
+          <IconButton
+            size="small"
+            sx={buttonStyle}
+            onClick={() => handleCLick("prev")}
+          >
             <ArrowBackIosIcon />
           </IconButton>
         </div>
-        <video width={"80%"} controls autoPlay="true" poster="/anh1.png">
-          <source src={lesson.video} type="video/mp4" />
-        </video>
+        <div className="h-[100%]">
+          <video
+            key={videoURL}
+            height="100%"
+            width="80%%"
+            controls
+            autoPlay
+            poster="/anh1.png"
+            className="mx-auto"
+          >
+            <source src={videoURL} type="video/mp4" />
+          </video>
+        </div>
         <div className="flex items-center flex-1 justify-center">
-          <IconButton size="small" sx={buttonStyle}>
+          <IconButton
+            size="small"
+            sx={buttonStyle}
+            onClick={() => handleCLick("next")}
+          >
             <ArrowForwardIosIcon />
           </IconButton>
         </div>
@@ -158,11 +186,43 @@ const Lesson = () => {
       <div className="playlist my-4">
         <div className=" mx-3 pt-2 search text-indigo-500 flex items-center border-b-4 border-solid border-red-800 ">
           <a className="text-2xl font-Bebas uppercase mr-4         ">
-            <b>{lesson.name}</b>
+            <b>{data[position].NAME}</b>
           </a>
-          - <h4 className="ml-4 text-lg">{lesson.author}</h4>
+          - <h4 className="ml-4 text-lg">{author}</h4>
         </div>
-        <LessonList data={data} />
+        <>
+          <input
+            type="text"
+            id="first_name"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1"
+            placeholder="Enter name of lesson"
+            onChange={(e) => setKey(e.target.value)}
+          />
+
+          <div className="w-full p-2 grid grid-flow-col  sm:auto-cols-[50%]  md:auto-cols-[33%] auto-cols-[20%] items-center overflow-scroll gap-2">
+            {data.map((item, index) => {
+              if (item.NAME.toLowerCase().includes(key))
+                return (
+                  <div
+                    className="item border-2 p-2 border-solid border-indigo-300 hover:-translate-y-1 hover:cursor-pointer hover:bg-slate-500 hover:text-amber-400 transition-all duration-200"
+                    key={index}
+                    onClick={() => handleCLick(index)}
+                  >
+                    <img
+                      className="object-cover object-center md:h-[100px] h-[132px] border-b-4 p-2 border-solid border-red-800"
+                      src={courseImage}
+                      width={"inherit"}
+                      alt="thumbnail-lesson"
+                    />
+                    <h6>
+                      <b>{item.NAME}</b>
+                    </h6>
+                    <div className="text-xs w-full text-end">"time"</div>
+                  </div>
+                );
+            })}
+          </div>
+        </>
       </div>
       <section className="container">
         <div className="mx-3 pt-2 text-indigo-500 flex items-center border-b-4 border-solid border-red-800 ">
@@ -171,7 +231,7 @@ const Lesson = () => {
           </h3>
         </div>
         <div className="text-lg font-note font-[300] mt-3 text-left word-break md:m-4 m-6">
-          {lesson.content}
+          {data[position].CONTENT}
         </div>
       </section>
       <section className="container">
@@ -183,7 +243,7 @@ const Lesson = () => {
         <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
           <a href="" className="hover:text-indigo-600">
             {" "}
-            {lesson.attachment}
+            {data[position].ATTACHMENT}
           </a>
         </div>
       </section>
@@ -201,11 +261,20 @@ const Lesson = () => {
             <b>Notes</b>
           </h3>
         </div>
-        <textarea
-          className="text-lg font-note font-[300] mt-3 text-left md:m-4 m-6 w-[80%] "
-          value={notes}
-          onChange={handleWriteNote}
-        ></textarea>
+        <div className="w-full flex items-center">
+          <textarea
+            className="text-lg font-note font-[300] mt-3 text-left md:m-4 m-6 w-[80%] "
+            value={notes}
+            onChange={handleWriteNote}
+          ></textarea>
+          <Button
+            className="ml-auto h-8"
+            variant="contained"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </div>
       </section>
       <section className="container">
         <div className="mx-3 pt-2 text-indigo-500 flex items-center border-b-4 border-solid border-red-800 ">
@@ -217,7 +286,11 @@ const Lesson = () => {
           <div className="mb-3">
             <textarea className="m-0 p-2 text-lg font-note font-[300] text-justify  w-full h-32"></textarea>
             <div className="flex justify-end">
-              <Button sx={{ ml: "auto" }} variant="contained">
+              <Button
+                sx={{ ml: "auto" }}
+                variant="contained"
+                onClick={handleComment}
+              >
                 Comment
               </Button>
             </div>
@@ -225,50 +298,9 @@ const Lesson = () => {
           <CommentList />
         </div>
       </section>
-    </>
-  );
-};
-
-const LessonList = ({ data }) => {
-  const navigate = useNavigate();
-
-  const [list, setList] = React.useState(data);
-  const [key, setKey] = React.useState("");
-
-  return (
-    <>
-      <input
-        type="text"
-        id="first_name"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 my-1"
-        placeholder="Enter name of lesson"
-        onChange={(e) => setKey(e.target.value)}
-      />
-
-      <div className="w-full p-2 grid grid-flow-col  sm:auto-cols-[50%]  md:auto-cols-[33%] auto-cols-[20%] items-center overflow-scroll gap-2">
-        {list.map((item) => {
-          if (item.name.toLowerCase().includes(key))
-            return (
-              <div
-                className="item border-2 p-2 border-solid border-indigo-300 hover:-translate-y-1 hover:cursor-pointer hover:bg-slate-500 hover:text-amber-400 transition-all duration-200"
-                key={item.id}
-                onClick={() => navigate(`/lesson/${item.id}`)}
-              >
-                <img
-                  className="object-cover object-center md:h-[100px] h-[132px] border-b-4 p-2 border-solid border-red-800"
-                  src={item.image}
-                  width={"inherit"}
-                  alt="thumbnail-lesson"
-                />
-                <h6>
-                  <b>{item.name}</b>
-                </h6>
-                <div className="text-xs w-full text-end">{item.time}</div>
-              </div>
-            );
-        })}
-      </div>
-    </>
+    </div>
+  ) : (
+    <Loading />
   );
 };
 

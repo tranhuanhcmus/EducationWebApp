@@ -53,8 +53,9 @@ const Login = () => {
         setMsg(res.data.msg);
         setOpen(true);
         dispatch(login(res.data));
-        window.location.replace("/");
       })
+      .then(() => window.location.replace("/"))
+
       .catch((err) => {
         setMsg(err.response.data.msg);
         setOpen(true);

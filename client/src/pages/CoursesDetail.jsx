@@ -186,7 +186,7 @@ const CoursesDetails = () => {
 
                         <Button
                           className=" self-center py-3 px-2 bg-indigo-600 font-note font-bold md:text-sm text-md text-white uppercase rounded-3xl md:w-[25%] w-[200px]  hover:bg-deep_purple_A201 hover:ring-yellow-400 ring-2 "
-                          onClick={() => navigate("/lesson/1")}
+                          onClick={() => navigate("/lesson/113")}
                         >
                           Move to lesson
                         </Button>

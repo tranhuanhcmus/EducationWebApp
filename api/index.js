@@ -5,6 +5,19 @@ import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
 import Route from "./routes/Route.js";
 import express from "express";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "./database/image");
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage: storage });
+
 const app = express();
 
 //setting header
@@ -30,10 +43,14 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api", Route);
-
+app.post("/api/upload", upload.single("image"), (req, res) => {
+    res.send("File uploaded successfully");
+});
 //connect to DB
 db.connect((error) => {
     if (error) return console.log(error);
     console.log("Connect to DB success");
-    app.listen(5000, () => console.log("Server work on url http://localhost:5000"));
+    app.listen(5000, () =>
+        console.log("Server work on url http://localhost:5000")
+    );
 });

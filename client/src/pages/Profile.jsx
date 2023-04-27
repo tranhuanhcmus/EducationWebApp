@@ -22,15 +22,17 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-import { makeRequest } from "./../utils/axios";
 import Cart from "./Cart";
+import Loading from "../utils/Loading";
+import { getImage, handleFileUpload } from "../utils/fetchData";
 
 const FormDialog = ({ open, handleClose, currentUser }) => {
   const [inputs, setInputs] = React.useState({
-    name: "huan",
-    phone: "1",
-    email: "1",
+    name: "",
+    phone: "",
+    email: "",
   });
+  const [bending, setBending] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState();
   const handleInput = (e) => {
     const key = e.target.id;
@@ -46,18 +48,18 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    makeRequest({
-      url: `/users/${currentUser.ID}`,
-      method: "put",
-      data: {
-        ...inputs,
-        avatar: selectedImage,
-      },
-    }).then((res) => console.log(res.data));
+    setBending((state) => true);
+    const fileName = `${currentUser.ID}.png`;
+    await handleFileUpload(selectedImage, fileName);
+    setBending((state) => false);
+    window.location.reload();
   };
-  return (
+
+  return bending ? (
+    <Loading />
+  ) : (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Profile Form</DialogTitle>
 
@@ -150,6 +152,15 @@ const Profile = () => {
     setOpen(true);
   };
 
+  const [image, setImage] = React.useState("not yet");
+  React.useEffect(() => {
+    const loadImage = async () => {
+      const newImage = await getImage(`${currentUser.ID}.png`);
+      setImage(newImage);
+    };
+    loadImage();
+  }, []);
+
   return (
     <Container>
       <Grid container spacing={2} my={3}>
@@ -167,7 +178,7 @@ const Profile = () => {
             <CardMedia
               component={"img"}
               title="avatar"
-              image={currentUser.AVA}
+              image={image}
               height="30%"
             />
             <CardContent>
