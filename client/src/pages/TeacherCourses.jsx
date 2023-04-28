@@ -9,10 +9,12 @@ import SelectBox from "../components/SelectBox";
 import CourseCard from "../components/CourseCard";
 import PaginationCard from "../components/PaginationCard";
 import CloseSVG from "../components/CloseSVG";
+import AddModal from "../components/FormInformation";
+import TrashPage from "../components/Trash";
 
 import ClassCard from "../components/ClassCard";
 import CustomImg from "../components/CustomImg";
-const EduviCoursesPage = () => {
+const TeacherCoursesPage = () => {
   const navigate = useNavigate();
 
   const [valueButton, setValue] = React.useState("");
@@ -32,7 +34,7 @@ const EduviCoursesPage = () => {
     };
   }, [valuePage]);
   const [inputvalue, setInputvalue] = React.useState("");
-  const Course = [
+  const Coures = [
     {
       image: "/anh5.png",
       courseName: "Ielts 3.0-5.0 Teacher 1",
@@ -95,39 +97,61 @@ const EduviCoursesPage = () => {
     },
   ];
 
-  const [itemsInCart, setItemsInCart] = React.useState([]);
+  const [add, setadd] = React.useState();
 
-  const [Coures, setItems] = React.useState(Course);
+  const addHandler = () => {
+    setadd(true);
+  };
+  const addHandleFalse = () => {
+    setadd(false);
+  };
 
-  React.useEffect(() => {
-    const items = JSON.parse(localStorage.getItem("items"));
-    if (items) {
-      setItemsInCart(items);
-    }
-  }, []);
+  const [CourseList, setCourseList] = React.useState([]);
 
-  React.useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(itemsInCart));
-  }, [itemsInCart]);
-
-  const addCourseHandler = (title, img, price) => {
-    setItemsInCart((prevUsersList) => {
+  const addCourseHandler = (title, img, detail) => {
+    setCourseList((prevUsersList) => {
       return [
         ...prevUsersList,
         {
-          courseName: title,
-          imgcourse: img,
-          price: price,
+          standard: title,
+          Img: img,
+          studyDetail: detail,
+          id: Math.random().toString(),
+          Teacher: true,
         },
       ];
     });
-    setItems((courses) =>
-      courses.filter((course) => course.courseName !== title)
+  };
+  const [detele, setdelete] = React.useState({
+    condition: false,
+    index: 0,
+  });
+
+  const deteletrue = (i) => {
+    setdelete({
+      condition: true,
+      index: i,
+    });
+  };
+  const deletefalse = () => {
+    setdelete(false);
+  };
+
+  const handleRemove = () => {
+    setCourseList((courses) =>
+      courses.filter((course) => courses.indexOf(course) !== detele.index)
     );
+    deletefalse();
   };
 
   return (
     <>
+      {add && (
+        <AddModal HandleFalse={addHandleFalse} onAddCourse={addCourseHandler} />
+      )}
+      {detele.condition && (
+        <TrashPage HandleFalse={deletefalse} onDeleteCourse={handleRemove} />
+      )}
       <div className="bg-gray_100 flex flex-col font-inter gap-[100px] sm:gap-[40px] md:gap-[40px] items-start justify-start mx-[auto] self-stretch sm:w-[100%] md:w-[100%] w-[auto]">
         <div className="flex flex-col items-start justify-start sm:px-[20px] md:px-[40px] px-[80px] w-[100%]">
           <CustomImg></CustomImg>
@@ -210,10 +234,7 @@ const EduviCoursesPage = () => {
             </div>
           </div>
           <div className="flex items-center justify-start sm:px-[20px] md:px-[40px] px-[80px] w-[100%]">
-            <div
-              className="flex flex-col gap-[24px] items-center justify-start max-w-[1280px] mx-[auto] w-[100%]"
-              onClick={() => navigate("/coursesdetails")}
-            >
+            <div className="flex flex-col gap-[24px] items-center justify-start max-w-[1280px] mx-[auto] w-[100%]">
               <Text
                 className="font-semibold text-gray_900 text-left w-[auto]"
                 as="h4"
@@ -223,10 +244,19 @@ const EduviCoursesPage = () => {
               </Text>
               <div className="flex items-center justify-start w-[100%]">
                 <div className="md:gap-[20px] gap-[40px] grid sm:grid-cols-1 md:grid-cols-2 grid-cols-4 justify-center min-h-[auto] w-[100%]">
-                  {new Array(5).fill({}).map((props, index) => (
+                  <div className=" bg-white_A700 hover:cursor-pointer flex flex-1 flex-col items-center justify-center px-[15px] py-[30px] rounded-[15px] hover:shadow-bs1 hover:w-[100%] w-[100%]">
+                    <Button
+                      className="border-[1px] border-red_300 border-solid cursor-pointer font-inter font-medium min-w-[161px] sm:px-[20px] px-[31px] py-[12px] rounded-[5px] text-[16px] text-center text-red_300 w-[auto]"
+                      onClick={addHandler}
+                    >
+                      Add course
+                    </Button>
+                  </div>
+                  {CourseList.map((props, index) => (
                     <React.Fragment key={`ClassCard${index}`}>
                       <ClassCard
-                        className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-col items-center justify-start px-[15px] py-[30px] rounded-[15px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
+                        className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-col items-center justify-start px-[15px] pb-[30px] pt-[10px] rounded-[15px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
+                        onDeleteCourse={() => deteletrue(index)}
                         {...props}
                       />
                     </React.Fragment>
@@ -295,13 +325,16 @@ const EduviCoursesPage = () => {
                 <div className="md:gap-[20px] gap-[40px] grid md:grid-cols-1 grid-cols-2 justify-center min-h-[auto] w-[100%]">
                   {Coures.map((props, index) => {
                     if (6 * valuePage <= index && index < 6 * (valuePage + 1)) {
+                      console.log(valuePage);
+                      //console.log(index);
                       return (
                         <React.Fragment key={`CourseCard${index}`}>
-                          <CourseCard
-                            className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
-                            addCourseHandler={addCourseHandler}
-                            {...props}
-                          />
+                          <div onClick={() => navigate("/coursesdetails")}>
+                            <CourseCard
+                              className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
+                              {...props}
+                            />
+                          </div>
                         </React.Fragment>
                       );
                     }
@@ -313,7 +346,7 @@ const EduviCoursesPage = () => {
               className="flex flex-row items-center justify-center w-[100%]"
               page="Page"
               one={valuePage}
-              ofCounter={Math.ceil(Coures.length / 6 - 1)}
+              ofCounter={Coures.length / 6 - 1}
               handlenext={() => {
                 if (valuePage < Coures.length / 6 - 1)
                   setValuePage(valuePage + 1);
@@ -331,4 +364,4 @@ const EduviCoursesPage = () => {
   );
 };
 
-export default EduviCoursesPage;
+export default TeacherCoursesPage;
