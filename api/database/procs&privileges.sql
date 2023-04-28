@@ -245,7 +245,7 @@ CREATE PROCEDURE AddCourse(
 )
 BEGIN
 	START TRANSACTION;
-		INSERT INTO COURSE VALUES (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG, OWNERID);
+		INSERT INTO COURSE VALUES (CID, NAME, CATEGORY, DESCRIPTION, PRICE, IMG, OWNERID, null);
 		SELECT 'Course inserts successfully' AS RESULT;
     COMMIT;
 END $$
@@ -391,7 +391,7 @@ CREATE PROCEDURE DeleteLesson(
 BEGIN
 	START TRANSACTION;
 		DELETE FROM NOTE WHERE LID = LessonID; 
-        DELETE FROM SOLUTION WHERE QID IN (SELECT QID FROM QUESTION WHERE LID = LessonID);
+        -- DELETE FROM SOLUTION WHERE QID IN (SELECT QID FROM QUESTION WHERE LID = LessonID);
         DELETE FROM QUESTION WHERE LID = LessonID;
 		DELETE FROM LESSON WHERE LID = LessonID; 
 		SELECT 'Lesson deletes successfully' AS RESULT;
@@ -418,7 +418,7 @@ BEGIN
 		IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
 			SELECT 'This course has already existed' AS RESULT;
 		ELSE
-			INSERT INTO CART VALUES (CID, UID, false, null);
+			INSERT INTO CART VALUES (CID, UID, false, null, null);
 			SELECT 'Add successfully' AS RESULT;
 		END IF;
     COMMIT;
@@ -457,7 +457,34 @@ BEGIN
         SET STATUS = true,
 			PURCHASE_DAY = NOW()
         WHERE CID = CourseID AND ID = UID;
-		SELECT 'Update successfully' AS RESULT;
+		SELECT 'Pay successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+/*==============================================================*/
+/* Proc: Rate                                                    */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `Rate`$$
+CREATE PROCEDURE Rate(
+	CourseID varchar(22),
+    UID varchar(22),
+    POINT float
+)
+BEGIN
+	DECLARE score FLOAT;
+	START TRANSACTION;
+		UPDATE CART 
+        SET RATING = POINT
+        WHERE CID = CourseID AND ID = UID;
+        SELECT AVG(RATING) INTO score
+        FROM CART
+        WHERE CID = CourseID;
+		UPDATE COURSE 
+        SET RATING = score
+        WHERE CID = CourseID;
+		SELECT 'Rate successfully' AS RESULT;
     COMMIT;
 END $$
 DELIMITER ;
@@ -471,12 +498,12 @@ DELIMITER ;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `GetTest`$$
 CREATE PROCEDURE GetTest(
-	CID varchar(22)
+	LID varchar(22)
 )
 BEGIN
 	START TRANSACTION;
-		SELECT * FROM LESSON L 
-		WHERE L.CID = CID;
+		SELECT * FROM TEST T
+		WHERE T.LID = LID;
     COMMIT;
 END $$
 DELIMITER ;
@@ -541,7 +568,7 @@ CREATE PROCEDURE DeleteTest(
 )
 BEGIN
 	START TRANSACTION;
-		DELETE FROM SOLUTION WHERE QID IN (SELECT QID FROM QUESTION WHERE TID = TestID);
+		-- DELETE FROM SOLUTION WHERE QID IN (SELECT QID FROM QUESTION WHERE TID = TestID);
         DELETE FROM QUESTION WHERE TID = TestID;
         DELETE FROM ANSWER WHERE ASSID IN (SELECT ASSID FROM ASSIGNMENT WHERE TID = TestID);
 		DELETE FROM ASSIGNMENT WHERE TID = TestID; 
@@ -566,7 +593,7 @@ CREATE PROCEDURE GetForumComment(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT C.*, A.NAME
+		SELECT C.CMTID, C.FID, C.ID, C.CONTENT, C.CMT_TIME, A.NAME
         FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
 		WHERE C.FID = FID;
     COMMIT;
@@ -585,7 +612,7 @@ CREATE PROCEDURE GetCourseComment(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT C.*, A.NAME
+		SELECT C.CMTID, C.CID, C.ID, C.CONTENT, C.CMT_TIME, A.NAME
         FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
 		WHERE C.CID = CID;
     COMMIT;
@@ -604,7 +631,7 @@ CREATE PROCEDURE GetTestComment(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT C.*, A.NAME
+		SELECT C.CMTID, C.TID, C.ID, C.CONTENT, C.CMT_TIME, A.NAME
         FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
 		WHERE C.TID = TID;
     COMMIT;
@@ -810,6 +837,289 @@ END $$
 DELIMITER ;
 
 -- CALL DeleteTestComment('');
+
+/*============================================================================================================================*/
+/*                                                            NOTE                                                            */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Get note                                               */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetNote`$$
+CREATE PROCEDURE GetNote(
+	LID varchar(22),
+    ID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT * FROM NOTE N 
+		WHERE N.LID = LID AND N.ID= ID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL GetNote('');
+
+/*==============================================================*/
+/* Proc: Add note                                               */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddNote`$$
+CREATE PROCEDURE AddNote(
+	NID varchar(22),
+	LID varchar(22),
+	ID varchar(22),
+	CONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO NOTE VALUES (NID, LID, ID, CONTENT);
+		SELECT 'Note inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddNote('');
+
+/*==============================================================*/
+/* Proc: Update note                                            */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateNote`$$
+CREATE PROCEDURE UpdateNote(
+	NoteID varchar(22),
+	LessonID varchar(22),
+	UID varchar(22),
+	NCONTENT text
+)	
+BEGIN
+	START TRANSACTION;
+		UPDATE NOTE     
+		SET CONTENT = NCONTENT
+		WHERE NID = NoteID AND LID = LessonID AND ID = UID; 
+		SELECT 'Note updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateNote();
+
+/*==============================================================*/
+/* Proc: Delete note                                            */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteNote`$$
+CREATE PROCEDURE DeleteNote(
+	NoteID varchar(22),
+	LessonID varchar(22),
+	UID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM NOTE 
+        WHERE NID = NoteID AND LID = LessonID AND ID = UID; 
+		SELECT 'Note deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteNote();
+
+/*============================================================================================================================*/
+/*                                                          QUESTION                                                          */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Get question                                           */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `GetQuestion`$$
+CREATE PROCEDURE GetQuestion(
+	LID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT * FROM QUESTION Q
+		WHERE Q.LID = LID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL GetQuestion();
+
+/*==============================================================*/
+/* Proc: Add question                                           */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddQuestion`$$
+CREATE PROCEDURE AddQuestion(
+	QID varchar(22),
+	LID varchar(22),
+	CONTENT text,
+	IMG varchar(100),
+	AUDIO varchar(100),
+	SOLUTION text
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO NOTE VALUES (QID, LID, CONTENT, IMG, AUDIO, SOLUTION);
+		SELECT 'Question inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddQuestion();
+
+/*==============================================================*/
+/* Proc: Update question                                        */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateQuestion`$$
+CREATE PROCEDURE UpdateQuestion(
+	QuestionID varchar(22),
+	LessonID varchar(22),
+	NCONTENT text,
+	NIMG varchar(100),
+	NAUDIO varchar(100),
+	NSOLUTION text
+)	
+BEGIN
+	START TRANSACTION;
+		UPDATE QUESTION     
+		SET CONTENT = NCONTENT,
+			IMG = NIMG,
+            AUDIO = NAUDIO,
+            SOLUTION = NSOLUTION
+		WHERE QID = QuestionID AND LID = LessonID; 
+		SELECT 'Question updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateQuestion();
+
+/*==============================================================*/
+/* Proc: Delete question                                        */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteQuestion`$$
+CREATE PROCEDURE DeleteQuestion(
+	QuestionID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM QUESTION 
+        WHERE QID = QuestionID; 
+		SELECT 'Question deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteQuestion();
+
+/*============================================================================================================================*/
+/*                                                            FORUM                                                           */
+/*============================================================================================================================*/
+/*==============================================================*/
+/* Proc: Get forum list                                         */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `ForumList`$$
+CREATE PROCEDURE ForumList(
+)
+BEGIN
+	START TRANSACTION;
+		SELECT * FROM FORUM;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL ForumList();
+
+/*==============================================================*/
+/* Proc: Get specific forum                                     */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `SpecificForum`$$
+CREATE PROCEDURE SpecificForum(
+	STR varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT * FROM FORUM
+		WHERE FID LIKE CONCAT('%', STR, '%') OR TITLE LIKE CONCAT('%', STR, '%');
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL SpecificForum("RELATIVE");
+
+/*==============================================================*/
+/* Proc: Add forum                                              */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AddForum`$$
+CREATE PROCEDURE AddForum(
+	FID varchar(22),
+	ID varchar(22),
+	TITLE text,
+	CONTENT text,
+	IMG varchar(100)
+)
+BEGIN
+	START TRANSACTION;
+		INSERT INTO FORUM VALUES (FID, ID, TITLE, NOW(), CONTENT, IMG);
+		SELECT 'Forum inserts successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL AddForum();
+
+/*==============================================================*/
+/* Proc: Update forum                                           */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateForum`$$
+CREATE PROCEDURE UpdateForum(
+	ForumID varchar(22),
+	UID varchar(22),
+	NTITLE text,
+	NCONTENT text,
+	NIMG varchar(100)
+)	
+BEGIN
+	START TRANSACTION;
+		UPDATE FORUM     
+		SET TITLE = NTITLE,
+			DATE_ESTABLISHED = NOW(),
+			CONTENT = NCONTENT, 
+            IMG = NIMG
+		WHERE FID = ForumID AND ID = UID; 
+		SELECT 'Forum updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateForum();
+
+/*==============================================================*/
+/* Proc: Delete forum                                           */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteForum`$$
+CREATE PROCEDURE DeleteForum(
+	ForumID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM COMMENT WHERE FID = ForumID; 
+        DELETE FROM FORUM WHERE FID = ForumID; 
+		SELECT 'Forum deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteForum();
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 

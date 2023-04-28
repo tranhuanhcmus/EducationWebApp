@@ -37,6 +37,7 @@ create table COURSE
    PRICE                float not null  comment '',
    IMG                  varchar(100) not null  comment '',
    OWNERID              varchar(22) not null  comment '',
+   RATING              	float comment '',
    primary key (CID)
 );
 
@@ -50,6 +51,7 @@ create table CART
    ID                   varchar(22) not null  comment '',
    STATUS               bool not null  comment '',
    PURCHASE_DAY         datetime comment '',
+   RATING              	float comment '',
    primary key (CID, ID)
 );
 
@@ -123,6 +125,7 @@ create table QUESTION
    CONTENT              text not null  comment '',
    IMG                  varchar(100)  comment '',
    AUDIO                varchar(100)  comment '',
+   SOLUTION             text not null  comment '',
    primary key (QID)
 );
 
@@ -156,14 +159,14 @@ create table ANSWER
 /*==============================================================*/
 /* Table: SOLUTION                                              */
 /*==============================================================*/
-drop table if exists SOLUTION;
-create table SOLUTION
-(
-   SID                  varchar(22) not null  comment '',
-   QID                  varchar(22) not null  comment '',
-   CONTENT              text not null  comment '',
-   primary key (SID)
-);
+-- drop table if exists SOLUTION;
+-- create table SOLUTION
+-- (
+--    SID                  varchar(22) not null  comment '',
+--    QID                  varchar(22) not null  comment '',
+--    CONTENT              text not null  comment '',
+--    primary key (SID)
+-- );
 
 
 /*==============================================================*/
@@ -233,8 +236,8 @@ alter table COURSE add constraint FK_COURSE_ACCOUNT foreign key (OWNERID)
 alter table QUESTION add constraint FK_QUESTION_LESSON foreign key (LID)
       references LESSON (LID) on delete restrict on update restrict;
 
-alter table SOLUTION add constraint FK_SOL_QUESTION foreign key (QID)
-      references QUESTION (QID) on delete restrict on update restrict;
+-- alter table SOLUTION add constraint FK_SOL_QUESTION foreign key (QID)
+--       references QUESTION (QID) on delete restrict on update restrict;
 
 alter table TEST add constraint FK_TEST_LESSON foreign key (LID)
       references LESSON (LID) on delete restrict on update restrict;

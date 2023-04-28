@@ -14,8 +14,8 @@ const controller = {
     },
     courseLesson: async(req, res) => {
         try {
-            const courseId = req.params.id;
-            const courseDetail = await model.courseLesson(courseId);
+            const courseID = req.params.id;
+            const courseDetail = await model.courseLesson(courseID);
             res.status(200).json(courseDetail);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -23,8 +23,8 @@ const controller = {
     },
     myCourse: async(req, res) => {
         try {
-            const studentId = req.params.id;
-            const courseList = await model.myCourse(studentId);
+            const studentID = req.params.id;
+            const courseList = await model.myCourse(studentID);
             res.status(200).json(courseList);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -32,8 +32,8 @@ const controller = {
     },
     myCart: async(req, res) => {
         try {
-            const studentId = req.params.id;
-            const courseList = await model.myCart(studentId);
+            const studentID = req.params.id;
+            const courseList = await model.myCart(studentID);
             res.status(200).json(courseList);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -41,8 +41,8 @@ const controller = {
     },
     myClass: async(req, res) => {
         try {
-            const teacherId = req.params.id;
-            const courseList = await model.myClass(teacherId);
+            const teacherID = req.params.id;
+            const courseList = await model.myClass(teacherID);
             res.status(200).json(courseList);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -69,8 +69,8 @@ const controller = {
     },
     deleteCourse: async(req, res) => {
         try {
-            const CourseID = req.params.id;
-            const result = await model.deleteCourse(CourseID);
+            const courseID = req.params.id;
+            const result = await model.deleteCourse(courseID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -104,6 +104,15 @@ const controller = {
             res.status(400).json({ msg: error.message });
         }
     },
+    rateCourse: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.rateCourse(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
     //------------------------------------LESSON------------------------------------//
     addLesson: async(req, res) => {
         try {
@@ -125,8 +134,8 @@ const controller = {
     },
     deleteLesson: async(req, res) => {
         try {
-            const LessonID = req.params.id;
-            const result = await model.deleteLesson(LessonID);
+            const lessonID = req.params.id;
+            const result = await model.deleteLesson(lessonID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -181,10 +190,11 @@ const controller = {
             fs.createReadStream(videoPath).pipe(res);
         }
     },
+    //------------------------------------COMMENT------------------------------------//
     getForumComment: async(req, res) => {
         try {
-            const ForumId = req.params.id;
-            const result = await model.deleteLesson(ForumId);
+            const forumID = req.params.id;
+            const result = await model.deleteLesson(forumID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -192,8 +202,8 @@ const controller = {
     },
     getCourseComment: async(req, res) => {
         try {
-            const CourseID = req.params.id;
-            const result = await model.deleteLesson(CourseID);
+            const courseID = req.params.id;
+            const result = await model.deleteLesson(courseID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -201,8 +211,8 @@ const controller = {
     },
     getTestComment: async(req, res) => {
         try {
-            const TestId = req.params.id;
-            const result = await model.deleteLesson(TestId);
+            const testID = req.params.id;
+            const result = await model.deleteLesson(testID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -289,6 +299,126 @@ const controller = {
             res.status(400).json({ msg: error.message });
         }
     },
+    //------------------------------------NOTE------------------------------------//
+    getNote: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.getNote(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    addNote: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.addNote(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    updateNote: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.updateNote(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    deleteNote: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.deleteNote(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    //------------------------------------QUESTION------------------------------------//
+    lessonQuiz: async(req, res) => {
+        try {
+            const lessonID = req.params.id;
+            const result = await model.lessonQuiz(lessonID);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    addQuestion: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.addQuestion(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    updateQuestion: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.updateQuestion(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    deleteQuestion: async(req, res) => {
+        try {
+            const questionID = req.params.id;
+            const result = await model.deleteQuestion(questionID);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    //-------------------------------------FORUM--------------------------------------//
+    forumList: async(req, res) => {
+        try {
+            const result = await model.forumList();
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    specificForum: async(req, res) => {
+        try {
+            const str = req.params.id;
+            const result = await model.specificForum(str);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    addForum: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.addForum(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    updateForum: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.updateForum(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    deleteForum: async(req, res) => {
+        try {
+            const forumID = req.params.id;
+            const result = await model.deleteForum(forumID);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+
 };
 
 export default controller;

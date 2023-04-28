@@ -149,6 +149,19 @@ const model = {
             return error.message;
         }
     },
+    rateCourse: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.Rate, [data.CourseID, data.UID, data.Point]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
     //------------------------------------LESSON------------------------------------//
     addLesson: async(data) => {
         try {
@@ -189,6 +202,7 @@ const model = {
             return error.message;
         }
     },
+    //------------------------------------COMMENT------------------------------------//
     getForumComment: async(ForumId) => {
         try {
             const sqlQuery = await loadSqlQueries('request');
@@ -345,5 +359,180 @@ const model = {
             return error.message;
         }
     },
+    //------------------------------------NOTE------------------------------------//
+    getNote: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.GetNote, [data.LID, data.ID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    addNote: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.AddNote, [data.NID, data.LID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    updateNote: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateNote, [data.NID, data.LID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    deleteNote: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.DeleteNote, [data.NID, data.LID, data.ID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    //------------------------------------QUESTION------------------------------------//
+    lessonQuiz: async(lessonID) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.GetQuestion, [lessonID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    addQuestion: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.AddQuestion, [data.QID, data.LID, data.Content, data.Img, data.Audio, data.Solution]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    updateQuestion: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateQuestion, [data.QID, data.LID, data.Content, data.Img, data.Audio, data.Solution]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    deleteQuestion: async(questionID) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.DeleteQuestion, [questionID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    
+    //-------------------------------------FORUM--------------------------------------//
+    forumList: async() => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.ForumList);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    specificForum: async(str) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.SpecificForum, [forumstrId]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    addForum: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.AddForum, [data.FID, data.ID, data.Title, data.Content, data.Img]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    updateForum: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateForum, [data.FID, data.ID, data.Title, data.Content, data.Img]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    deleteForum: async(forumID) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.DeleteForum, [forumID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+
+
 };
 export default model;

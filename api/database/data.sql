@@ -6,9 +6,9 @@ INSERT INTO ACCOUNT VALUES("20127507", "PeMeo", "PeMeo", "BTHUAN", "113", "@gmai
 -- CALL DeleteAccount("20127063");
 
 -- Course
-INSERT INTO COURSE VALUES ("999","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
-INSERT INTO COURSE VALUES ("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
-INSERT INTO COURSE VALUES ("113","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063");
+INSERT INTO COURSE VALUES ("999","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("113","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063", null);
 
 -- Lesson
 INSERT INTO LESSON VALUES("227", "111", "STARTER", "GROUP6", "vid1.mp4", "TL.pdf", "00:30:00");
@@ -24,16 +24,24 @@ INSERT INTO NOTE VALUES("456", "666", "20127063", "GROUP6");
 INSERT INTO NOTE VALUES("789", "999", "20127507", "GROUP6");
 
 -- Cart
-INSERT INTO CART VALUES("111", "20127237", true, null);
-INSERT INTO CART VALUES("999", "20127237", true, NOW());
-INSERT INTO CART VALUES("113", "20127237", false, NOW());
-INSERT INTO CART VALUES("111", "20127507", true, null);
-INSERT INTO CART VALUES("999", "20127507", false, NOW());
-INSERT INTO CART VALUES("113", "20127507", true, NOW());
+INSERT INTO CART VALUES("111", "20127237", true, NOW(), null);
+INSERT INTO CART VALUES("999", "20127237", true, NOW(), null);
+INSERT INTO CART VALUES("113", "20127237", false, null, null);
+INSERT INTO CART VALUES("111", "20127507", true, NOW(), null);
+INSERT INTO CART VALUES("999", "20127507", false, null, null);
+INSERT INTO CART VALUES("113", "20127507", true, NOW(), null);
 -- CALL Pay("111", "20127507");
 -- select * from cart;
 -- SET @days = 15;
 -- SELECT DATE_ADD(NOW(), INTERVAL @days DAY);
+
+-- CALL CourseList();
+-- CALL Rate("111", "20127507", 5);
+-- CALL CourseList();
+-- CALL Rate("111", "20127237", 4);
+-- CALL CourseList();
+-- CALL Rate("113", "20127507", 5);
+-- CALL CourseList();
 
 -- Forum
 INSERT INTO FORUM VALUES ("777","20127237", "PHRASED VERD", "2022-04-03", "9+", "bth.jpg");
@@ -48,21 +56,21 @@ INSERT INTO TEST VALUES ("003","227", "PERFECT TENSE", "Listening", "00:15:00");
 
 
 -- Question
-INSERT INTO QUESTION VALUES ("001","227", "In 1967, One Hundred Years of Solitude was published in?| Spanish| Italian| French", "", "100-years-of-solitude.mp3");
-INSERT INTO QUESTION VALUES ("002","222", "The story can be described as?| science fiction| fantasy| magical realism", "", "100-years-of-solitude.mp3");
-INSERT INTO QUESTION VALUES ("003","227", "In 1982| the book was first translated| the book began to sell extremely well| Márquez won the Nobel Prize in Literature", "", "100-years-of-solitude.mp3");
-INSERT INTO QUESTION VALUES ("004","222", "Kathy is a tall fashion model, and everyone says she TAKES AFTER| her short, fat father| her tall, handsome son| her tall, beautiful mother", "", "");
-INSERT INTO QUESTION VALUES ("005","227", "Christmas decorations are usually TAKEN DOWN| just before Christmas| soon after Christmas| all through Christmas", "", "");
-INSERT INTO QUESTION VALUES ("006","232", "Before TAKING OFF your shoes, you'll have to| take off your socks| untie your shoelaces| put on your feet", "", "");
+INSERT INTO QUESTION VALUES ("001","227", "In 1967, One Hundred Years of Solitude was published in?| Spanish| Italian| French", "", "100-years-of-solitude.mp3", "Spanish");
+INSERT INTO QUESTION VALUES ("002","222", "The story can be described as?| science fiction| fantasy| magical realism", "", "100-years-of-solitude.mp3", "magical realism");
+INSERT INTO QUESTION VALUES ("003","227", "In 1982| the book was first translated| the book began to sell extremely well| Márquez won the Nobel Prize in Literature", "", "100-years-of-solitude.mp3", "Márquez won the Nobel Prize in Literature");
+INSERT INTO QUESTION VALUES ("004","222", "Kathy is a tall fashion model, and everyone says she TAKES AFTER| her short, fat father| her tall, handsome son| her tall, beautiful mother", "", "", "her tall, beautiful mother");
+INSERT INTO QUESTION VALUES ("005","227", "Christmas decorations are usually TAKEN DOWN| just before Christmas| soon after Christmas| all through Christmas", "", "", "soon after Christmas");
+INSERT INTO QUESTION VALUES ("006","232", "Before TAKING OFF your shoes, you'll have to| take off your socks| untie your shoelaces| put on your feet", "", "", "untie your shoelaces");
 
 
 -- Solution
-INSERT INTO SOLUTION VALUES ("001","001", "Spanish");
-INSERT INTO SOLUTION VALUES ("002","002", "magical realism");
-INSERT INTO SOLUTION VALUES ("003","003", "Márquez won the Nobel Prize in Literature");
-INSERT INTO SOLUTION VALUES ("004","004", "her tall, beautiful mother");
-INSERT INTO SOLUTION VALUES ("005","005", "soon after Christmas");
-INSERT INTO SOLUTION VALUES ("006","006", "untie your shoelaces");
+-- INSERT INTO SOLUTION VALUES ("001","001", "Spanish");
+-- INSERT INTO SOLUTION VALUES ("002","002", "magical realism");
+-- INSERT INTO SOLUTION VALUES ("003","003", "Márquez won the Nobel Prize in Literature");
+-- INSERT INTO SOLUTION VALUES ("004","004", "her tall, beautiful mother");
+-- INSERT INTO SOLUTION VALUES ("005","005", "soon after Christmas");
+-- INSERT INTO SOLUTION VALUES ("006","006", "untie your shoelaces");
 
 -- Assignment
 INSERT INTO ASSIGNMENT VALUES("001", "001", "20127237", "2020-03-06", NULL);

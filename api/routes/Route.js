@@ -14,6 +14,7 @@ router.delete("/deletecourse/:id", controller.deleteCourse);    //xóa course
 //-------------------------------------CART-------------------------------------//
 router.post("/addtocart", controller.addToCart);                //thêm vào giỏ hàng
 router.put("/enrollcourse", controller.enrollCourse);           //thanh toán course đã thêm vào giỏ hàng
+router.put("/rating", controller.rateCourse);                   //đánh giá course đã thanh toán
 router.delete("/deletefromcart", controller.deleteFromCart);    //xóa course khỏi giỏ hàng
 //------------------------------------LESSON------------------------------------//
 router.post("/addlesson", controller.addLesson);                //thêm lesson
@@ -32,7 +33,24 @@ router.put("/ufcmt", controller.updateForumComment);            //sửa comment 
 router.put("/ufcmt", controller.updateCourseComment);           //sửa comment trong course
 router.put("/ufcmt", controller.updateTestComment);             //sửa comment trong test
 router.delete("/dfcmt", controller.deleteForumComment);         //xóa comment trong forum
-router.delete("/dccmt", controller.deleteCourseComment);        //xóa comment trong forum
-router.delete("/dtcmt", controller.deleteTestComment);          //xóa comment trong forum
+router.delete("/dccmt", controller.deleteCourseComment);        //xóa comment trong course
+router.delete("/dtcmt", controller.deleteTestComment);          //xóa comment trong test
+//-------------------------------------NOTE-------------------------------------//
+router.get("/ln", controller.getNote);                          //lấy note của 1 lesson
+router.post("/an", controller.addNote);                         //thêm note trong lesson
+router.put("/un", controller.updateNote);                       //sửa note trong lesson
+router.delete("/dn", controller.deleteNote);                    //xóa note trong lesson
+//-----------------------------------QUESTION-----------------------------------//
+router.get("/lq/:id", controller.lessonQuiz);                   //lấy quiz của 1 lesson
+router.post("/aq", controller.addQuestion);                     //thêm quiz trong lesson
+router.put("/uq", controller.updateQuestion);                   //sửa quiz trong lesson
+router.delete("/dq", controller.deleteQuestion);                //xóa quiz trong lesson
+//-------------------------------------FORUM------------------------------------//
+router.get("/forum", controller.forumList);                     //lấy solution của 1 quiz
+router.get("/forum/:id", controller.specificForum);             //lấy solution của 1 quiz
+router.post("/af", controller.addForum);                        //thêm solution của 1 quiz
+router.put("/uf", controller.updateForum);                      //sửa solution của 1 quiz
+router.delete("/df", controller.deleteForum);                   //xóa solution của 1 quiz
+
 
 export default router;
