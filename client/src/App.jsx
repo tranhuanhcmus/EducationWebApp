@@ -18,6 +18,8 @@ import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
 import BlogDetails from "./pages/BlogDetails";
 import Pay from "./pages/Pay";
+import TeacherCourses from "./pages/TeacherCourses";
+import TeacherCoursesDetails from "./pages/TeacherCourseDetail";
 
 function App() {
   const Layout = () => {
@@ -57,12 +59,15 @@ function App() {
           element: <CoursesDetails />,
         },
         { path: "/profile", element: <Profile /> },
+        { path: "/TeacherCourse", element: <TeacherCourses /> },
         { path: "/cart", element: <Cart /> },
         { path: "/test", element: <Test /> },
         { path: "/blogs", element: <Blogs /> },
         { path: "/BlogDetails", element: <BlogDetails /> },
         { path: "/lesson/:id", element: <Lesson /> },
         { path: "/pay", element: <Pay /> },
+        { path: "/testthu", element: <TeacherCoursesDetails /> },
+        { path: "/testthu/:courseId", element: <TeacherCoursesDetails /> },
       ],
     },
 
