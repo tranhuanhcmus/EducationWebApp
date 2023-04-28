@@ -208,6 +208,87 @@ const controller = {
             res.status(400).json({ msg: error.message });
         }
     },
+    addForumComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.addForumComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    addCourseComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.addCourseComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    addTestComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.addTestComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    updateForumComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.updateForumComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    updateCourseComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.updateCourseComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    updateTestComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.updateTestComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    deleteForumComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.deleteForumComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    deleteCourseComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.deleteCourseComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
+    deleteTestComment: async(req, res) => {
+        try {
+            const data = req.body;
+            const result = await model.deleteTestComment(data);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
 };
 
 export default controller;

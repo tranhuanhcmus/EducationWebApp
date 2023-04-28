@@ -22,9 +22,17 @@ router.delete("/deletelesson/:id", controller.deleteLesson);    //xóa lesson
 router.post("/image", controller.getImage);                     //lấy ảnh từ database
 router.get("/video/:name", controller.getVideo);                //lấy ảnh từ database
 //------------------------------------COMMENT------------------------------------//
-router.get("/fcmt/:id", controller.myCart);                     //lấy comment của 1 forum
-router.get("/ccmt/:id", controller.myCart);                     //lấy comment của 1 course
-router.get("/tcmt/:id", controller.myCart);                     //lấy comment của 1 test
-
+router.get("/fcmt/:id", controller.getForumComment);            //lấy comment của 1 forum
+router.get("/ccmt/:id", controller.getCourseComment);           //lấy comment của 1 course
+router.get("/tcmt/:id", controller.getTestComment);             //lấy comment của 1 test
+router.post("/afcmt", controller.addForumComment);              //thêm comment trong forum
+router.post("/accmt", controller.addCourseComment);             //thêm comment trong course
+router.post("/atcmt", controller.addTestComment);               //thêm comment trong test
+router.put("/ufcmt", controller.updateForumComment);            //sửa comment trong forum
+router.put("/ufcmt", controller.updateCourseComment);           //sửa comment trong course
+router.put("/ufcmt", controller.updateTestComment);             //sửa comment trong test
+router.delete("/dfcmt", controller.deleteForumComment);         //xóa comment trong forum
+router.delete("/dccmt", controller.deleteCourseComment);        //xóa comment trong forum
+router.delete("/dtcmt", controller.deleteTestComment);          //xóa comment trong forum
 
 export default router;

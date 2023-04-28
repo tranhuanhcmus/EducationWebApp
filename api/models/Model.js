@@ -228,5 +228,122 @@ const model = {
             return error.message;
         }
     },
+    addForumComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.AddForumComment, [data.CmtID, data.FID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    addCourseComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.AddCourseComment, [data.CmtID, data.CID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    addTestComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.AddTestComment, [data.CmtID, data.TID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    updateForumComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateForumComment, [data.CmtID, data.FID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    updateCourseComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateCourseComment, [data.CmtID, data.CID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    updateTestComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateTestComment, [data.CmtID, data.TID, data.ID, data.Content]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    deleteForumComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.DeleteForumComment, [data.CmtID, data.FID, data.ID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    deleteCourseComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.DeleteCourseComment, [data.CmtID, data.CID, data.ID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
+    deleteTestComment: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.DeleteTestComment, [data.CmtID, data.TID, data.ID]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
 };
 export default model;

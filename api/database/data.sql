@@ -81,6 +81,14 @@ INSERT INTO COMMENT VALUES ("001", "888", "20127063", null, null, "Xiao Chou Huo
 INSERT INTO COMMENT VALUES ("002", null, "20127507", "999", null, "Pe Meo HuHong", NOW());
 INSERT INTO COMMENT VALUES ("003", null, "20127237", null, "002", "Luc Che Nha", NOW());
 
+-- CALL AddCourseComment("2223", "999", "20127063", "Test mic");
+-- CALL GetCourseComment("999");
+-- CALL UpdateCourseComment("2223", "999", "20127063", "123 123");
+-- CALL GetCourseComment("999");
+-- CALL DeleteCourseComment("2223", "999", "20127063");
+-- CALL GetCourseComment("999");
+
+
 -- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Chou.huog5459';
 -- flush privileges;
 

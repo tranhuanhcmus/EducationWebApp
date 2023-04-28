@@ -367,13 +367,12 @@ CREATE PROCEDURE UpdateLesson(
 BEGIN
 	START TRANSACTION;
 		UPDATE LESSON     
-		SET CID = NCID,
-			NAME = NNAME,   
+		SET NAME = NNAME,   
 			CONTENT = NCONTENT,
 			VIDEO = NVIDEO,
 			ATTACHMENT = NATTACHMENT,
             DURATION = NDURATION
-		WHERE LID = LessonID; 
+		WHERE LID = LessonID AND CID = NCID; 
 		SELECT 'Lesson updates successfully' AS RESULT;
     COMMIT;
 END $$
@@ -615,7 +614,7 @@ DELIMITER ;
 -- CALL GetTestComment('');
 
 /*==============================================================*/
-/* Proc: Add Forum Comment                                      */
+/* Proc: Add Forum Comment                                   */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `AddForumComment`$$
@@ -636,7 +635,7 @@ DELIMITER ;
 -- CALL AddForumComment('');
 
 /*==============================================================*/
-/* Proc: Add Course Comment                                     */
+/* Proc: Add Course Comment                                  */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `AddCourseComment`$$
@@ -657,7 +656,7 @@ DELIMITER ;
 -- CALL AddCourseComment('');
 
 /*==============================================================*/
-/* Proc: Add Test Comment                                       */
+/* Proc: Add Test Comment                                    */
 /*==============================================================*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `AddTestComment`$$
@@ -677,6 +676,142 @@ DELIMITER ;
 
 -- CALL AddTestComment('');
 
+/*==============================================================*/
+/* Proc: Update Forum Comment                                   */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateForumComment`$$
+CREATE PROCEDURE UpdateForumComment(
+	NCMTID varchar(22),
+	NFID varchar(22),
+	NID varchar(22),
+	NCONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		UPDATE COMMENT 
+        SET CONTENT = NCONTENT,
+			CMT_TIME = NOW()
+        WHERE CMTID = NCMTID AND FID = NFID AND ID = NID;
+		SELECT 'Comment updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateForumComment('');
+
+/*==============================================================*/
+/* Proc: Update Course Comment                                  */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateCourseComment`$$
+CREATE PROCEDURE UpdateCourseComment(
+	NCMTID varchar(22),
+	NCID varchar(22),
+	NID varchar(22),
+	NCONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		UPDATE COMMENT 
+        SET CONTENT = NCONTENT,
+			CMT_TIME = NOW()
+        WHERE CMTID = NCMTID AND CID = NCID AND ID = NID;
+		SELECT 'Comment updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateCourseComment('');
+
+/*==============================================================*/
+/* Proc: Update Test Comment                                    */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `UpdateTestComment`$$
+CREATE PROCEDURE UpdateTestComment(
+	NCMTID varchar(22),
+	NTID varchar(22),
+	NID varchar(22),
+	NCONTENT text
+)
+BEGIN
+	START TRANSACTION;
+		UPDATE COMMENT 
+        SET CONTENT = NCONTENT,
+			CMT_TIME = NOW()
+        WHERE CMTID = NCMTID AND TID = NTID AND ID = NID;
+		SELECT 'Comment updates successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL UpdateTestComment('');
+
+/*==============================================================*/
+/* Proc: Delete Forum Comment                                   */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteForumComment`$$
+CREATE PROCEDURE DeleteForumComment(
+	NCMTID varchar(22),
+	NFID varchar(22),
+	NID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM COMMENT
+        WHERE CMTID = NCMTID AND FID = NFID AND ID = NID;
+		SELECT 'Comment deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteForumComment('');
+
+/*==============================================================*/
+/* Proc: Delete Course Comment                                  */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteCourseComment`$$
+CREATE PROCEDURE DeleteCourseComment(
+	NCMTID varchar(22),
+	NCID varchar(22),
+	NID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM COMMENT
+        WHERE CMTID = NCMTID AND CID = NCID AND ID = NID;
+		SELECT 'Comment deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteCourseComment('');
+
+/*==============================================================*/
+/* Proc: Delete Test Comment                                    */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `DeleteTestComment`$$
+CREATE PROCEDURE DeleteTestComment(
+	NCMTID varchar(22),
+	NTID varchar(22),
+	NID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		DELETE FROM COMMENT
+        WHERE CMTID = NCMTID AND TID = NTID AND ID = NID;
+		SELECT 'Comment deletes successfully' AS RESULT;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL DeleteTestComment('');
+
+/*-------------------------------------------------------------------------------------------------------------------------------------*/
 
 /*==============================================================*/
 /* Proc: Create users                                           */
