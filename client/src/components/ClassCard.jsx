@@ -3,11 +3,27 @@ import React from "react";
 import Img from "./Img";
 import Button from "./Button";
 import Text from "./Text";
+import { useNavigate } from "react-router-dom";
 const ClassCard = (props) => {
+  const navigate = useNavigate();
   return (
     <>
       <div className={props.className}>
-        <div className="flex flex-col gap-[20px] items-center justify-start w-[100%]">
+        {props.Teacher && (
+          <div className="w-full flex items-end justify-end ">
+            <div
+              className="items-start p-[10px] rounded-[6px] w-[44px] cursor-pointer"
+              onClick={props.onDeleteCourse}
+            >
+              <Img src="./Delete.svg" className="" alt="download"></Img>
+            </div>
+          </div>
+        )}
+
+        <div
+          className="flex flex-col gap-[20px] items-center justify-start w-[100%]"
+          onClick={() => navigate(`/coursesdetails/${props.id}`)}
+        >
           <Img
             src={props?.standardCountImage}
             className="h-[50px] w-[50px]"
@@ -37,7 +53,10 @@ const ClassCard = (props) => {
             </Text>
           </div>
         </div>
-        <Button className="border-[1px] border-red_300 border-solid cursor-pointer font-inter font-medium min-w-[161px] sm:px-[20px] px-[31px] py-[12px] rounded-[5px] text-[16px] text-center text-red_300 w-[auto]">
+        <Button
+          className="border-[1px] border-red_300 border-solid cursor-pointer font-inter font-medium min-w-[161px] sm:px-[20px] px-[31px] py-[12px] rounded-[5px] text-[16px] text-center text-red_300 w-[auto]"
+          onClick={() => navigate(`/coursesdetails/${props.id}`)}
+        >
           Class Details
         </Button>
       </div>

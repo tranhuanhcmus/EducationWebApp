@@ -2,14 +2,21 @@ import React from "react";
 
 import Img from "./Img";
 import Button from "./Button";
-import Text from "./Text";
 import List from "./List";
-
+import { Link, useNavigate } from "react-router-dom";
 const CourseCard = (props) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className={props.className}>
-        <div className="flex flex-1 sm:flex-col flex-row gap-[15px] items-center justify-start w-[100%]">
+        <div
+          className="flex flex-1 sm:flex-col flex-row gap-[15px] items-center justify-start w-[100%]"
+          onClick={() => {
+            navigate("/coursesdetails");
+            console.log("ok");
+          }}
+        >
           <Img
             src={props?.image}
             className="h-[103px] md:h-[auto] max-h-[103px] object-cover rounded-[10px] w-[auto] sm:w-[auto]"
@@ -37,7 +44,12 @@ const CourseCard = (props) => {
             </List>
           </div>
         </div>
-        <Button className="bg-red_50 flex h-[44px] items-center justify-center p-[10px] rounded-[6px] w-[44px]">
+        <Button
+          className="bg-red_50 flex h-[44px] items-center justify-center p-[10px] rounded-[6px] w-[44px] cursor-pointer"
+          onClick={() => {
+            props.addCourseHandler(props.courseName, props.image, props.price);
+          }}
+        >
           <Img src="../../public/imgBag.svg" className="h-[24px]" alt="bag" />
         </Button>
       </div>
