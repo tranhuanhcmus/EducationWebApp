@@ -42,10 +42,12 @@ router.post("/an", controller.addNote); //thêm note trong lesson
 router.put("/un", controller.updateNote); //sửa note trong lesson
 router.delete("/dn", controller.deleteNote); //xóa note trong lesson
 //-----------------------------------QUESTION-----------------------------------//
-router.get("/lq/:id", controller.lessonQuiz); //lấy quiz của 1 lesson
-router.post("/aq", controller.addQuestion); //thêm quiz trong lesson
-router.put("/uq", controller.updateQuestion); //sửa quiz trong lesson
-router.delete("/dq", controller.deleteQuestion); //xóa quiz trong lesson
+
+router.get("/lq/:id", controller.lessonQuiz);                   //lấy quiz của 1 lesson
+router.post("/aq", controller.addQuestion);                     //thêm quiz trong lesson
+router.put("/uq", controller.updateQuestion);                   //sửa quiz trong lesson
+router.delete("/dq/:id", controller.deleteQuestion);                //xóa quiz trong lesson
+
 //-------------------------------------FORUM------------------------------------//
 router.get("/forum", controller.forumList); //lấy solution của 1 quiz
 router.get("/forum/:id", controller.specificForum); //lấy solution của 1 quiz

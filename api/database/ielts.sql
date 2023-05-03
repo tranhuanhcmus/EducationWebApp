@@ -239,7 +239,7 @@ alter table QUESTION add constraint FK_QUESTION_LESSON foreign key (LID)
 -- alter table SOLUTION add constraint FK_SOL_QUESTION foreign key (QID)
 --       references QUESTION (QID) on delete restrict on update restrict;
 
-alter table TEST add constraint FK_TEST_LESSON foreign key (LID)
-      references LESSON (LID) on delete restrict on update restrict;
+-- alter table TEST add constraint FK_TEST_LESSON foreign key (LID)
+--       references LESSON (LID) on delete restrict on update restrict;
 
 

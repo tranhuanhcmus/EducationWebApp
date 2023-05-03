@@ -9,6 +9,10 @@ INSERT INTO ACCOUNT VALUES("20127507", "PeMeo", "PeMeo", "BTHUAN", "113", "@gmai
 INSERT INTO COURSE VALUES ("999","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063", null);
 INSERT INTO COURSE VALUES ("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063", null);
 INSERT INTO COURSE VALUES ("113","LIS 9.0", "LISTENING-9.0", "EZ 9+", "50.00", "bth.jpg", "20127063", null);
+-- CALL CourseList();
+-- CALL UpdateCourse("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "90.00", "bth.jpg", "20127063");
+-- CALL CourseList();
+
 
 -- Lesson
 INSERT INTO LESSON VALUES("227", "111", "STARTER", "GROUP6", "vid1.mp4", "TL.pdf", "00:30:00");
@@ -63,6 +67,7 @@ INSERT INTO QUESTION VALUES ("004","222", "Kathy is a tall fashion model, and ev
 INSERT INTO QUESTION VALUES ("005","227", "Christmas decorations are usually TAKEN DOWN| just before Christmas| soon after Christmas| all through Christmas", "", "", "soon after Christmas");
 INSERT INTO QUESTION VALUES ("006","232", "Before TAKING OFF your shoes, you'll have to| take off your socks| untie your shoelaces| put on your feet", "", "", "untie your shoelaces");
 
+-- select * from question;
 
 -- Solution
 -- INSERT INTO SOLUTION VALUES ("001","001", "Spanish");
