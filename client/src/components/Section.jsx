@@ -44,7 +44,7 @@ const Section = ({ Type, index, data }) => {
           >
             {Type}
           </Typography>
-          <Link href={`/${Type}`}>
+          <Link to={`/${Type}`}>
             <Button color="primary">
               <Typography variant="body1" sx={{ textAlign: "right" }}>
                 More
@@ -60,6 +60,7 @@ const Section = ({ Type, index, data }) => {
             data.map((course) => {
               const [image, setImage] = React.useState("");
 
+              //get Image from database
               React.useEffect(() => {
                 const loadImage = async () => {
                   const data = await getImage(course.IMG);
