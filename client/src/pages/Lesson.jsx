@@ -123,7 +123,7 @@ const Lesson = () => {
       .catch(() => console.log("Error when get lessons"));
   }, []);
 
-  //fetching video
+  //get video from database
   useEffect(() => {
     const loadVideo = async () => {
       const URL = await getVideo(data[position].VIDEO);
