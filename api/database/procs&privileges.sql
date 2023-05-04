@@ -176,12 +176,13 @@ DROP PROCEDURE IF EXISTS `CourseList`$$
 CREATE PROCEDURE CourseList()
 BEGIN
 	START TRANSACTION;
-		SELECT * FROM COURSE; 
+		SELECT C.CID, C.NAME AS COURESENAME, C.CATEGORY, C.DESCRIPTION, C.PRICE, C.IMG, C.RATING, A.NAME AS OWNERNAME
+        FROM COURSE C JOIN ACCOUNT A ON C.OWNERID = A.ID; 
     COMMIT;
 END $$
 DELIMITER ;
 
--- CALL CourseList();
+CALL CourseList();
 
 /*==============================================================*/
 /* Proc: Get course by name                                              */
