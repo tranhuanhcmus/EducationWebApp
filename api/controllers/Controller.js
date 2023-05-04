@@ -194,7 +194,7 @@ const controller = {
     getForumComment: async(req, res) => {
         try {
             const forumID = req.params.id;
-            const result = await model.deleteLesson(forumID);
+            const result = await model.getForumComment(forumID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -203,7 +203,7 @@ const controller = {
     getCourseComment: async(req, res) => {
         try {
             const courseID = req.params.id;
-            const result = await model.deleteLesson(courseID);
+            const result = await model.getCourseComment(courseID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });
@@ -212,7 +212,7 @@ const controller = {
     getTestComment: async(req, res) => {
         try {
             const testID = req.params.id;
-            const result = await model.deleteLesson(testID);
+            const result = await model.getTestComment(testID);
             res.status(200).json(result);
         } catch (error) {
             res.status(400).json({ msg: error.message });

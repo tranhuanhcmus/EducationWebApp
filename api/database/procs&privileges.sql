@@ -182,7 +182,7 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL CourseList();
+-- CALL CourseList();
 
 /*==============================================================*/
 /* Proc: Get course by name                                              */
