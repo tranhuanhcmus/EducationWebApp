@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Stack,
@@ -25,35 +25,35 @@ import { makeRequest } from "./../utils/axios";
 const Section = ({ Type, index, onAdd }) => {
   const [courses, setCourses] = useState([]);
   const [courseImgs, setCourseImgs] = useState([]);
-  useEffect(() => {
-    const fetchCourses = async () => {
-      const res = await makeRequest({ url: "/course", method: "get" });
-      res.data.forEach(async (course) => {
-        const data1 = await getImage(course.IMG);
-        setCourseImgs((prev) => {
-          return [...prev, data1];
-        });
+  var items = JSON.parse(localStorage.getItem("items"));
+  const fetchCourses = useCallback(async () => {
+    const array = [];
+    const res = await makeRequest({ url: "/course", method: "get" });
+    const items = JSON.parse(localStorage.getItem("items"));
+    res.data.forEach(async (course) => {
+      const data1 = await getImage(course.IMG);
+      setCourseImgs((prev) => {
+        return [...prev, data1];
       });
-
-      const items = JSON.parse(localStorage.getItem("items"));
-      const array = [];
-      res.data.map((index) => {
-        var i = 0;
-        items.map((course) => {
-          if (course.CID === index.CID) {
-            i = i + 1;
-          }
-        });
-        if (i === 0) {
-          array.push(index);
+    });
+    res.data.map((index) => {
+      var i = 0;
+      items.map((course) => {
+        if (course.CID === index.CID) {
+          i = i + 1;
         }
       });
-      setCourses(array);
-    };
+      if (i === 0) {
+        array.push(index);
+      }
+    });
+    setCourses(array);
+  }, []);
+  useEffect(() => {
     if (Type == "Courses") {
       fetchCourses();
     }
-  }, [courses]);
+  }, [fetchCourses]);
   return (
     <Box
       sx={{
@@ -181,6 +181,7 @@ const Section = ({ Type, index, onAdd }) => {
                               course.PRICE,
                               course.CID
                             );
+                            fetchCourses();
                           }}
                         >
                           <IconButton color="primary">
