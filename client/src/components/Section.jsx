@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Stack,
@@ -20,7 +20,25 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
-const Section = ({ Type, index, data }) => {
+import { makeRequest } from "./../utils/axios";
+const Section = ({ Type, index }) => {
+  const [courses, setCourses] = useState([]);
+  const [courseImgs, setCourseImgs] = useState([]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const res = await makeRequest({ url: "/course", method: "get" });
+      res.data.forEach(async (course) => {
+        const data1 = await getImage(course.IMG);
+        setCourseImgs((prev) => {
+          return [...prev, data1];
+        });
+      });
+      setCourses(res.data);
+    };
+    if (Type == "Courses") {
+      fetchCourses();
+    }
+  }, []);
   return (
     <Box
       sx={{
@@ -56,18 +74,18 @@ const Section = ({ Type, index, data }) => {
         <hr />
 
         <Grid container spacing={3}>
-          {data.length != 0 ? (
-            data.map((course) => {
-              const [image, setImage] = React.useState("");
-
+          {courses.length != 0 ? (
+            courses.map((course, index) => {
+              // const [image, setImage] = useState("");
+              const image = "";
               //get Image from database
-              React.useEffect(() => {
-                const loadImage = async () => {
-                  const data = await getImage(course.IMG);
-                  setImage(data);
-                };
-                loadImage();
-              }, []);
+              // useEffect(() => {
+              //   const loadImage = async () => {
+              //     const data = await getImage(course.IMG);
+              //     setImage(data);
+              //   };
+              //   loadImage();
+              // }, []);
 
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
@@ -77,7 +95,7 @@ const Section = ({ Type, index, data }) => {
                         <CardMedia
                           component="img"
                           alt={course.NAME}
-                          src={image}
+                          src={courseImgs[index]}
                           sx={{
                             width: "100%",
                             height: "200px",
@@ -105,7 +123,7 @@ const Section = ({ Type, index, data }) => {
                                 fontFamily: "Roboto Slab",
                               }}
                             >
-                              course.author
+                              {course.OWNERNAME}
                             </Typography>
                           </Stack>
                           {/* <Rating value={5} readOnly precision={0.5} /> */}

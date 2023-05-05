@@ -5,9 +5,7 @@ import { makeRequest } from "./../utils/axios";
 
 const Home = () => {
   const sectionVariants = ["Courses", "Tests", "Blogs"];
-  const [courses, setCourses] = React.useState([]);
-  const [tests, setTests] = React.useState([]);
-  const [blogs, setBlogs] = React.useState([]);
+
   const discount = [
     "/discount/discount3.jpg",
     "/discount/discount1.jpg",
@@ -20,34 +18,9 @@ const Home = () => {
   ];
 
   const [bgs, setBgs] = React.useState([]);
-  // React.useEffect(() => {
-  //   const getRandomImages = async () => {
-  //     const imagePromises = [];
 
-  //     for (let i = 0; i < 5; i++) {
-  //       imagePromises.push(
-  //         fetch(`https://picsum.photos/1920/1080?random=${i}`).then(
-  //           (response) => response.url
-  //         )
-  //       );
-  //     }
-
-  //     const images = await Promise.all(imagePromises);
-  //     setBgs(images);
-  //   };
-
-  //   getRandomImages();
-  // }, []);
   React.useEffect(() => {
     setBgs(discount);
-
-    //get Courses
-    const data_courses = makeRequest({
-      url: "/course",
-      method: "get",
-    })
-      .then((res) => res.data)
-      .then((data) => setCourses(data));
   }, []);
 
   const [score, setScore] = React.useState({});
@@ -64,7 +37,6 @@ const Home = () => {
     const total = (listening + reading + writing) / 3;
     setSum((sum) => (Math.round(total * 4) / 4).toFixed(2));
   };
-  console.log(score);
   return (
     <>
       <Carousel backgrounds={bgs} />
@@ -143,20 +115,7 @@ const Home = () => {
         </div>
       </div>
       {sectionVariants.map((variant, index) => {
-        return (
-          <Section
-            key={index}
-            Type={variant}
-            index={index}
-            data={
-              variant == "Courses"
-                ? courses
-                : variant == "Tests"
-                ? tests
-                : blogs
-            }
-          />
-        );
+        return <Section key={index} Type={variant} index={index} />;
       })}
     </>
   );
