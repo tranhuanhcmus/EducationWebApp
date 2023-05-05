@@ -45,7 +45,7 @@ const img = "/anh4.png";
 
 const CoursesDetails = () => {
   const params = useParams();
-
+  console.log(params);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
   const [valueButton, setValue] = React.useState(parseInt(params.lessonId));
@@ -91,58 +91,6 @@ const CoursesDetails = () => {
 
     setBending(false);
   }, []);
-
-  // React.useEffect(() => {
-  //   const indetiPIEr = setTimeout(() => {
-  //     setBending(true);
-  //     const data_courses = makeRequest({
-  //       url: `/course/${parseInt(params.courseId)}`,
-  //       method: "get",
-  //     })
-  //       .then((res) => res.data)
-  //       .then((data) => {
-  //         setCourses(data);
-  //         if (!bending) {
-  //           data.forEach((value) => {
-  //             loadVideo(value);
-  //           });
-  //         }
-  //       });
-  //     const loadVideo = async () => {
-  //       const URL = await getVideo(courses[0].VIDEO);
-  //       setVideoURL(URL);
-  //     };
-
-  //     setBending(false);
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(indetiPIEr);
-  //   };
-  // }, []);
-
-  // React.useEffect(() => {
-  //   const indetiPIEr = setTimeout(() => {
-  //     setBending(true);
-  //     const loadVideo = async () => {
-  //       if (parseInt(params.lessonId) >= 0) {
-  //         const URL = await getVideo(courses[parseInt(params.lessonId)].VIDEO);
-  //         setVideoURL(URL);
-  //       } else {
-  //         const URL = await getVideo(courses[0].VIDEO);
-  //         setVideoURL(URL);
-  //       }
-  //     };
-  //     playNextVideo();
-  //     loadVideo();
-
-  //     setValue(params.lessonId);
-  //     setBending(false);
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(indetiPIEr);
-  //   };
-  // }, [params.lessonId]);
-
   React.useEffect(() => {
     const indetiPIEr = setTimeout(async () => {
       fetchData();
@@ -210,7 +158,18 @@ const CoursesDetails = () => {
 
                       <Button
                         className=" self-center py-3 px-2 bg-indigo-600 font-note font-bold md:text-sm text-md text-white uppercase rounded-3xl md:w-[25%] w-[200px]  hover:bg-deep_purple_A201 hover:ring-yellow-400 ring-2 "
-                        onClick={() => navigate("/lesson/113")}
+                        onClick={() => {
+                          const CID = params.courseId;
+                          const LID = params.lessonId;
+                          navigate(`/lesson/${CID}`, {
+                            state: {
+                              CID,
+                              LID,
+                              author: "Harry Bui",
+                              courseImage: "bth.jpg",
+                            },
+                          });
+                        }}
                       >
                         Move to lesson
                       </Button>

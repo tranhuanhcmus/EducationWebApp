@@ -4,12 +4,12 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Button, IconButton } from "@mui/material";
 import CommentList from "../components/CommentList";
 import Quiz from "./../components/Quiz/Quiz";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { makeRequest } from "./../utils/axios";
 import { useSelector } from "react-redux";
-
+import { useMutation, useQueryClient } from "react-query";
 import Loading from "../utils/Loading";
-import { getVideo } from "../utils/fetchData";
+import { getImage, getVideo } from "../utils/fetchData";
 
 const buttonStyle = {
   border: "solid 1px black",
@@ -84,19 +84,22 @@ const questionBank = [
 const Lesson = () => {
   const currentUser = useSelector((state) => state.auth.user);
 
-  const author = "Harry Bui";
-  const courseImage = "/anh1.png";
-  const [notes, setNotes] = useState("");
+  const location = useLocation();
+  const CID = location.state.CID;
+  const LID = location.state.LID;
+  const author = location.state.author;
+  const courseImage = location.state.courseImage;
+
   const [data, setData] = useState([]);
+  const [notes, setNotes] = useState("");
   const [bending, setBending] = useState(true);
   const [videoURL, setVideoURL] = useState("");
-  const [comments, setComments] = useState([]);
-  const location = useLocation();
-  const CID = location.pathname.split("/")[2];
+  const [image, setImage] = React.useState("not yet");
+
   const [cmt, setCmt] = useState("");
   const [position, setPosition] = useState(null);
-
   const [key, setKey] = React.useState("");
+  const queryClient = useQueryClient();
   const handleCLick = (arg) => {
     if (typeof arg !== "number") {
       switch (arg) {
@@ -116,6 +119,10 @@ const Lesson = () => {
 
   //fetching lessons
   useEffect(() => {
+    const loadImage = async () => {
+      const newImage = await getImage(`${courseImage}`);
+      setImage(newImage);
+    };
     const fetchLesson = () => {
       setBending(true);
       makeRequest({
@@ -124,44 +131,81 @@ const Lesson = () => {
       })
         .then((res) => setData(res.data))
         .then(() => setBending(false))
-        .then(() => setPosition(0))
+        .then(() => setPosition(LID))
         .catch(() => console.log("Error when get lessons"));
     };
     fetchLesson();
+    loadImage();
   }, []);
 
-  //get video from database
+  //change on position (when change lesson)
   useEffect(() => {
     const loadVideo = async () => {
       const URL = await getVideo(data[position].VIDEO);
       setVideoURL(URL);
     };
+
+    const fetchingNotes = async () => {
+      const res = await makeRequest({
+        url: "/ln",
+        method: "post",
+        data: {
+          LID: data[position].LID,
+          ID: currentUser.ID,
+        },
+      });
+      if (res.data.length > 0) {
+        setNotes(res.data[0].CONTENT);
+      } else setNotes("");
+    };
+
     if (!bending) {
       loadVideo();
+      fetchingNotes();
     }
   }, [position]);
 
-  //fetching note
-
-  //fetching comments
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      setBending(true);
-      const res = await makeRequest({
-        url: `/ccmt/${CID}`,
-        method: "get",
+  const handleSaveNote = async () => {
+    //check have note?
+    var res = await makeRequest({
+      url: "/ln",
+      method: "post",
+      data: {
+        LID: data[position]?.LID,
+        ID: currentUser.ID,
+      },
+    });
+    const haveNote = res.data.length > 0;
+    const NID = currentUser.ID + data[position].LID;
+    if (!haveNote) {
+      //add note
+      res = await makeRequest({
+        url: "/an",
+        method: "post",
+        data: {
+          LID: data[position].LID,
+          ID: currentUser.ID,
+          NID: NID,
+          Content: notes,
+        },
       });
-      setComments(res.data);
-      setBending(false);
-    };
-    fetchComments();
-  }, []);
-
-  const handleSave = () => {
-    setBending(true);
+    } else {
+      //update note
+      res = await makeRequest({
+        url: "/un",
+        method: "put",
+        data: {
+          LID: data[position].LID,
+          ID: currentUser.ID,
+          NID: NID,
+          Content: notes,
+        },
+      });
+    }
+    console.log(res);
+    alert(res.data[0]?.RESULT);
   };
-  const handleComment = async () => {
+  const saveComment = async () => {
     const currentDate = (+new Date()).toString(36);
     const CMTID = currentDate + CID + currentUser.ID;
     const Content = cmt;
@@ -171,15 +215,20 @@ const Lesson = () => {
       method: "post",
       data: {
         CmtID: CMTID.slice(0, 22),
-        Content: Content,
+        Content: `Lesson ${data[position].NAME}: ${Content}`,
         CID: CID,
         ID: currentUser.ID,
       },
     });
-    window.location.reload();
+    setCmt("");
+    return res;
   };
+  const { mutate: addComment } = useMutation(saveComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("comments");
+    },
+  });
 
-  console.log(videoURL);
   return !bending ? (
     <div>
       <div className="container flex justify-center">
@@ -199,7 +248,7 @@ const Lesson = () => {
             width="80%%"
             controls
             autoPlay
-            poster="/anh1.png"
+            poster={image}
             className="mx-auto"
           >
             <source src={videoURL} type="video/mp4" />
@@ -242,7 +291,7 @@ const Lesson = () => {
                   >
                     <img
                       className="object-cover object-center md:h-[100px] h-[132px] border-b-4 p-2 border-solid border-red-800"
-                      src={courseImage}
+                      src={image}
                       width={"inherit"}
                       alt="thumbnail-lesson"
                     />
@@ -307,7 +356,7 @@ const Lesson = () => {
           <Button
             className="ml-auto h-8"
             variant="contained"
-            onClick={handleSave}
+            onClick={handleSaveNote}
           >
             Save
           </Button>
@@ -329,13 +378,13 @@ const Lesson = () => {
               <Button
                 sx={{ ml: "auto" }}
                 variant="contained"
-                onClick={handleComment}
+                onClick={addComment}
               >
                 Comment
               </Button>
             </div>
           </div>
-          <CommentList comments={comments} />
+          <CommentList CID={CID} />
         </div>
       </section>
     </div>

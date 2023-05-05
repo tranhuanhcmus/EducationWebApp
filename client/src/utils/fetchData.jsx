@@ -15,7 +15,7 @@ const getImage = async (name) => {
     const image = `data:image/jpeg;base64, ${res.data}`;
     return image;
   } catch (error) {
-    console.error(error);
+    return error.message;
   }
 };
 

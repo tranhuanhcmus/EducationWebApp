@@ -37,7 +37,7 @@ router.delete("/dfcmt", controller.deleteForumComment); //xóa comment trong for
 router.delete("/dccmt", controller.deleteCourseComment); //xóa comment trong course
 router.delete("/dtcmt", controller.deleteTestComment); //xóa comment trong test
 //-------------------------------------NOTE-------------------------------------//
-router.get("/ln", controller.getNote); //lấy note của 1 lesson
+router.post("/ln", controller.getNote); //lấy note của 1 lesson
 router.post("/an", controller.addNote); //thêm note trong lesson
 router.put("/un", controller.updateNote); //sửa note trong lesson
 router.delete("/dn", controller.deleteNote); //xóa note trong lesson

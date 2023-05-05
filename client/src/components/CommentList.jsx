@@ -1,8 +1,51 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { getImage } from "../utils/fetchData";
+import { useQuery } from "react-query";
+import { makeRequest } from "./../utils/axios";
 
-const CommentList = ({ comments }) => {
+const CommentList = ({ CID }) => {
+  const {
+    isLoading,
+    data: comments,
+    isError,
+    error,
+  } = useQuery(
+    "comments",
+    () => {
+      return makeRequest({
+        url: `/ccmt/${CID}`,
+        method: "get",
+      });
+    },
+    {
+      select: (data) =>
+        data.data.sort((a, b) => new Date(b.CMT_TIME) - new Date(a.CMT_TIME)),
+    }
+  );
+
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      setImages([]);
+      if (comments) {
+        for (var i = 0; i < comments.length; i++) {
+          const image = await getImage(`${comments[i].ID}.png`);
+          setImages((images) => [...images, image]);
+        }
+      }
+    };
+    loadImages();
+  }, [comments]);
+  if (isLoading) {
+    return <h1 className="w-full text-center px-3 py-2">Loading</h1>;
+  }
+  if (isError) {
+    return <h1 className="w-full text-center px-3 py-2">{error.message}</h1>;
+  }
+
   return comments.length > 0
-    ? comments.map((comment) => {
+    ? comments.map((comment, index) => {
         return (
           <div
             className="container p-2 my-2 border-indigo-400/50 border-2 border-dashed "
@@ -11,7 +54,7 @@ const CommentList = ({ comments }) => {
             <div className="header flex justify-between">
               <div className="user flex items-center gap-3">
                 <img
-                  src="/anh4.png"
+                  src={images[index]}
                   alt="user Avatar"
                   className="rounded-full w-10 h-10 object-cover object-center"
                 />

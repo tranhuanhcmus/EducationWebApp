@@ -4,7 +4,7 @@ import Section from "../components/Section";
 import { makeRequest } from "./../utils/axios";
 
 const Home = () => {
-  const sectionVariants = ["Courses", "Tests", "Blogs"];
+  const sectionVariants = ["Courses", "Blogs"];
   const discount = [
     "/discount/discount3.jpg",
     "/discount/discount1.jpg",
