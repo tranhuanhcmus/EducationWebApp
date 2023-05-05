@@ -20,6 +20,7 @@ router.delete("/deletefromcart", controller.deleteFromCart); //xóa course khỏ
 router.post("/addlesson", controller.addLesson); //thêm lesson
 router.put("/updatelesson", controller.updateLesson); //cập nhật lesson
 router.delete("/deletelesson/:id", controller.deleteLesson); //xóa lesson
+//------------------------------------UTILS------------------------------------//
 router.post("/image", controller.getImage); //lấy ảnh từ database
 router.get("/video/:name", controller.getVideo); //lấy ảnh từ database
 //------------------------------------COMMENT------------------------------------//

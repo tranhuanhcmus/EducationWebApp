@@ -1,7 +1,6 @@
 import React from "react";
 
 const CommentList = ({ comments }) => {
-  console.log(comments);
   return comments.length > 0
     ? comments.map((comment) => {
         return (
