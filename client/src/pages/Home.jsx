@@ -5,7 +5,6 @@ import { makeRequest } from "./../utils/axios";
 
 const Home = () => {
   const sectionVariants = ["Courses", "Tests", "Blogs"];
-
   const discount = [
     "/discount/discount3.jpg",
     "/discount/discount1.jpg",
@@ -29,27 +28,6 @@ const Home = () => {
     if (items) {
       setItemsInCart(items);
     }
-    //get Courses
-    const data_courses = makeRequest({
-      url: "/course",
-      method: "get",
-    })
-      .then((res) => res.data)
-      .then((data) => {
-        const array = [];
-
-        data.map((index) => {
-          var i = 0;
-          items.map((course) => {
-            if (course.CID === index.CID) {
-              i = i + 1;
-            }
-          });
-          if (i === 0) {
-            array.push(index);
-          }
-        });
-      });
   }, []);
 
   React.useEffect(() => {
@@ -70,7 +48,6 @@ const Home = () => {
   };
 
   const addCourseInCartHandler = (title, img, price, id) => {
-    console.log({ title, img, price, id });
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
@@ -83,7 +60,6 @@ const Home = () => {
       ];
     });
     alert("Add success!");
-    // setCourses((courses) => courses.filter((course) => course.CID !== id));
   };
 
   return (
