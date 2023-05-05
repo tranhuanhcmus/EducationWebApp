@@ -25,7 +25,6 @@ import { makeRequest } from "./../utils/axios";
 const Section = ({ Type, index, onAdd }) => {
   const [courses, setCourses] = useState([]);
   const [courseImgs, setCourseImgs] = useState([]);
-  var items = JSON.parse(localStorage.getItem("items"));
   const fetchCourses = useCallback(async () => {
     const array = [];
     const res = await makeRequest({ url: "/course", method: "get" });
@@ -109,7 +108,7 @@ const Section = ({ Type, index, onAdd }) => {
                       <CardActionArea>
                         <CardMedia
                           component="img"
-                          alt={course.COURESENAME}
+                          alt={course.NAME}
                           src={courseImgs[index]}
                           sx={{
                             width: "100%",
@@ -127,7 +126,7 @@ const Section = ({ Type, index, onAdd }) => {
                                 fontFamily: "Roboto Slab",
                               }}
                             >
-                              {course.COURESENAME}-{course.CATEGORY}
+                              {course.NAME}-{course.CATEGORY}
                             </Typography>
                             <Typography
                               gutterBottom
@@ -176,7 +175,7 @@ const Section = ({ Type, index, onAdd }) => {
                           TransitionComponent={Zoom}
                           onClick={() => {
                             onAdd(
-                              course.COURESENAME,
+                              course.NAME,
                               course.IMG,
                               course.PRICE,
                               course.CID

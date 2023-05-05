@@ -4,8 +4,19 @@ import Img from "./Img";
 import Button from "./Button";
 import Text from "./Text";
 import { useNavigate } from "react-router-dom";
+import { getImage } from "../utils/fetchData";
 const ClassCard = (props) => {
   const navigate = useNavigate();
+  const [courseImgs, setCourseImgs] = React.useState("");
+  React.useEffect(() => {
+    console.log(props.IMG);
+    const loadImage = async () => {
+      const newImage = await getImage(props.IMG);
+      setCourseImgs(newImage);
+    };
+    loadImage();
+  }, []);
+
   return (
     <>
       <div className={props.className}>
@@ -30,11 +41,7 @@ const ClassCard = (props) => {
             }
           }}
         >
-          <Img
-            src={props?.standardCountImage}
-            className="h-[50px] w-[50px]"
-            alt="download"
-          />
+          <Img src={courseImgs} className="h-[50px] w-[50px]" alt="download" />
           <div className="flex flex-col gap-[10px] items-center justify-start w-[100%]">
             <Text
               className="font-inter text-center text-gray_900 w-[auto]"
