@@ -65,7 +65,6 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(currentUser);
 
   const [image, setImage] = React.useState("not yet");
   React.useEffect(() => {

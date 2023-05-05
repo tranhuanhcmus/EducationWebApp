@@ -19,16 +19,6 @@ const Home = () => {
 
   const [bgs, setBgs] = React.useState([]);
 
-
-  React.useEffect(() => {
-    setBgs(discount);
-
-  //     const images = await Promise.all(imagePromises);
-  //     setBgs(images);
-  //   };
-
-  //   getRandomImages();
-  // }, []);
   const [itemsInCart, setItemsInCart] = React.useState([]);
   const [score, setScore] = React.useState({});
   const [sum, setSum] = React.useState(0);
@@ -59,10 +49,7 @@ const Home = () => {
             array.push(index);
           }
         });
-        console.log(array);
-        setCourses(array);
       });
-
   }, []);
 
   React.useEffect(() => {
@@ -83,6 +70,7 @@ const Home = () => {
   };
 
   const addCourseInCartHandler = (title, img, price, id) => {
+    console.log({ title, img, price, id });
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
@@ -95,7 +83,7 @@ const Home = () => {
       ];
     });
     alert("Add success!");
-    setCourses((courses) => courses.filter((course) => course.CID !== id));
+    // setCourses((courses) => courses.filter((course) => course.CID !== id));
   };
 
   return (
@@ -176,9 +164,14 @@ const Home = () => {
         </div>
       </div>
       {sectionVariants.map((variant, index) => {
-
-        return <Section key={index} Type={variant} index={index} onAdd={addCourseInCartHandler} />;
-
+        return (
+          <Section
+            key={index}
+            Type={variant}
+            index={index}
+            onAdd={addCourseInCartHandler}
+          />
+        );
       })}
     </>
   );

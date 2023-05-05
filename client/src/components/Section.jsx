@@ -22,7 +22,7 @@ import { Link } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
 
 import { makeRequest } from "./../utils/axios";
-const Section = ({ Type, index }) => {
+const Section = ({ Type, index, onAdd }) => {
   const [courses, setCourses] = useState([]);
   const [courseImgs, setCourseImgs] = useState([]);
   useEffect(() => {
@@ -34,13 +34,26 @@ const Section = ({ Type, index }) => {
           return [...prev, data1];
         });
       });
-      setCourses(res.data);
+
+      const items = JSON.parse(localStorage.getItem("items"));
+      const array = [];
+      res.data.map((index) => {
+        var i = 0;
+        items.map((course) => {
+          if (course.CID === index.CID) {
+            i = i + 1;
+          }
+        });
+        if (i === 0) {
+          array.push(index);
+        }
+      });
+      setCourses(array);
     };
     if (Type == "Courses") {
       fetchCourses();
     }
-  }, []);
-
+  }, [courses]);
   return (
     <Box
       sx={{
@@ -76,7 +89,6 @@ const Section = ({ Type, index }) => {
         <hr />
 
         <Grid container spacing={3}>
-
           {courses.length != 0 ? (
             courses.map((course, index) => {
               // const [image, setImage] = useState("");
@@ -90,7 +102,6 @@ const Section = ({ Type, index }) => {
               //   loadImage();
               // }, []);
 
-
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
                   <Card>
@@ -98,10 +109,8 @@ const Section = ({ Type, index }) => {
                       <CardActionArea>
                         <CardMedia
                           component="img"
-                          alt={course.NAME}
-
+                          alt={course.COURESENAME}
                           src={courseImgs[index]}
-
                           sx={{
                             width: "100%",
                             height: "200px",
@@ -118,7 +127,7 @@ const Section = ({ Type, index }) => {
                                 fontFamily: "Roboto Slab",
                               }}
                             >
-                              {course.NAME}-{course.CATEGORY}
+                              {course.COURESENAME}-{course.CATEGORY}
                             </Typography>
                             <Typography
                               gutterBottom
@@ -167,7 +176,7 @@ const Section = ({ Type, index }) => {
                           TransitionComponent={Zoom}
                           onClick={() => {
                             onAdd(
-                              course.NAME,
+                              course.COURESENAME,
                               course.IMG,
                               course.PRICE,
                               course.CID
