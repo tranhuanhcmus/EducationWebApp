@@ -11,93 +11,93 @@ import PaginationCard from "../components/PaginationCard";
 import CloseSVG from "../components/CloseSVG";
 import AddModal from "../components/FormInformation";
 import TrashPage from "../components/Trash";
+import { useSelector } from "react-redux";
+import {
+  HandleSaveCourseOfTeacher,
+  getImage,
+  handleFileUpload,
+  HandleDeleteCourseOfTeacher,
+  getAllCourse,
+} from "../utils/fetchData";
 
 import ClassCard from "../components/ClassCard";
+import { HandleGetCourseOfTeacher } from "../utils/fetchData";
 import CustomImg from "../components/CustomImg";
+import { useCallback } from "react";
+
 const TeacherCoursesPage = () => {
+  const currentUser = useSelector((state) => state.auth.user);
+  const [Coures, setItems] = React.useState([]);
+
+  const [inputvalue, setInputvalue] = React.useState("");
+  const [CourseList, setCourseList] = React.useState([]);
+
+  const [add, setadd] = React.useState();
+
   const navigate = useNavigate();
 
   const [valueButton, setValue] = React.useState("");
   const [valuePage, setValuePage] = React.useState(0);
+  const [itemsInCart, setItemsInCart] = React.useState([]);
 
   const CourseHandle = (e) => {
     if (e.target.value !== valueButton) {
       setValue(e.target.value);
     }
   };
+  const [bending, setBending] = React.useState(false);
+
+  const fetchData = useCallback(async () => {
+    setBending(true);
+    const items = JSON.parse(localStorage.getItem("items"));
+
+    const data = await HandleGetCourseOfTeacher(currentUser.ID);
+    const dataAllCourse = await getAllCourse();
+    const array = [];
+
+    dataAllCourse.map((index) => {
+      var i = 0;
+      items.map((course) => {
+        if (course.CID === index.CID) {
+          i = i + 1;
+        }
+      });
+      if (i === 0) {
+        array.push(index);
+      }
+    });
+    const dataresponse = await data.map((value) => {
+      return {
+        Teacher: true,
+        ...value,
+      };
+    });
+    setItems(array);
+    setCourseList(dataresponse);
+
+    console.log(dataresponse);
+
+    setBending(false);
+  }, []);
+
   React.useEffect(() => {
     const indetifier = setTimeout(() => {
-      //navigate(`/courses/${valuePage}`);
+      fetchData();
     }, 500);
     return () => {
       clearTimeout(indetifier);
     };
-  }, [valuePage]);
-  const [inputvalue, setInputvalue] = React.useState("");
-  const Coures = [
-    {
-      image: "/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 1",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 2.0-3.0 Teacher 2",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 5.0-6.0 Teacher 3",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 4",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 6.0-7.0 Teacher 5",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 6",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 7",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 2.0-3.0 Teacher 8",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 5.0-6.0 Teacher 9",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 10",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 6.0-7.0 Teacher 11",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 12",
-      price: "$40.00",
-    },
-  ];
+  }, [fetchData]);
+  React.useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("items"));
+    if (items) {
+      setItemsInCart(items);
+    }
+  }, []);
 
-  const [add, setadd] = React.useState();
+  React.useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(itemsInCart));
+  }, [itemsInCart]);
 
   const addHandler = () => {
     setadd(true);
@@ -106,17 +106,30 @@ const TeacherCoursesPage = () => {
     setadd(false);
   };
 
-  const [CourseList, setCourseList] = React.useState([]);
+  const addCourseHandler = async (title, price, img, detail, band) => {
+    console.log(title, price, img, detail, band);
+    const fileName = `${(+new Date()).toString(36)}.png`;
+    const ID = `${(+new Date()).toString(36)}`;
+    const data = {
+      CourseID: ID,
+      Name: title,
+      Category: band,
+      Description: detail,
+      Price: price,
+      Img: fileName,
+      OwnerID: currentUser.ID,
+    };
+    await HandleSaveCourseOfTeacher(data);
+    await handleFileUpload(img.prevFile, fileName);
 
-  const addCourseHandler = (title, img, detail) => {
     setCourseList((prevUsersList) => {
       return [
         ...prevUsersList,
         {
-          standard: title,
-          Img: img,
-          studyDetail: detail,
-          id: Math.random().toString(),
+          NAME: title,
+          IMG: fileName,
+          DESCRIPTION: detail,
+          CID: ID,
           Teacher: true,
         },
       ];
@@ -125,22 +138,41 @@ const TeacherCoursesPage = () => {
   const [detele, setdelete] = React.useState({
     condition: false,
     index: 0,
+    removeIn: "",
   });
+  const addCourseInCartHandler = (title, img, price, id) => {
+    setItemsInCart((prevUsersList) => {
+      return [
+        ...prevUsersList,
+        {
+          Name: title,
+          IMG: img,
+          PRICE: price,
+          CID: id,
+        },
+      ];
+    });
+    alert("Add success!");
+    setItems((courses) => courses.filter((course) => course.CID !== id));
+  };
 
-  const deteletrue = (i) => {
+  const deteletrue = (i, CID) => {
     setdelete({
       condition: true,
       index: i,
+      removeIn: CID,
     });
+    console.log(CID);
   };
   const deletefalse = () => {
     setdelete(false);
   };
 
-  const handleRemove = () => {
+  const handleRemove = async () => {
     setCourseList((courses) =>
       courses.filter((course) => courses.indexOf(course) !== detele.index)
     );
+    await HandleDeleteCourseOfTeacher(detele.removeIn);
     deletefalse();
   };
 
@@ -256,7 +288,7 @@ const TeacherCoursesPage = () => {
                     <React.Fragment key={`ClassCard${index}`}>
                       <ClassCard
                         className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-col items-center justify-start px-[15px] pb-[30px] pt-[10px] rounded-[15px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
-                        onDeleteCourse={() => deteletrue(index)}
+                        onDeleteCourse={() => deteletrue(index, props.CID)}
                         {...props}
                       />
                     </React.Fragment>
@@ -325,16 +357,13 @@ const TeacherCoursesPage = () => {
                 <div className="md:gap-[20px] gap-[40px] grid md:grid-cols-1 grid-cols-2 justify-center min-h-[auto] w-[100%]">
                   {Coures.map((props, index) => {
                     if (6 * valuePage <= index && index < 6 * (valuePage + 1)) {
-                      console.log(valuePage);
-                      //console.log(index);
                       return (
                         <React.Fragment key={`CourseCard${index}`}>
-                          <div onClick={() => navigate("/coursesdetails")}>
-                            <CourseCard
-                              className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
-                              {...props}
-                            />
-                          </div>
+                          <CourseCard
+                            className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 hover:w-[100%] w-[100%]"
+                            addCourseHandler={addCourseInCartHandler}
+                            {...props}
+                          />
                         </React.Fragment>
                       );
                     }
@@ -346,7 +375,7 @@ const TeacherCoursesPage = () => {
               className="flex flex-row items-center justify-center w-[100%]"
               page="Page"
               one={valuePage}
-              ofCounter={Coures.length / 6 - 1}
+              ofCounter={Math.ceil(Coures.length / 6 - 1)}
               handlenext={() => {
                 if (valuePage < Coures.length / 6 - 1)
                   setValuePage(valuePage + 1);

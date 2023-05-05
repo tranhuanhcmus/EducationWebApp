@@ -20,7 +20,54 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
-const Section = ({ Type, index, data }) => {
+import { makeRequest } from "../utils/axios";
+
+const Section = ({ Type, index, onAdd, data }) => {
+  const [image, setImage] = React.useState([]);
+
+  const items = JSON.parse(localStorage.getItem("items"));
+  const array = [];
+  const data_courses = makeRequest({
+    url: "/course",
+    method: "get",
+  })
+    .then((res) => res.data)
+    .then((data) => {
+      data.map((index) => {
+        var i = 0;
+        items.map((course) => {
+          if (course.CID === index.CID) {
+            i = i + 1;
+          }
+        });
+        if (i === 0) {
+          array.push(index);
+        }
+      });
+      console.log(array);
+      //setCourses(array);
+    });
+  const fetchData = React.useCallback(async () => {
+    const res = array;
+
+    res.forEach(async (course) => {
+      const data1 = await getImage(course.IMG);
+      setImage((prev) => {
+        return [...prev, data1];
+      });
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const indetifier = setTimeout(() => {
+      fetchData();
+    }, 500);
+    return () => {
+      console.log(data);
+      clearTimeout(indetifier);
+    };
+  }, [fetchData]);
+
   return (
     <Box
       sx={{
@@ -57,27 +104,16 @@ const Section = ({ Type, index, data }) => {
 
         <Grid container spacing={3}>
           {data.length != 0 ? (
-            data.map((course) => {
-              const [image, setImage] = React.useState("");
-
-              //get Image from database
-              React.useEffect(() => {
-                const loadImage = async () => {
-                  const data = await getImage(course.IMG);
-                  setImage(data);
-                };
-                loadImage();
-              }, []);
-
+            data.map((course, index) => {
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
-                  <Link to="coursesdetails/0">
-                    <Card>
+                  <Card>
+                    <Link to="coursesdetails/0">
                       <CardActionArea>
                         <CardMedia
                           component="img"
                           alt={course.NAME}
-                          src={image}
+                          src={image[index]}
                           sx={{
                             width: "100%",
                             height: "200px",
@@ -128,36 +164,44 @@ const Section = ({ Type, index, data }) => {
                           </Typography>
                         </CardContent>
                       </CardActionArea>
-                      <CardActions>
-                        <Stack
-                          direction={"row"}
-                          sx={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
+                    </Link>
+                    <CardActions>
+                      <Stack
+                        direction={"row"}
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Tooltip
+                          title="Add to Cart"
+                          TransitionComponent={Zoom}
+                          onClick={() => {
+                            onAdd(
+                              course.NAME,
+                              course.IMG,
+                              course.PRICE,
+                              course.CID
+                            );
                           }}
                         >
-                          <Tooltip
-                            title="Add to Cart"
-                            TransitionComponent={Zoom}
-                          >
-                            <IconButton color="primary">
-                              <ShoppingCartIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Typography
-                            variant="body1"
-                            sx={{ mr: "auto", fontWeight: "500" }}
-                          >
-                            {course.PRICE}đ
-                          </Typography>
-                          <Button size="small" color="primary">
-                            View
-                          </Button>
-                        </Stack>
-                      </CardActions>
-                    </Card>
-                  </Link>
+                          <IconButton color="primary">
+                            <ShoppingCartIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Typography
+                          variant="body1"
+                          sx={{ mr: "auto", fontWeight: "500" }}
+                        >
+                          {course.PRICE}đ
+                        </Typography>
+                        <Button size="small" color="primary">
+                          View
+                        </Button>
+                      </Stack>
+                    </CardActions>
+                  </Card>
                 </Grid>
               );
             })

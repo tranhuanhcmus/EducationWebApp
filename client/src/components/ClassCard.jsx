@@ -22,7 +22,13 @@ const ClassCard = (props) => {
 
         <div
           className="flex flex-col gap-[20px] items-center justify-start w-[100%]"
-          onClick={() => navigate(`/coursesdetails/${props.id}`)}
+          onClick={() => {
+            {
+              props.Teacher
+                ? navigate(`/coursesdetails/${props.CID}`)
+                : navigate(`/coursesdetails/${props.CID}`);
+            }
+          }}
         >
           <Img
             src={props?.standardCountImage}
@@ -35,7 +41,7 @@ const ClassCard = (props) => {
               as="h5"
               variant="h5"
             >
-              {props?.standard}
+              {props?.NAME}
             </Text>
 
             <div className="w-full bg-gray-200 rounded-full h-3 mb-4 dark:bg-gray-700">
@@ -49,13 +55,13 @@ const ClassCard = (props) => {
               className="font-inter font-normal leading-[30.00px] md:max-w-[100%] max-w-[260px] not-italic text-center text-gray_700"
               variant="body4"
             >
-              {props?.studyDetail}
+              {props?.DESCRIPTION}
             </Text>
           </div>
         </div>
         <Button
           className="border-[1px] border-red_300 border-solid cursor-pointer font-inter font-medium min-w-[161px] sm:px-[20px] px-[31px] py-[12px] rounded-[5px] text-[16px] text-center text-red_300 w-[auto]"
-          onClick={() => navigate(`/coursesdetails/${props.id}`)}
+          onClick={() => navigate(`/coursesdetails/${props.CID}`)}
         >
           Class Details
         </Button>

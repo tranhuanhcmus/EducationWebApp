@@ -1,5 +1,6 @@
 import React from "react";
 import { makeRequest } from "./../utils/axios";
+import { json } from "react-router-dom";
 
 // return an image
 const getImage = async (name) => {
@@ -38,6 +39,39 @@ const handleFileUpload = async (selectedImage, fileName) => {
   }
 };
 
+const handleFileUploadVideo = async (selectedVideo, fileName) => {
+  const formData = new FormData();
+
+  formData.append("video", selectedVideo, fileName);
+
+  try {
+    const response = await makeRequest({
+      method: "post",
+      url: "/uploadvideo",
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleAddLesson = async (data1) => {
+  try {
+    const response = await makeRequest({
+      method: "post",
+      url: "/addlesson",
+      data: data1,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // return URL video
 const getVideo = async (name) => {
   const response = await makeRequest({
@@ -49,4 +83,59 @@ const getVideo = async (name) => {
   return URL.createObjectURL(blob);
 };
 
-export { getImage, handleFileUpload, getVideo };
+const getAllCourse = async () => {
+  const data_courses = await makeRequest({
+    url: "/course",
+    method: "get",
+  });
+  const blob = await data_courses.data;
+  return blob;
+};
+
+const HandleGetCourseOfTeacher = async (id) => {
+  const data_courses = await makeRequest({
+    url: `/myclass/${id}`,
+    method: "get",
+  });
+  const blob = await data_courses.data;
+  return blob;
+};
+
+const HandleSaveCourseOfTeacher = async (data) => {
+  try {
+    const response = await makeRequest({
+      method: "post",
+      url: "/addcourse",
+      data: data,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const HandleDeleteCourseOfTeacher = async (id) => {
+  try {
+    const response = await makeRequest({
+      method: "delete",
+      url: `/deletecourse/${id}`,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export {
+  getImage,
+  handleFileUpload,
+  handleFileUploadVideo,
+  getVideo,
+  getAllCourse,
+  handleAddLesson,
+  HandleGetCourseOfTeacher,
+  HandleSaveCourseOfTeacher,
+  HandleDeleteCourseOfTeacher,
+};
