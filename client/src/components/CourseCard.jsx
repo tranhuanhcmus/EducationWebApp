@@ -28,7 +28,7 @@ const CourseCard = (props) => {
               as="h6"
               variant="h6"
             >
-              {props?.courseName}
+              {props?.NAME}
             </List>
             <Img
               src="../../public/anh2.svg"
@@ -40,14 +40,19 @@ const CourseCard = (props) => {
               as="h6"
               variant="h6"
             >
-              {props?.price}
+              {`$ ${props?.PRICE}.00`}
             </List>
           </div>
         </div>
         <Button
           className="bg-red_50 flex h-[44px] items-center justify-center p-[10px] rounded-[6px] w-[44px] cursor-pointer"
           onClick={() => {
-            props.addCourseHandler(props.courseName, props.image, props.price);
+            props.addCourseHandler(
+              props.NAME,
+              props.image,
+              props.PRICE,
+              props.CID
+            );
           }}
         >
           <Img src="../../public/imgBag.svg" className="h-[24px]" alt="bag" />
@@ -59,8 +64,8 @@ const CourseCard = (props) => {
 
 CourseCard.defaultProps = {
   image: "/anh5.png",
-  courseName: "Ielts 3.0-5.0",
-  price: "$40.00",
+  NAME: "Ielts 3.0-5.0",
+  PRICE: "40",
 };
 
 export default CourseCard;

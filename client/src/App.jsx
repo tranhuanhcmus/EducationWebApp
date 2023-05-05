@@ -20,7 +20,9 @@ import BlogDetails from "./pages/BlogDetails";
 import Pay from "./pages/Pay";
 import TeacherCourses from "./pages/TeacherCourses";
 import TeacherCoursesDetails from "./pages/TeacherCourseDetail";
-
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 function App() {
   const Layout = () => {
     return (
@@ -47,21 +49,20 @@ function App() {
           element: <Courses />,
         },
         {
-          path: "/courses/:courseId",
-          element: <Courses />,
-        },
-        {
           path: "/coursesdetails/:courseId",
           element: <CoursesDetails />,
         },
         {
-          path: "/coursesdetails",
+          path: "/coursesdetails/:courseId/:lessonId",
           element: <CoursesDetails />,
         },
         { path: "/profile", element: <Profile /> },
         { path: "/TeacherCourse", element: <TeacherCourses /> },
         { path: "/cart", element: <Cart /> },
-        { path: "/test", element: <Test /> },
+        {
+          path: "/test",
+          element: <Test />,
+        },
         { path: "/blogs", element: <Blogs /> },
         { path: "/BlogDetails", element: <BlogDetails /> },
         { path: "/lesson/:id", element: <Lesson /> },
@@ -81,7 +82,12 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={route} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={route} />
+      <ReactQueryDevtools initialIsOpen="false" />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

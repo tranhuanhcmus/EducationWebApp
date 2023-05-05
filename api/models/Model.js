@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import loadSqlQueries from "./utils.js";
-import mysql from 'mysql2';
+import mysql from "mysql2";
 const model = {
     //------------------------------------COURSE------------------------------------//
     course: async() => {
@@ -535,5 +535,81 @@ const model = {
     },
 
 
+  //-------------------------------------FORUM--------------------------------------//
+  forumList: async () => {
+    try {
+      const sqlQuery = await loadSqlQueries("request");
+      const [rows, fields] = await db.promise().query(sqlQuery.ForumList);
+      console.log(rows);
+      return rows[0];
+    } catch (error) {
+      console.log(error.message);
+      return error.message;
+    }
+  },
+  specificForum: async (str) => {
+    try {
+      const sqlQuery = await loadSqlQueries("request");
+      const [rows, fields] = await db
+        .promise()
+        .query(sqlQuery.SpecificForum, [forumstrId]);
+      console.log(rows);
+      return rows[0];
+    } catch (error) {
+      console.log(error.message);
+      return error.message;
+    }
+  },
+  addForum: async (data) => {
+    try {
+      const sqlQuery = await loadSqlQueries("request");
+      const [rows, fields] = await db
+        .promise()
+        .query(sqlQuery.AddForum, [
+          data.FID,
+          data.ID,
+          data.Title,
+          data.Content,
+          data.Img,
+        ]);
+      console.log(rows);
+      return rows[0];
+    } catch (error) {
+      console.log(error.message);
+      return error.message;
+    }
+  },
+  updateForum: async (data) => {
+    try {
+      const sqlQuery = await loadSqlQueries("request");
+      const [rows, fields] = await db
+        .promise()
+        .query(sqlQuery.UpdateForum, [
+          data.FID,
+          data.ID,
+          data.Title,
+          data.Content,
+          data.Img,
+        ]);
+      console.log(rows);
+      return rows[0];
+    } catch (error) {
+      console.log(error.message);
+      return error.message;
+    }
+  },
+  deleteForum: async (forumID) => {
+    try {
+      const sqlQuery = await loadSqlQueries("request");
+      const [rows, fields] = await db
+        .promise()
+        .query(sqlQuery.DeleteForum, [forumID]);
+      console.log(rows);
+      return rows[0];
+    } catch (error) {
+      console.log(error.message);
+      return error.message;
+    }
+  },
 };
 export default model;

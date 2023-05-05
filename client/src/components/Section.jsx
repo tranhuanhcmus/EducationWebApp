@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Stack,
@@ -20,7 +20,40 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
-const Section = ({ Type, index, data }) => {
+
+import { makeRequest } from "./../utils/axios";
+const Section = ({ Type, index, onAdd }) => {
+  const [courses, setCourses] = useState([]);
+  const [courseImgs, setCourseImgs] = useState([]);
+  var items = JSON.parse(localStorage.getItem("items"));
+  const fetchCourses = useCallback(async () => {
+    const array = [];
+    const res = await makeRequest({ url: "/course", method: "get" });
+    const items = JSON.parse(localStorage.getItem("items"));
+    res.data.forEach(async (course) => {
+      const data1 = await getImage(course.IMG);
+      setCourseImgs((prev) => {
+        return [...prev, data1];
+      });
+    });
+    res.data.map((index) => {
+      var i = 0;
+      items.map((course) => {
+        if (course.CID === index.CID) {
+          i = i + 1;
+        }
+      });
+      if (i === 0) {
+        array.push(index);
+      }
+    });
+    setCourses(array);
+  }, []);
+  useEffect(() => {
+    if (Type == "Courses") {
+      fetchCourses();
+    }
+  }, [fetchCourses]);
   return (
     <Box
       sx={{
@@ -56,28 +89,28 @@ const Section = ({ Type, index, data }) => {
         <hr />
 
         <Grid container spacing={3}>
-          {data.length != 0 ? (
-            data.map((course) => {
-              const [image, setImage] = React.useState("");
-
+          {courses.length != 0 ? (
+            courses.map((course, index) => {
+              // const [image, setImage] = useState("");
+              const image = "";
               //get Image from database
-              React.useEffect(() => {
-                const loadImage = async () => {
-                  const data = await getImage(course.IMG);
-                  setImage(data);
-                };
-                loadImage();
-              }, []);
+              // useEffect(() => {
+              //   const loadImage = async () => {
+              //     const data = await getImage(course.IMG);
+              //     setImage(data);
+              //   };
+              //   loadImage();
+              // }, []);
 
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
-                  <Link to="coursesdetails/0">
-                    <Card>
+                  <Card>
+                    <Link to="coursesdetails/0">
                       <CardActionArea>
                         <CardMedia
                           component="img"
-                          alt={course.NAME}
-                          src={image}
+                          alt={course.COURESENAME}
+                          src={courseImgs[index]}
                           sx={{
                             width: "100%",
                             height: "200px",
@@ -94,7 +127,7 @@ const Section = ({ Type, index, data }) => {
                                 fontFamily: "Roboto Slab",
                               }}
                             >
-                              {course.NAME}-{course.CATEGORY}
+                              {course.COURESENAME}-{course.CATEGORY}
                             </Typography>
                             <Typography
                               gutterBottom
@@ -105,7 +138,7 @@ const Section = ({ Type, index, data }) => {
                                 fontFamily: "Roboto Slab",
                               }}
                             >
-                              course.author
+                              {course.OWNERNAME}
                             </Typography>
                           </Stack>
                           {/* <Rating value={5} readOnly precision={0.5} /> */}
@@ -128,36 +161,45 @@ const Section = ({ Type, index, data }) => {
                           </Typography>
                         </CardContent>
                       </CardActionArea>
-                      <CardActions>
-                        <Stack
-                          direction={"row"}
-                          sx={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
+                    </Link>
+                    <CardActions>
+                      <Stack
+                        direction={"row"}
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Tooltip
+                          title="Add to Cart"
+                          TransitionComponent={Zoom}
+                          onClick={() => {
+                            onAdd(
+                              course.COURESENAME,
+                              course.IMG,
+                              course.PRICE,
+                              course.CID
+                            );
+                            fetchCourses();
                           }}
                         >
-                          <Tooltip
-                            title="Add to Cart"
-                            TransitionComponent={Zoom}
-                          >
-                            <IconButton color="primary">
-                              <ShoppingCartIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Typography
-                            variant="body1"
-                            sx={{ mr: "auto", fontWeight: "500" }}
-                          >
-                            {course.PRICE}đ
-                          </Typography>
-                          <Button size="small" color="primary">
-                            View
-                          </Button>
-                        </Stack>
-                      </CardActions>
-                    </Card>
-                  </Link>
+                          <IconButton color="primary">
+                            <ShoppingCartIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Typography
+                          variant="body1"
+                          sx={{ mr: "auto", fontWeight: "500" }}
+                        >
+                          {course.PRICE}đ
+                        </Typography>
+                        <Button size="small" color="primary">
+                          View
+                        </Button>
+                      </Stack>
+                    </CardActions>
+                  </Card>
                 </Grid>
               );
             })

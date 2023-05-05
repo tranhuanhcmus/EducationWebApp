@@ -9,7 +9,9 @@ import SelectBox from "../components/SelectBox";
 import CourseCard from "../components/CourseCard";
 import PaginationCard from "../components/PaginationCard";
 import CloseSVG from "../components/CloseSVG";
-
+import { getAllCourse } from "../utils/fetchData";
+import { makeRequest } from "./../utils/axios";
+import { useSelector } from "react-redux";
 import ClassCard from "../components/ClassCard";
 import CustomImg from "../components/CustomImg";
 const EduviCoursesPage = () => {
@@ -32,98 +34,73 @@ const EduviCoursesPage = () => {
     };
   }, [valuePage]);
   const [inputvalue, setInputvalue] = React.useState("");
-  const Course = [
-    {
-      image: "/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 1",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 2.0-3.0 Teacher 2",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 5.0-6.0 Teacher 3",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 4",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 6.0-7.0 Teacher 5",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 6",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 7",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 2.0-3.0 Teacher 8",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 5.0-6.0 Teacher 9",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 10",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 6.0-7.0 Teacher 11",
-      price: "$40.00",
-    },
-    {
-      image: "../../public/anh5.png",
-      courseName: "Ielts 3.0-5.0 Teacher 12",
-      price: "$40.00",
-    },
-  ];
+
+  const currentUser = useSelector((state) => state.auth.user);
 
   const [itemsInCart, setItemsInCart] = React.useState([]);
 
-  const [Coures, setItems] = React.useState(Course);
+  const [Coures, setItems] = React.useState([]);
+  const [CourseList, setCourseList] = React.useState([]);
 
   React.useEffect(() => {
     const items = JSON.parse(localStorage.getItem("items"));
     if (items) {
       setItemsInCart(items);
     }
+    const data_courses = makeRequest({
+      url: "/course",
+      method: "get",
+    })
+      .then((res) => res.data)
+      .then((data) =>
+        //setItems(data)
+        {
+          const array = [];
+
+          data.map((index) => {
+            var i = 0;
+            items.map((course) => {
+              if (course.CID === index.CID) {
+                i = i + 1;
+              }
+            });
+            if (i === 0) {
+              array.push(index);
+            }
+          });
+          console.log(array);
+          setItems(array);
+        }
+      );
+
+    const data_mycourses = makeRequest({
+      url: `/mycourse/${currentUser.ID}`,
+      method: "get",
+    })
+      .then((res) => res.data)
+      .then((data) => {
+        setCourseList(data);
+      });
   }, []);
 
   React.useEffect(() => {
     localStorage.setItem("items", JSON.stringify(itemsInCart));
   }, [itemsInCart]);
 
-  const addCourseHandler = (title, img, price) => {
+  const addCourseHandler = (title, img, price, id) => {
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
         {
-          courseName: title,
-          imgcourse: img,
-          price: price,
+          Name: title,
+          IMG: img,
+          PRICE: price,
+          CID: id,
         },
       ];
     });
-    setItems((courses) =>
-      courses.filter((course) => course.courseName !== title)
-    );
+    alert("Add success!");
+    setItems((courses) => courses.filter((course) => course.CID !== id));
   };
 
   return (
@@ -210,10 +187,7 @@ const EduviCoursesPage = () => {
             </div>
           </div>
           <div className="flex items-center justify-start sm:px-[20px] md:px-[40px] px-[80px] w-[100%]">
-            <div
-              className="flex flex-col gap-[24px] items-center justify-start max-w-[1280px] mx-[auto] w-[100%]"
-              onClick={() => navigate("/coursesdetails")}
-            >
+            <div className="flex flex-col gap-[24px] items-center justify-start max-w-[1280px] mx-[auto] w-[100%]">
               <Text
                 className="font-semibold text-gray_900 text-left w-[auto]"
                 as="h4"
@@ -223,7 +197,7 @@ const EduviCoursesPage = () => {
               </Text>
               <div className="flex items-center justify-start w-[100%]">
                 <div className="md:gap-[20px] gap-[40px] grid sm:grid-cols-1 md:grid-cols-2 grid-cols-4 justify-center min-h-[auto] w-[100%]">
-                  {new Array(5).fill({}).map((props, index) => (
+                  {CourseList.map((props, index) => (
                     <React.Fragment key={`ClassCard${index}`}>
                       <ClassCard
                         className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-col items-center justify-start px-[15px] py-[30px] rounded-[15px] hover:shadow-bs1 hover:w-[100%] w-[100%]"

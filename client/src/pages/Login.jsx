@@ -53,6 +53,7 @@ const Login = () => {
         setMsg(res.data.msg);
         setOpen(true);
         dispatch(login(res.data));
+        console.log("success");
       })
       .then(() => window.location.replace("/"))
 
