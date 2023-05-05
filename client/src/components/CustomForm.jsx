@@ -1,13 +1,54 @@
 import React from "react";
 import Text from "./Text";
+import Img from "./Img";
 import { PaperClipIcon } from "@heroicons/react/24/solid";
+import { getImage, handleFileUploadVideo } from "../utils/fetchData";
+import { useParams, useSearchParams } from "react-router-dom";
+import ReactPlayer from "react-player";
+import { handleAddLesson } from "../utils/fetchData";
 
 const CustomFormPage = () => {
+  const params = useParams();
   const [selectedFile, setSelectedFile] = React.useState();
+  const [File, setFile] = React.useState();
   const [isFilePicked, setIsFilePicked] = React.useState(false);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("ok");
+    const fileName = `video${parseInt(params.courseId)}.mp4`;
+    await handleFileUploadVideo(File, fileName);
+
+    // const jsTime = new Date(); // Replace with your JavaScript date object
+    // const sqlTime = jsTime.toLocaleTimeString("en-US", { hour12: false });
+
+    const data = {
+      LessonID: "442",
+      CourseID: "113",
+      Name: "Lesson tesst thu",
+      Content: "No content",
+      Video: fileName,
+      Attachment: "NO",
+      Duration: "00:30:00",
+    };
+
+    // var data = {};
+    // data.LessonID = "444";
+    // data.CourseID = "113";
+    // data.Name = "Lesson tesst thu";
+    // data.Content = "No content";
+    // data.Video = fileName;
+    // data.Attachment = "NO";
+    // data.Duration = "00:30:00";
+    await handleAddLesson(data);
+    //window.location.reload();
+  };
+
   const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setFile(file);
+    const url = URL.createObjectURL(file);
+    setSelectedFile(url);
     setIsFilePicked(true);
   };
 
@@ -20,7 +61,7 @@ const CustomFormPage = () => {
               <Text className="font-semibold md:text-3xl sm:text-[28px] text-[32px] text-bluegray_900 text-left w-auto">
                 Add your Lesson
               </Text>
-              <form className="w-full">
+              <form className="w-full" onSubmit={handleSubmit}>
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -67,59 +108,25 @@ const CustomFormPage = () => {
 
                       <div className="border-b border-gray-900/10 pb-12">
                         <div className="mt-10 space-y-10">
-                          <fieldset>
-                            <legend className="text-sm font-semibold leading-6 text-gray-900">
-                              Choice type of course
-                            </legend>
-                            <p className="mt-1 text-sm leading-6 text-gray-600">
-                              These are some type of file you can upload to
-                              website.
-                            </p>
-                            <div className="mt-6 space-y-6">
-                              <div className="flex items-center gap-x-3">
+                          <div className="sm:col-span-4">
+                            <label
+                              htmlFor="Duration"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Duration
+                            </label>
+                            <div className="mt-2">
+                              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                                 <input
-                                  id="push-video"
-                                  name="push-notifications"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  type="time"
+                                  name="Duration"
+                                  id="Duration"
+                                  className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                  placeholder="input time of lesson"
                                 />
-                                <label
-                                  htmlFor="push-video"
-                                  className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                  Video
-                                </label>
-                              </div>
-                              <div className="flex items-center gap-x-3">
-                                <input
-                                  id="push-PDF"
-                                  name="push-notifications"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label
-                                  htmlFor="push-PDF"
-                                  className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                  PDF
-                                </label>
-                              </div>
-                              <div className="flex items-center gap-x-3">
-                                <input
-                                  id="push-content"
-                                  name="push-notifications"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label
-                                  htmlFor="push-content"
-                                  className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                  Content
-                                </label>
                               </div>
                             </div>
-                          </fieldset>
+                          </div>
                         </div>
                       </div>
                       <div className="col-span-full">
@@ -149,25 +156,25 @@ const CustomFormPage = () => {
                                   onChange={changeHandler}
                                 />
                               </label>
-                              <p className="pl-1">or drag and drop</p>
+                              {isFilePicked ? (
+                                <div>
+                                  <ReactPlayer
+                                    url={selectedFile}
+                                    className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
+                                    height="300px"
+                                    width="400px"
+                                    controls
+                                  ></ReactPlayer>
+                                  <p>Filename: {selectedFile}</p>
+                                </div>
+                              ) : (
+                                <div>
+                                  <p className="text-xs leading-5 text-gray-600">
+                                    PNG, JPG, GIF up to 10MB
+                                  </p>
+                                </div>
+                              )}
                             </div>
-                            {isFilePicked ? (
-                              <div>
-                                <p>Filename: {selectedFile.name}</p>
-                                <p>Filetype: {selectedFile.type}</p>
-                                <p>Size in bytes: {selectedFile.size}</p>
-                                <p>
-                                  lastModifiedDate:{" "}
-                                  {selectedFile.lastModifiedDate.toLocaleDateString()}
-                                </p>
-                              </div>
-                            ) : (
-                              <div>
-                                <p className="text-xs leading-5 text-gray-600">
-                                  PNG, JPG, GIF up to 10MB
-                                </p>
-                              </div>
-                            )}
                           </div>
                         </div>
                       </div>

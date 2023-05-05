@@ -148,6 +148,7 @@ const Lesson = () => {
     setBending(true);
   };
 
+  console.log(videoURL);
   return !bending ? (
     <div>
       <div className="container flex justify-center">

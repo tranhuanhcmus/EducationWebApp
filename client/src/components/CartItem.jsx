@@ -14,7 +14,7 @@ const CartItem = (props) => {
         />
         <div className="flex flex-col gap-4 items-start justify-start self-stretch w-auto">
           <Text className="font-bold font-raleway leading-[35.00px] max-w-[294px] md:max-w-full text-black_900 text-left text-xl tracking-[-0.50px]">
-            {props?.courseName}
+            {props?.Name}
           </Text>
           <Img
             src="../../public/anh2.svg"
@@ -25,11 +25,11 @@ const CartItem = (props) => {
       </div>
 
       <Text className="font-semibold text-black_900 text-left text-lg tracking-[-0.50px] w-auto">
-        {props?.price}
+        {`$ ${props?.PRICE}.00`}
       </Text>
       <div
         className="cursor-pointer"
-        onClick={() => props.DeleteCartHandler(props.courseName)}
+        onClick={() => props.DeleteCartHandler(props.CID)}
       >
         <Img src="./img_trash.svg" className="h-[50px] w-[50px]" alt="trash" />
       </div>
