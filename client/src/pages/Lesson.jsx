@@ -6,6 +6,7 @@ import CommentList from "../components/CommentList";
 import Quiz from "./../components/Quiz/Quiz";
 import { useLocation, useNavigate } from "react-router-dom";
 import { makeRequest } from "./../utils/axios";
+import { useSelector } from "react-redux";
 
 import Loading from "../utils/Loading";
 import { getVideo } from "../utils/fetchData";
@@ -81,15 +82,18 @@ const questionBank = [
   },
 ];
 const Lesson = () => {
+  const currentUser = useSelector((state) => state.auth.user);
+
   const author = "Harry Bui";
   const courseImage = "/anh1.png";
   const [notes, setNotes] = useState("");
   const [data, setData] = useState([]);
   const [bending, setBending] = useState(true);
   const [videoURL, setVideoURL] = useState("");
+  const [comments, setComments] = useState([]);
   const location = useLocation();
   const CID = location.pathname.split("/")[2];
-
+  const [cmt, setCmt] = useState("");
   const [position, setPosition] = useState(null);
 
   const [key, setKey] = React.useState("");
@@ -112,15 +116,18 @@ const Lesson = () => {
 
   //fetching lessons
   useEffect(() => {
-    setBending(true);
-    makeRequest({
-      url: `/course/${CID}`,
-      method: "get",
-    })
-      .then((res) => setData(res.data))
-      .then(() => setBending(false))
-      .then(() => setPosition(0))
-      .catch(() => console.log("Error when get lessons"));
+    const fetchLesson = () => {
+      setBending(true);
+      makeRequest({
+        url: `/course/${CID}`,
+        method: "get",
+      })
+        .then((res) => setData(res.data))
+        .then(() => setBending(false))
+        .then(() => setPosition(0))
+        .catch(() => console.log("Error when get lessons"));
+    };
+    fetchLesson();
   }, []);
 
   //get video from database
@@ -135,17 +142,41 @@ const Lesson = () => {
   }, [position]);
 
   //fetching note
-  const handleWriteNote = (e) => {
-    setNotes((notes) => e.target.value);
-  };
 
   //fetching comments
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      setBending(true);
+      const res = await makeRequest({
+        url: `/ccmt/${CID}`,
+        method: "get",
+      });
+      setComments(res.data);
+      setBending(false);
+    };
+    fetchComments();
+  }, []);
 
   const handleSave = () => {
     setBending(true);
   };
-  const handleComment = () => {
-    setBending(true);
+  const handleComment = async () => {
+    const currentDate = (+new Date()).toString(36);
+    const CMTID = currentDate + CID + currentUser.ID;
+    const Content = cmt;
+
+    const res = await makeRequest({
+      url: "/accmt",
+      method: "post",
+      data: {
+        CmtID: CMTID.slice(0, 22),
+        Content: Content,
+        CID: CID,
+        ID: currentUser.ID,
+      },
+    });
+    window.location.reload();
   };
 
   console.log(videoURL);
@@ -218,7 +249,9 @@ const Lesson = () => {
                     <h6>
                       <b>{item.NAME}</b>
                     </h6>
-                    <div className="text-xs w-full text-end">"time"</div>
+                    <div className="text-xs w-full text-end">
+                      {item.DURATION}
+                    </div>
                   </div>
                 );
             })}
@@ -244,7 +277,7 @@ const Lesson = () => {
         <div className="text-lg font-note font-[300] mt-3 text-center  duration-300 px-3 py-2 hover:text-yellow-400 hover:font-bold bg-indigo-500 w-[400px] sm:w-[90%] mx-auto">
           <a href={data[position].ATTACHMENT} target={"_blank"}>
             {" "}
-            <i class="mr-2 fa-solid fa-graduation-cap"></i>
+            <i className="mr-2 fa-solid fa-graduation-cap"></i>
             MOVE TO TEST OF {data[position].NAME}
           </a>
         </div>
@@ -267,7 +300,9 @@ const Lesson = () => {
           <textarea
             className="text-lg font-note font-[300] mt-3 text-left md:m-4 m-6 w-[80%] "
             value={notes}
-            onChange={handleWriteNote}
+            onChange={(e) => {
+              setNotes((notes) => e.target.value);
+            }}
           ></textarea>
           <Button
             className="ml-auto h-8"
@@ -286,7 +321,10 @@ const Lesson = () => {
         </div>
         <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
           <div className="mb-3">
-            <textarea className="m-0 p-2 text-lg font-note font-[300] text-justify  w-full h-32"></textarea>
+            <textarea
+              onChange={(e) => setCmt(e.target.value)}
+              className="m-0 p-2 text-lg font-note font-[300] text-justify  w-full h-32"
+            ></textarea>
             <div className="flex justify-end">
               <Button
                 sx={{ ml: "auto" }}
@@ -297,7 +335,7 @@ const Lesson = () => {
               </Button>
             </div>
           </div>
-          <CommentList />
+          <CommentList comments={comments} />
         </div>
       </section>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Stack,
@@ -20,53 +20,26 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
-import { makeRequest } from "../utils/axios";
 
-const Section = ({ Type, index, onAdd, data }) => {
-  const [image, setImage] = React.useState([]);
-
-  const items = JSON.parse(localStorage.getItem("items"));
-  const array = [];
-  const data_courses = makeRequest({
-    url: "/course",
-    method: "get",
-  })
-    .then((res) => res.data)
-    .then((data) => {
-      data.map((index) => {
-        var i = 0;
-        items.map((course) => {
-          if (course.CID === index.CID) {
-            i = i + 1;
-          }
+import { makeRequest } from "./../utils/axios";
+const Section = ({ Type, index }) => {
+  const [courses, setCourses] = useState([]);
+  const [courseImgs, setCourseImgs] = useState([]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const res = await makeRequest({ url: "/course", method: "get" });
+      res.data.forEach(async (course) => {
+        const data1 = await getImage(course.IMG);
+        setCourseImgs((prev) => {
+          return [...prev, data1];
         });
-        if (i === 0) {
-          array.push(index);
-        }
       });
-      console.log(array);
-      //setCourses(array);
-    });
-  const fetchData = React.useCallback(async () => {
-    const res = array;
-
-    res.forEach(async (course) => {
-      const data1 = await getImage(course.IMG);
-      setImage((prev) => {
-        return [...prev, data1];
-      });
-    });
-  }, []);
-
-  React.useEffect(() => {
-    const indetifier = setTimeout(() => {
-      fetchData();
-    }, 500);
-    return () => {
-      console.log(data);
-      clearTimeout(indetifier);
+      setCourses(res.data);
     };
-  }, [fetchData]);
+    if (Type == "Courses") {
+      fetchCourses();
+    }
+  }, []);
 
   return (
     <Box
@@ -103,8 +76,21 @@ const Section = ({ Type, index, onAdd, data }) => {
         <hr />
 
         <Grid container spacing={3}>
-          {data.length != 0 ? (
-            data.map((course, index) => {
+
+          {courses.length != 0 ? (
+            courses.map((course, index) => {
+              // const [image, setImage] = useState("");
+              const image = "";
+              //get Image from database
+              // useEffect(() => {
+              //   const loadImage = async () => {
+              //     const data = await getImage(course.IMG);
+              //     setImage(data);
+              //   };
+              //   loadImage();
+              // }, []);
+
+
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
                   <Card>
@@ -113,7 +99,9 @@ const Section = ({ Type, index, onAdd, data }) => {
                         <CardMedia
                           component="img"
                           alt={course.NAME}
-                          src={image[index]}
+
+                          src={courseImgs[index]}
+
                           sx={{
                             width: "100%",
                             height: "200px",
@@ -141,7 +129,7 @@ const Section = ({ Type, index, onAdd, data }) => {
                                 fontFamily: "Roboto Slab",
                               }}
                             >
-                              course.author
+                              {course.OWNERNAME}
                             </Typography>
                           </Stack>
                           {/* <Rating value={5} readOnly precision={0.5} /> */}

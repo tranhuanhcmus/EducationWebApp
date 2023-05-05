@@ -5,9 +5,7 @@ import { makeRequest } from "./../utils/axios";
 
 const Home = () => {
   const sectionVariants = ["Courses", "Tests", "Blogs"];
-  const [courses, setCourses] = React.useState([]);
-  const [tests, setTests] = React.useState([]);
-  const [blogs, setBlogs] = React.useState([]);
+
   const discount = [
     "/discount/discount3.jpg",
     "/discount/discount1.jpg",
@@ -20,17 +18,10 @@ const Home = () => {
   ];
 
   const [bgs, setBgs] = React.useState([]);
-  // React.useEffect(() => {
-  //   const getRandomImages = async () => {
-  //     const imagePromises = [];
 
-  //     for (let i = 0; i < 5; i++) {
-  //       imagePromises.push(
-  //         fetch(`https://picsum.photos/1920/1080?random=${i}`).then(
-  //           (response) => response.url
-  //         )
-  //       );
-  //     }
+
+  React.useEffect(() => {
+    setBgs(discount);
 
   //     const images = await Promise.all(imagePromises);
   //     setBgs(images);
@@ -71,6 +62,7 @@ const Home = () => {
         console.log(array);
         setCourses(array);
       });
+
   }, []);
 
   React.useEffect(() => {
@@ -89,6 +81,7 @@ const Home = () => {
     const total = (listening + reading + writing) / 3;
     setSum((sum) => (Math.round(total * 4) / 4).toFixed(2));
   };
+
   const addCourseInCartHandler = (title, img, price, id) => {
     setItemsInCart((prevUsersList) => {
       return [
@@ -104,6 +97,7 @@ const Home = () => {
     alert("Add success!");
     setCourses((courses) => courses.filter((course) => course.CID !== id));
   };
+
   return (
     <>
       <Carousel backgrounds={bgs} />
@@ -182,21 +176,9 @@ const Home = () => {
         </div>
       </div>
       {sectionVariants.map((variant, index) => {
-        return (
-          <Section
-            key={index}
-            Type={variant}
-            index={index}
-            onAdd={addCourseInCartHandler}
-            data={
-              variant == "Courses"
-                ? courses
-                : variant == "Tests"
-                ? tests
-                : blogs
-            }
-          />
-        );
+
+        return <Section key={index} Type={variant} index={index} onAdd={addCourseInCartHandler} />;
+
       })}
     </>
   );
