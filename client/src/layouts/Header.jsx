@@ -294,6 +294,8 @@ const Header = () => {
                   <MenuItem
                     onClick={() => {
                       dispatch(logout());
+                      window.location.replace("/");
+                      //clean items
                     }}
                   >
                     <ListItemIcon>

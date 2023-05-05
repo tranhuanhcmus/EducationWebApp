@@ -89,17 +89,20 @@ const Lesson = () => {
   const LID = location.state.LID;
   const author = location.state.author;
   const courseImage = location.state.courseImage;
+  const [image, setImage] = React.useState("not yet");
 
   const [data, setData] = useState([]);
+  const [position, setPosition] = useState(null);
   const [notes, setNotes] = useState("");
   const [bending, setBending] = useState(true);
   const [videoURL, setVideoURL] = useState("");
-  const [image, setImage] = React.useState("not yet");
 
   const [cmt, setCmt] = useState("");
-  const [position, setPosition] = useState(null);
   const [key, setKey] = React.useState("");
+
   const queryClient = useQueryClient();
+
+  // click button to change lesson
   const handleCLick = (arg) => {
     if (typeof arg !== "number") {
       switch (arg) {
@@ -117,7 +120,7 @@ const Lesson = () => {
     } else setPosition((pos) => arg);
   };
 
-  //fetching lessons
+  //fetching lessons and loadImageCourse
   useEffect(() => {
     const loadImage = async () => {
       const newImage = await getImage(`${courseImage}`);
@@ -205,6 +208,7 @@ const Lesson = () => {
     console.log(res);
     alert(res.data[0]?.RESULT);
   };
+
   const saveComment = async () => {
     const currentDate = (+new Date()).toString(36);
     const CMTID = currentDate + CID + currentUser.ID;
