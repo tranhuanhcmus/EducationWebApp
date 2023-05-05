@@ -602,14 +602,14 @@ CREATE PROCEDURE GetForumComment(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT C.CMTID, C.FID, C.ID, C.CONTENT, C.CMT_TIME, A.NAME
-        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
+		SELECT C.CMTID, C.FID, C.CONTENT, C.CMT_TIME, A.NAME
+        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID
 		WHERE C.FID = FID;
     COMMIT;
 END $$
 DELIMITER ;
 
--- CALL GetForumComment('888');
+CALL GetForumComment('888');
 
 /*==============================================================*/
 /* Proc: Get Course Comment                                     */

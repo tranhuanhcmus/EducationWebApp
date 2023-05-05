@@ -167,6 +167,7 @@ const model = {
         try {
             const sqlQuery = await loadSqlQueries('request');
             const [rows, fields] = await db.promise()
+                                        // .query(sqlQuery.AddLesson, ["1234", "999", "temp", "test", "5.mp4", "a.pdf", "00:30:00"]);
                                         .query(sqlQuery.AddLesson, [data.LessonID, data.CourseID, data.Name, data.Content, data.Video, data.Attachment, data.Duration]);
             console.log(rows);
             return rows[0];
