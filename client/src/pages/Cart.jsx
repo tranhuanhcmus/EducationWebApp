@@ -18,9 +18,8 @@ const CartPage = () => {
     if (items) {
       setItemsInCart(items);
       items.forEach((element) => {
-        sum =
-          sum +
-          parseInt(element.price.substr(1, element.price.indexOf(".") - 1));
+        sum = sum + element.PRICE;
+        //parseInt(element.price.substr(1, element.PRICE.indexOf(".") - 1));
       });
       setTotalPrice(sum);
     }
@@ -30,16 +29,14 @@ const CartPage = () => {
     localStorage.setItem("items", JSON.stringify(itemsInCart));
     var sum = 0;
     itemsInCart.forEach((element) => {
-      sum =
-        sum + parseInt(element.price.substr(1, element.price.indexOf(".") - 1));
+      sum = sum + element.PRICE;
+      //parseInt(element.PRICE.substr(1, element.PRICE.indexOf(".") - 1));
     });
     setTotalPrice(sum);
   }, [itemsInCart]);
 
-  const DeleteCartHandler = (title) => {
-    setItemsInCart((courses) =>
-      courses.filter((course) => course.courseName !== title)
-    );
+  const DeleteCartHandler = (id) => {
+    setItemsInCart((courses) => courses.filter((course) => course.CID !== id));
   };
 
   return (

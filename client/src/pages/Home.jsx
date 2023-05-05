@@ -19,12 +19,56 @@ const Home = () => {
 
   const [bgs, setBgs] = React.useState([]);
 
+
   React.useEffect(() => {
     setBgs(discount);
-  }, []);
 
+  //     const images = await Promise.all(imagePromises);
+  //     setBgs(images);
+  //   };
+
+  //   getRandomImages();
+  // }, []);
+  const [itemsInCart, setItemsInCart] = React.useState([]);
   const [score, setScore] = React.useState({});
   const [sum, setSum] = React.useState(0);
+  React.useEffect(() => {
+    setBgs(discount);
+
+    const items = JSON.parse(localStorage.getItem("items"));
+    if (items) {
+      setItemsInCart(items);
+    }
+    //get Courses
+    const data_courses = makeRequest({
+      url: "/course",
+      method: "get",
+    })
+      .then((res) => res.data)
+      .then((data) => {
+        const array = [];
+
+        data.map((index) => {
+          var i = 0;
+          items.map((course) => {
+            if (course.CID === index.CID) {
+              i = i + 1;
+            }
+          });
+          if (i === 0) {
+            array.push(index);
+          }
+        });
+        console.log(array);
+        setCourses(array);
+      });
+
+  }, []);
+
+  React.useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(itemsInCart));
+  }, [itemsInCart]);
+
   const handleChange = (e) => {
     var newScore = { ...score };
     newScore[e.target.id] = e.target.value;
@@ -37,6 +81,23 @@ const Home = () => {
     const total = (listening + reading + writing) / 3;
     setSum((sum) => (Math.round(total * 4) / 4).toFixed(2));
   };
+
+  const addCourseInCartHandler = (title, img, price, id) => {
+    setItemsInCart((prevUsersList) => {
+      return [
+        ...prevUsersList,
+        {
+          Name: title,
+          IMG: img,
+          PRICE: price,
+          CID: id,
+        },
+      ];
+    });
+    alert("Add success!");
+    setCourses((courses) => courses.filter((course) => course.CID !== id));
+  };
+
   return (
     <>
       <Carousel backgrounds={bgs} />
@@ -115,7 +176,9 @@ const Home = () => {
         </div>
       </div>
       {sectionVariants.map((variant, index) => {
-        return <Section key={index} Type={variant} index={index} />;
+
+        return <Section key={index} Type={variant} index={index} onAdd={addCourseInCartHandler} />;
+
       })}
     </>
   );

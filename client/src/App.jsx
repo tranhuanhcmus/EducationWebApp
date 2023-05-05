@@ -49,15 +49,11 @@ function App() {
           element: <Courses />,
         },
         {
-          path: "/courses/:courseId",
-          element: <Courses />,
-        },
-        {
           path: "/coursesdetails/:courseId",
           element: <CoursesDetails />,
         },
         {
-          path: "/coursesdetails",
+          path: "/coursesdetails/:courseId/:lessonId",
           element: <CoursesDetails />,
         },
         { path: "/profile", element: <Profile /> },

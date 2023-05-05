@@ -20,6 +20,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
+
 import { makeRequest } from "./../utils/axios";
 const Section = ({ Type, index }) => {
   const [courses, setCourses] = useState([]);
@@ -39,6 +40,7 @@ const Section = ({ Type, index }) => {
       fetchCourses();
     }
   }, []);
+
   return (
     <Box
       sx={{
@@ -74,6 +76,7 @@ const Section = ({ Type, index }) => {
         <hr />
 
         <Grid container spacing={3}>
+
           {courses.length != 0 ? (
             courses.map((course, index) => {
               // const [image, setImage] = useState("");
@@ -87,15 +90,18 @@ const Section = ({ Type, index }) => {
               //   loadImage();
               // }, []);
 
+
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
-                  <Link to="coursesdetails/0">
-                    <Card>
+                  <Card>
+                    <Link to="coursesdetails/0">
                       <CardActionArea>
                         <CardMedia
                           component="img"
                           alt={course.NAME}
+
                           src={courseImgs[index]}
+
                           sx={{
                             width: "100%",
                             height: "200px",
@@ -146,36 +152,44 @@ const Section = ({ Type, index }) => {
                           </Typography>
                         </CardContent>
                       </CardActionArea>
-                      <CardActions>
-                        <Stack
-                          direction={"row"}
-                          sx={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
+                    </Link>
+                    <CardActions>
+                      <Stack
+                        direction={"row"}
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Tooltip
+                          title="Add to Cart"
+                          TransitionComponent={Zoom}
+                          onClick={() => {
+                            onAdd(
+                              course.NAME,
+                              course.IMG,
+                              course.PRICE,
+                              course.CID
+                            );
                           }}
                         >
-                          <Tooltip
-                            title="Add to Cart"
-                            TransitionComponent={Zoom}
-                          >
-                            <IconButton color="primary">
-                              <ShoppingCartIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Typography
-                            variant="body1"
-                            sx={{ mr: "auto", fontWeight: "500" }}
-                          >
-                            {course.PRICE}đ
-                          </Typography>
-                          <Button size="small" color="primary">
-                            View
-                          </Button>
-                        </Stack>
-                      </CardActions>
-                    </Card>
-                  </Link>
+                          <IconButton color="primary">
+                            <ShoppingCartIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Typography
+                          variant="body1"
+                          sx={{ mr: "auto", fontWeight: "500" }}
+                        >
+                          {course.PRICE}đ
+                        </Typography>
+                        <Button size="small" color="primary">
+                          View
+                        </Button>
+                      </Stack>
+                    </CardActions>
+                  </Card>
                 </Grid>
               );
             })
