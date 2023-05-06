@@ -20,6 +20,7 @@ router.delete("/deletefromcart", controller.deleteFromCart); //xóa course khỏ
 router.post("/addlesson", controller.addLesson); //thêm lesson
 router.put("/updatelesson", controller.updateLesson); //cập nhật lesson
 router.delete("/deletelesson/:id", controller.deleteLesson); //xóa lesson
+//------------------------------------UTILS------------------------------------//
 router.post("/image", controller.getImage); //lấy ảnh từ database
 router.get("/video/:name", controller.getVideo); //lấy ảnh từ database
 //------------------------------------COMMENT------------------------------------//
@@ -36,7 +37,7 @@ router.delete("/dfcmt", controller.deleteForumComment); //xóa comment trong for
 router.delete("/dccmt", controller.deleteCourseComment); //xóa comment trong course
 router.delete("/dtcmt", controller.deleteTestComment); //xóa comment trong test
 //-------------------------------------NOTE-------------------------------------//
-router.get("/ln", controller.getNote); //lấy note của 1 lesson
+router.post("/ln", controller.getNote); //lấy note của 1 lesson
 router.post("/an", controller.addNote); //thêm note trong lesson
 router.put("/un", controller.updateNote); //sửa note trong lesson
 router.delete("/dn", controller.deleteNote); //xóa note trong lesson
