@@ -34,6 +34,12 @@ INSERT INTO CART VALUES("113", "20127237", false, null, null);
 INSERT INTO CART VALUES("111", "20127507", true, NOW(), null);
 INSERT INTO CART VALUES("999", "20127507", false, null, null);
 INSERT INTO CART VALUES("113", "20127507", true, NOW(), null);
+
+-- call AddToCart('111', '20127507');
+-- call AddToCart('111', '20127237');
+-- select * from cart where id = '20127237';
+-- call DeleteFromCart('111', '20127237');
+
 -- CALL Pay("111", "20127507");
 -- select * from cart;
 -- SET @days = 15;

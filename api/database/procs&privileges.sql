@@ -427,7 +427,7 @@ BEGIN
 		IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
 			SELECT 'This course has already existed' AS RESULT;
 		ELSE
-			INSERT INTO CART VALUES (CID, UID, false, null, null);
+			INSERT INTO CART VALUES (CourseID, UID, false, null, null);
 			SELECT 'Add successfully' AS RESULT;
 		END IF;
     COMMIT;
