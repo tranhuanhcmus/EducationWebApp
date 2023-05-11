@@ -87,7 +87,7 @@ const Right = () => {
     error,
     data: blogs,
   } = useQuery(
-    "blogs",
+    "latest-blogs",
     () => {
       return makeRequest({
         method: "get",
@@ -96,9 +96,12 @@ const Right = () => {
     },
     {
       select: (data) =>
-        data.data.sort(
-          (a, b) => new Date(b.DATE_ESTABLISHED) - new Date(a.DATE_ESTABLISHED)
-        ),
+        data.data
+          .sort(
+            (a, b) =>
+              new Date(b.DATE_ESTABLISHED) - new Date(a.DATE_ESTABLISHED)
+          )
+          .slice(0, 4),
     }
   );
   if (error) return <p>{error.message}</p>;
@@ -129,7 +132,7 @@ const Right = () => {
         </span>
 
         <ul className="link-list p-1 font-Poppins ">
-          {blogs.slice(0, 4).map((blog) => (
+          {blogs.map((blog) => (
             <li key={blog.FID} className="px-3 ml-3 text-sm  ">
               <Link
                 to={`details/${blog.FID}`}
