@@ -2,19 +2,29 @@ import React from "react";
 
 import Img from "./Img";
 import Text from "./Text";
+import { getImage } from "../utils/fetchData";
 
 const CartItem = (props) => {
+  const [courseImgs, setCourseImgs] = React.useState("");
+  React.useEffect(() => {
+    console.log(props.IMG);
+    const loadImage = async () => {
+      const newImage = await getImage(props.IMG);
+      setCourseImgs(newImage);
+    };
+    loadImage();
+  }, []);
   return (
     <div className="flex flex-1 md:flex-col flex-row gap-[49px] items-center justify-start my-0 w-full">
       <div className="flex flex-1 sm:flex-col flex-row gap-5 items-center justify-start w-full">
         <Img
-          src={props?.image}
+          src={courseImgs}
           className="h-[120px] md:h-auto object-cover w-[120px]"
           alt="rectangle1480"
         />
         <div className="flex flex-col gap-4 items-start justify-start self-stretch w-auto">
           <Text className="font-bold font-raleway leading-[35.00px] max-w-[294px] md:max-w-full text-black_900 text-left text-xl tracking-[-0.50px]">
-            {props?.Name}
+            {props?.NAME}
           </Text>
           <Img
             src="../../public/anh2.svg"

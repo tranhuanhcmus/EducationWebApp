@@ -36,7 +36,7 @@ const ClassCard = (props) => {
           onClick={() => {
             {
               props.Teacher
-                ? navigate(`/coursesdetails/${props.CID}`)
+                ? navigate(`/TeacherCourseDetails/${props.CID}`)
                 : navigate(`/coursesdetails/${props.CID}`);
             }
           }}

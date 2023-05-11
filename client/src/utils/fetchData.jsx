@@ -128,6 +128,86 @@ const HandleDeleteCourseOfTeacher = async (id) => {
   }
 };
 
+const HandleDeleteLessonOfTeacher = async (id) => {
+  try {
+    const response = await makeRequest({
+      method: "delete",
+      url: `deletelesson/${id}`,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+const GetCourseInCart = async (id) => {
+  try {
+    const response = await makeRequest({
+      method: "get",
+      url: `/mycart/${id}`,
+    });
+
+    const blob = await response.data;
+    return blob;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const AddCourseToCart = async (data) => {
+  try {
+    const response = await makeRequest({
+      method: "post",
+      url: "/addtocart",
+      data: data,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const GetMyCourse = async (id) => {
+  try {
+    const response = await makeRequest({
+      method: "get",
+      url: `/mycourse/${id}`,
+    });
+
+    const blob = await response.data;
+    return blob;
+  } catch (error) {
+    console.error(error);
+  }
+};
+const HandleDeleteItemInCart = async (data) => {
+  try {
+    const response = await makeRequest({
+      method: "delete",
+      url: "/deletefromcart",
+      data: data,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+const HandlePayMent = async (data) => {
+  try {
+    const response = await makeRequest({
+      method: "put",
+      url: "/enrollcourse",
+      data: data,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   getImage,
   handleFileUpload,
@@ -138,4 +218,10 @@ export {
   HandleGetCourseOfTeacher,
   HandleSaveCourseOfTeacher,
   HandleDeleteCourseOfTeacher,
+  HandleDeleteLessonOfTeacher,
+  GetCourseInCart,
+  AddCourseToCart,
+  GetMyCourse,
+  HandleDeleteItemInCart,
+  HandlePayMent,
 };

@@ -7,30 +7,50 @@ import { useParams, useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { handleAddLesson } from "../utils/fetchData";
 
-const CustomFormPage = () => {
+const CustomFormPage = (props) => {
   const params = useParams();
   const [selectedFile, setSelectedFile] = React.useState();
   const [File, setFile] = React.useState();
+
+  const TitleInputRef = React.useRef();
+  const DetailInputRef = React.useRef();
+  const DurationInputRef = React.useRef();
+  const AttachmentInputRef = React.useRef();
   const [isFilePicked, setIsFilePicked] = React.useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("ok");
-    const fileName = `video${parseInt(params.courseId)}.mp4`;
+    //const fileName = `video${parseInt(params.courseId)}.mp4`;
+    const fileName = `${(+new Date()).toString(36)}.png`;
+    const LID = `${(+new Date()).toString(36)}`;
     await handleFileUploadVideo(File, fileName);
+    console.log(TitleInputRef.current.value);
+    console.log(DetailInputRef.current.value);
+    console.log(DurationInputRef.current.value);
+    console.log(AttachmentInputRef.current.value);
 
     // const jsTime = new Date(); // Replace with your JavaScript date object
     // const sqlTime = jsTime.toLocaleTimeString("en-US", { hour12: false });
 
     const data = {
-      LessonID: "442",
-      CourseID: "113",
-      Name: "Lesson tesst thu",
-      Content: "No content",
+      LessonID: LID,
+      CourseID: params.courseId.toString(),
+      Name: TitleInputRef.current.value,
+      Content: DetailInputRef.current.value,
       Video: fileName,
-      Attachment: "NO",
-      Duration: "00:30:00",
+      Attachment: AttachmentInputRef.current.value,
+      Duration: DurationInputRef.current.value,
     };
+    props.handleAdd(
+      data.LID,
+      data.CourseID,
+      data.Name,
+      data.Content,
+      data.Video,
+      data.Attachment,
+      data.Duration
+    );
 
     // var data = {};
     // data.LessonID = "444";
@@ -75,6 +95,7 @@ const CustomFormPage = () => {
                         <div className="mt-2">
                           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                             <input
+                              ref={TitleInputRef}
                               type="text"
                               name="username"
                               id="username"
@@ -94,6 +115,7 @@ const CustomFormPage = () => {
                         </label>
                         <div className="mt-2">
                           <textarea
+                            ref={DetailInputRef}
                             id="about"
                             name="about"
                             rows={3}
@@ -118,6 +140,7 @@ const CustomFormPage = () => {
                             <div className="mt-2">
                               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                                 <input
+                                  ref={DurationInputRef}
                                   type="time"
                                   name="Duration"
                                   id="Duration"
@@ -128,7 +151,30 @@ const CustomFormPage = () => {
                             </div>
                           </div>
                         </div>
+                        <div className="mt-10 space-y-10">
+                          <div className="sm:col-span-4">
+                            <label
+                              htmlFor="ATTACHMENT"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              ATTACHMENT
+                            </label>
+                            <div className="mt-2">
+                              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                                <input
+                                  ref={AttachmentInputRef}
+                                  type="link"
+                                  name="ATTACHMENT"
+                                  id="ATTACHMENT"
+                                  className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                  placeholder="input attachment"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+
                       <div className="col-span-full">
                         <label
                           htmlFor="cover-photo"

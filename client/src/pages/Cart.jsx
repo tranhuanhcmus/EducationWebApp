@@ -3,15 +3,24 @@ import React from "react";
 import Img from "../components/Img";
 import Input from "../components/Input";
 import Button from "../components/Button";
-
+import { makeRequest } from "./../utils/axios";
 import List from "../components/List";
 import Text from "../components/Text";
 import CartItem from "../components/CartItem";
+import { useSelector } from "react-redux";
+import {
+  HandleDeleteItemInCart,
+  HandlePayMent,
+  GetCourseInCart,
+} from "../utils/fetchData";
+import { useParams } from "react-router-dom";
 
 const CartPage = () => {
   const [itemsInCart, setItemsInCart] = React.useState([]);
   const [totalprice, setTotalPrice] = React.useState(0);
-
+  const [PayMentID, SetPayMentID] = React.useState("");
+  const params = useParams();
+  const currentUser = useSelector((state) => state.auth.user);
   React.useEffect(() => {
     const items = JSON.parse(localStorage.getItem("items"));
     var sum = 0;
@@ -35,8 +44,35 @@ const CartPage = () => {
     setTotalPrice(sum);
   }, [itemsInCart]);
 
-  const DeleteCartHandler = (id) => {
+  const DeleteCartHandler = async (id) => {
+    const Data = {
+      CourseID: id,
+      UID: currentUser.ID,
+    };
+    await HandleDeleteItemInCart(Data);
     setItemsInCart((courses) => courses.filter((course) => course.CID !== id));
+  };
+  const sendRequest = async (data) => {
+    const res = await makeRequest({
+      method: "post",
+      url: "/momo",
+      data: data,
+    });
+    const request = await res.data;
+    console.log(request);
+
+    return request;
+  };
+
+  const handleSubscribe = async (id, name, price) => {
+    if (itemsInCart.length > 0) {
+      const data = { id, name, price, itemsInCart };
+      const message = await sendRequest(data);
+      SetPayMentID(message);
+      alert("You can close this window after payment.");
+    } else {
+      alert("you should add item to cart");
+    }
   };
 
   return (
@@ -70,7 +106,7 @@ const CartPage = () => {
                       Subtotal
                     </Text>
                     <Text className="font-poppins font-semibold text-black_900 text-left text-xl tracking-[-0.50px] w-auto">
-                      {`$ ${totalprice}.00`}
+                      {`${totalprice}.000 đ`}
                     </Text>
                   </div>
                   <div className="flex flex-row items-start justify-start w-full">
@@ -91,10 +127,19 @@ const CartPage = () => {
                     Total
                   </Text>
                   <Text className="font-poppins font-semibold text-black_900 text-left text-xl tracking-[-0.50px] w-auto">
-                    {`$ ${totalprice}.00`}
+                    {`$ ${totalprice}.000 đ`}
                   </Text>
                 </div>
-                <Button className="bg-bluegray_900 cursor-pointer font-rubik font-semibold leading-[normal] md:px-10 sm:px-5 px-[120px] py-[15px] text-center text-lg text-yellow_100 tracking-[-0.50px] w-full">
+                <Button
+                  onClick={() => {
+                    handleSubscribe(
+                      currentUser.ID,
+                      currentUser.NAME,
+                      totalprice
+                    );
+                  }}
+                  className="bg-bluegray_900 cursor-pointer font-rubik font-semibold leading-[normal] md:px-10 sm:px-5 px-[120px] py-[15px] text-center text-lg text-yellow_100 tracking-[-0.50px] w-full"
+                >
                   Checkout Now
                 </Button>
               </div>

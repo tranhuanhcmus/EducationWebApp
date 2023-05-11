@@ -127,7 +127,7 @@ const TeacherCoursesPage = () => {
         ...prevUsersList,
         {
           NAME: title,
-          IMG: filexName,
+          IMG: fileName,
           DESCRIPTION: detail,
           CID: ID,
           Teacher: true,

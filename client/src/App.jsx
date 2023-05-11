@@ -24,8 +24,13 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route } from "@mui/icons-material";
 import BlogLayout from "./pages/Blogs/BlogLayout";
+import SuccessfulPage from "./pages/PaymenySuccess";
+import { useSelector } from "react-redux";
+import { current } from "@reduxjs/toolkit";
+
 const queryClient = new QueryClient();
 function App() {
+  const currentUser = useSelector((state) => state.auth.user);
   const Layout = () => {
     return (
       <>
@@ -38,79 +43,182 @@ function App() {
   };
 
   //Setting Router
-  const route = createBrowserRouter([
-    {
-      path: "/",
-      element: <Layout />,
-      errorElement: <ErrorPage />,
-      children: [
-        { path: "/", element: <Home /> },
 
-        {
-          path: "/courses",
-          element: <Courses />,
-        },
-        {
-          path: "/blogs",
-          Component: BlogLayout,
-          children: [
-            {
-              path: "/blogs/",
-              Component: Blogs,
-            },
-            {
-              path: "/blogs/details/:id",
-              Component: BlogDetails,
-            },
-            {
-              path: "/blogs/category/:name",
-              Component: Test,
-            },
-            {
-              path: "/blogs/hashtag/:name",
-              Component: Test,
-            },
-          ],
-        },
-        {
-          path: "/coursesdetails/:courseId",
-          element: <CoursesDetails />,
-        },
-        {
-          path: "/coursesdetails/:courseId/:lessonId",
-          element: <CoursesDetails />,
-        },
-        { path: "/profile", element: <Profile /> },
-        { path: "/TeacherCourse", element: <TeacherCourses /> },
-        { path: "/cart", element: <Cart /> },
-        {
-          path: "/test",
-          element: <Test />,
-        },
+  if (currentUser.ROLE === "teacher") {
+    const route = createBrowserRouter([
+      {
+        path: "/",
+        element: <Layout />,
+        errorElement: <ErrorPage />,
+        children: [
+          { path: "/", element: <Home /> },
 
-        { path: "/lesson/:id", element: <Lesson /> },
-        { path: "/pay", element: <Pay /> },
-        { path: "/testthu", element: <TeacherCoursesDetails /> },
-        { path: "/testthu/:courseId", element: <TeacherCoursesDetails /> },
-      ],
-    },
+          {
+            path: "/courses",
+            element: <Courses />,
+          },
+          {
+            path: "/coursesdetails/:courseId",
+            element: <CoursesDetails />,
+          },
+          {
+            path: "/coursesdetails/:courseId/:lessonId",
+            element: <CoursesDetails />,
+          },
+          { path: "/profile", element: <Profile /> },
+          { path: "/TeacherCourse", element: <TeacherCourses /> },
+          { path: "/cart", element: <Cart /> },
+          {
+            path: "/test",
+            element: <Test />,
+          },
+          {
+            path: "/blogs",
+            Component: BlogLayout,
+            children: [
+              {
+                path: "/blogs/",
+                Component: Blogs,
+              },
+              {
+                path: "/blogs/details/:id",
+                Component: BlogDetails,
+              },
+              {
+                path: "/blogs/category/:name",
+                Component: Test,
+              },
+              {
+                path: "/blogs/hashtag/:name",
+                Component: Test,
+              },
+            ],
+          },
+          { path: "/lesson/:id", element: <Lesson /> },
+          { path: "/pay", element: <Pay /> },
+          { path: "/TeacherCourseDetails", element: <TeacherCoursesDetails /> },
+          {
+            path: "/TeacherCourseDetails/:courseId",
+            element: <TeacherCoursesDetails />,
+          },
+          {
+            path: "/TeacherCourseDetails/:courseId/:lessonId",
+            element: <TeacherCoursesDetails />,
+          },
+          { path: "/cart/:PayMentID", element: <Cart /> },
+          { path: "/PaymentSuccess", element: <SuccessfulPage /> },
+          {
+            path: "/blogs",
+            Component: BlogLayout,
+            children: [
+              {
+                path: "/blogs/",
+                Component: Blogs,
+              },
+              {
+                path: "/blogs/details/:id",
+                Component: BlogDetails,
+              },
+              {
+                path: "/blogs/category/:name",
+                Component: Test,
+              },
+              {
+                path: "/blogs/hashtag/:name",
+                Component: Test,
+              },
+            ],
+          },
+        ],
+      },
 
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "/register",
-      element: <Register />,
-    },
-  ]);
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ]);
+    return (
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={route} />
+        <ReactQueryDevtools initialIsOpen="false" />
+      </QueryClientProvider>
+    );
+  } else {
+    const route = createBrowserRouter([
+      {
+        path: "/",
+        element: <Layout />,
+        errorElement: <ErrorPage />,
+        children: [
+          { path: "/", element: <Home /> },
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={route} />
-      <ReactQueryDevtools initialIsOpen="false" />
-    </QueryClientProvider>
-  );
+          {
+            path: "/courses",
+            element: <Courses />,
+          },
+          {
+            path: "/coursesdetails/:courseId",
+            element: <CoursesDetails />,
+          },
+          {
+            path: "/coursesdetails/:courseId/:lessonId",
+            element: <CoursesDetails />,
+          },
+          { path: "/profile", element: <Profile /> },
+          { path: "/cart", element: <Cart /> },
+          {
+            path: "/test",
+            element: <Test />,
+          },
+          {
+            path: "/blogs",
+            Component: BlogLayout,
+            children: [
+              {
+                path: "/blogs/",
+                Component: Blogs,
+              },
+              {
+                path: "/blogs/details/:id",
+                Component: BlogDetails,
+              },
+              {
+                path: "/blogs/category/:name",
+                Component: Test,
+              },
+              {
+                path: "/blogs/hashtag/:name",
+                Component: Test,
+              },
+            ],
+          },
+          { path: "/lesson/:id", element: <Lesson /> },
+          { path: "/pay", element: <Pay /> },
+          { path: "/cart/:PayMentID", element: <Cart /> },
+          { path: "/PaymentSuccess", element: <SuccessfulPage /> },
+        ],
+      },
+
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ]);
+    return (
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={route} />
+        <ReactQueryDevtools initialIsOpen="false" />
+      </QueryClientProvider>
+    );
+  }
 }
 
 export default App;

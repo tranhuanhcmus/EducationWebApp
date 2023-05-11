@@ -4,8 +4,19 @@ import Img from "./Img";
 import Button from "./Button";
 import List from "./List";
 import { Link, useNavigate } from "react-router-dom";
+import { getImage } from "../utils/fetchData";
 const CourseCard = (props) => {
   const navigate = useNavigate();
+  const [courseImgs, setCourseImgs] = React.useState("");
+  React.useEffect(() => {
+    const loadImage = async () => {
+      const newImage = await getImage(props.IMG);
+      setCourseImgs(newImage);
+    };
+
+    loadImage();
+  }, []);
+  const info = { PRICE: `$ ${props?.PRICE}.00`, CATEGORY: props.CATEGORY };
 
   return (
     <>
@@ -13,12 +24,12 @@ const CourseCard = (props) => {
         <div
           className="flex flex-1 sm:flex-col flex-row gap-[15px] items-center justify-start w-[100%]"
           onClick={() => {
-            navigate("/coursesdetails");
-            console.log("ok");
+            navigate(`/coursesdetails/${props.CID}`);
+            localStorage.setItem("Info", JSON.stringify(info));
           }}
         >
           <Img
-            src={props?.image}
+            src={courseImgs}
             className="h-[103px] md:h-[auto] max-h-[103px] object-cover rounded-[10px] w-[auto] sm:w-[auto]"
             alt="image"
           />
@@ -28,7 +39,7 @@ const CourseCard = (props) => {
               as="h6"
               variant="h6"
             >
-              {props?.NAME}
+              {props.COURESENAME}
             </List>
             <Img
               src="../../public/anh2.svg"
@@ -48,7 +59,7 @@ const CourseCard = (props) => {
           className="bg-red_50 flex h-[44px] items-center justify-center p-[10px] rounded-[6px] w-[44px] cursor-pointer"
           onClick={() => {
             props.addCourseHandler(
-              props.NAME,
+              props.COURESENAME,
               props.image,
               props.PRICE,
               props.CID
@@ -64,7 +75,7 @@ const CourseCard = (props) => {
 
 CourseCard.defaultProps = {
   image: "/anh5.png",
-  NAME: "Ielts 3.0-5.0",
+  //NAME: "Ielts 3.0-5.0",
   PRICE: "40",
 };
 
