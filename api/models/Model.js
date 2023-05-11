@@ -498,7 +498,7 @@ const model = {
         try {
             const sqlQuery = await loadSqlQueries('request');
             const [rows, fields] = await db.promise()
-                                        .query(sqlQuery.AddForum, [data.FID, data.ID, data.Title, data.Content, data.Img]);
+                                        .query(sqlQuery.AddForum, [data.FID, data.ID, data.Title, data.Content, data.Img, data.Category, data.Tag]);
             console.log(rows);
             return rows[0];
         }   
@@ -511,7 +511,7 @@ const model = {
         try {
             const sqlQuery = await loadSqlQueries('request');
             const [rows, fields] = await db.promise()
-                                        .query(sqlQuery.UpdateForum, [data.FID, data.ID, data.Title, data.Content, data.Img]);
+                                        .query(sqlQuery.UpdateForum, [data.FID, data.ID, data.Title, data.Content, data.Img, data.Category, data.Tag]);
             console.log(rows);
             return rows[0];
         }   
