@@ -1,7 +1,8 @@
 import React from "react";
 import Carousel from "../components/Carousel";
 import Section from "../components/Section";
-import { makeRequest } from "./../utils/axios";
+import { useSelector } from "react-redux";
+import { GetCourseInCart, AddCourseToCart } from "../utils/fetchData";
 
 const Home = () => {
   const sectionVariants = ["Courses", "Blogs"];
@@ -21,13 +22,16 @@ const Home = () => {
   const [itemsInCart, setItemsInCart] = React.useState([]);
   const [score, setScore] = React.useState({});
   const [sum, setSum] = React.useState(0);
+  const currentUser = useSelector((state) => state.auth.user);
   React.useEffect(() => {
     setBgs(discount);
 
-    const items = JSON.parse(localStorage.getItem("items"));
-    if (items) {
-      setItemsInCart(items);
-    }
+    const GetCart = async () => {
+      const data = await GetCourseInCart(currentUser.ID);
+      localStorage.setItem("items", JSON.stringify(data));
+      setItemsInCart(data);
+    };
+    GetCart();
   }, []);
 
   React.useEffect(() => {
@@ -47,18 +51,23 @@ const Home = () => {
     setSum((sum) => (Math.round(total * 4) / 4).toFixed(2));
   };
 
-  const addCourseInCartHandler = (title, img, price, id) => {
+  const addCourseInCartHandler = async (title, img, price, id) => {
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
         {
-          Name: title,
+          NAME: title,
           IMG: img,
           PRICE: price,
           CID: id,
         },
       ];
     });
+    const Data = {
+      CourseID: id,
+      UID: currentUser.ID,
+    };
+    await AddCourseToCart(Data);
     alert("Add success!");
   };
 

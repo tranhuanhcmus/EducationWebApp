@@ -5,130 +5,89 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import CourseCard from "../components/CourseCard";
 import List from "../components/List";
+import { makeRequest } from "./../utils/axios";
 import Text from "../components/Text";
 import { Link, useNavigate } from "react-router-dom";
 import { useParams, useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import Example from "./example";
 import GoogleForm from "./googleform";
+import { getVideo } from "../utils/fetchData";
 import CustomFormPage from "../components/CustomForm";
 import TrashPage from "../components/Trash";
 import EditText from "../components/EditText";
-const Data = [
-  {
-    src: "/anh4.png",
-    namecourse: "Introduction",
-    time: "7:37",
-    video: "/video/lesson1.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Reading 01",
-    time: "12:00",
-    video: "../../public/video1.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Listening 02",
-    time: "13:00",
-    video: "../../public/video2.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Reading 02",
-    time: "14:00",
-    video: "../../public/flowbite.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Listening 03",
-    time: "15:00",
-    video: "../../public/video4.mp4",
-    type: "listening",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Reading 03",
-    time: "16:00",
-    video: "../../public/flowbite.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Reading 04",
-    time: "17:00",
-    video: "../../public/flowbite.mp4",
-    type: "text",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Reading 04_1",
-    time: "18:00",
-    video: "../../public/flowbite.mp4",
-    type: "form",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Listening 05",
-    time: "19:00",
-    video: "../../public/video3.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Reading 05",
-    time: "15:00",
-    video: "../../public/video4.mp4",
-    type: "video",
-  },
-  {
-    src: "/anh4.png",
-    namecourse: "Revision 01",
-    time: "15:00",
-    video: "../../public/flowbite.mp4",
-    type: "video",
-  },
-];
+import Loading from "../utils/Loading";
+import { HandleDeleteLessonOfTeacher } from "../utils/fetchData";
 
-function secondsToHms(d) {
-  d = Number(d);
-  var h = Math.floor(d / 3600);
-  var m = Math.floor((d % 3600) / 60);
-  var s = Math.floor((d % 3600) % 60);
+// function secondsToHms(d) {
+//   d = Number(d);
+//   var h = Math.floor(d / 3600);
+//   var m = Math.floor((d % 3600) / 60);
+//   var s = Math.floor((d % 3600) % 60);
 
-  var hDisplay = h > 0 ? h + (h == 1 ? "h" : "h") : "";
-  var mDisplay = m > 0 ? m + (m == 1 ? "m" : "m") : "";
-  var sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "";
-  return hDisplay + mDisplay + sDisplay;
-}
+//   var hDisplay = h > 0 ? h + (h == 1 ? "h" : "h") : "";
+//   var mDisplay = m > 0 ? m + (m == 1 ? "m" : "m") : "";
+//   var sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "";
+//   return hDisplay + mDisplay + sDisplay;
+// }
 
-Data.forEach((item) => {
-  if (item.type === "video" || item.type === "listening") {
-    const videoElement = document.createElement("video");
-    videoElement.src = item.video;
-    //Data[index].time = `00:${parseInt(videoElement.duration, 10).toString()}`;
-    videoElement.addEventListener("loadedmetadata", () => {
-      item.time = `${secondsToHms(
-        parseInt(videoElement.duration, 10)
-      ).toString()}`;
-    });
-  }
-});
+// Data.forEach((item) => {
+//   if (item.type === "video" || item.type === "listening") {
+//     const videoElement = document.createElement("video");
+//     videoElement.src = item.video;
+//     //Data[index].time = `00:${parseInt(videoElement.duration, 10).toString()}`;
+//     videoElement.addEventListener("loadedmetadata", () => {
+//       item.time = `${secondsToHms(
+//         parseInt(videoElement.duration, 10)
+//       ).toString()}`;
+//     });
+//   }
+// });
+const img = "/anh4.png";
 
 const TeacherCoursesDetails = () => {
   const params = useParams();
 
-  const [searchParams, setSearchParams] = useSearchParams("");
+  //const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
   const [valueButton, setValue] = React.useState(parseInt(params.courseId));
   const myref = useRef([]);
 
   const [currentVideo, setCurrentVideo] = React.useState(0);
-  const [courses, setCourses] = React.useState(Data);
+  const [courses, setCourses] = React.useState([]);
+  const [bending, setBending] = React.useState(false);
+  const [videoURL, setVideoURL] = React.useState("");
+
+  const fetchData = React.useCallback(async () => {
+    setBending(true);
+    const data_courses = await makeRequest({
+      url: `/course/${params.courseId}`,
+      method: "get",
+    });
+
+    if (data_courses.data.length > 0) {
+      setCourses(() => {
+        return data_courses.data;
+      });
+
+      playNextVideo();
+      if (
+        parseInt(params.lessonId) >= 0 &&
+        parseInt(params.lessonId) < data_courses.data.length
+      ) {
+        const URL = await getVideo(
+          data_courses.data[parseInt(params.lessonId)].VIDEO
+        );
+        setVideoURL(URL);
+      } else {
+        const URL = await getVideo(data_courses.data[0].VIDEO);
+        setVideoURL(URL);
+      }
+      setValue(params.lessonId);
+    }
+
+    setBending(false);
+  }, []);
 
   const playNextVideo = () => {
     if (
@@ -136,30 +95,21 @@ const TeacherCoursesDetails = () => {
       currentVideo <= courses.length &&
       parseInt(params.courseId) != courses.length
     ) {
-      setCurrentVideo(parseInt(params.courseId));
+      setCurrentVideo(parseInt(params.lessonId));
     }
   };
-
-  React.useEffect(() => {
-    const indetifier = setTimeout(() => {
-      playNextVideo();
-
-      setValue(params.courseId);
-    }, 500);
-    return () => {
-      clearTimeout(indetifier);
-    };
-  }, [params.courseId]);
 
   const [detele, setdelete] = React.useState({
     condition: false,
     index: 0,
+    removeIn: "",
   });
 
-  const deteletrue = (i) => {
+  const deteletrue = (i, LID) => {
     setdelete({
       condition: true,
       index: i,
+      removeIn: LID,
     });
   };
   const deletefalse = () => {
@@ -168,28 +118,32 @@ const TeacherCoursesDetails = () => {
 
   const dragItem = React.useRef();
   const dragOverItem = React.useRef();
-  const handleRemove = () => {
+
+  const handleRemove = async () => {
     setCourses((courses) =>
       courses.filter((course) => courses.indexOf(course) !== detele.index)
     );
     deletefalse();
+    console.log(detele.removeIn);
+    await HandleDeleteLessonOfTeacher(detele.removeIn);
     if (detele.index < currentVideo) {
       setCurrentVideo(currentVideo - 1);
-      navigate(`/testthu/${currentVideo - 1}`);
+      navigate(`/testthu/${params.courseId}/${currentVideo - 1}`);
     }
     if (detele.index === currentVideo && detele.index === courses.length - 1) {
+      setCurrentVideo(currentVideo - 1);
+    }
+    if (detele.index === currentVideo) {
       setCurrentVideo(currentVideo - 1);
     }
   };
 
   const dragStart = (e, position) => {
     dragItem.current = position;
-    console.log(e.target.innerHTML);
   };
 
   const dragEnter = (e, position) => {
     dragOverItem.current = position;
-    console.log(e.target.innerHTML);
   };
 
   const drop = (e) => {
@@ -210,9 +164,52 @@ const TeacherCoursesDetails = () => {
     Quizzes: "",
     Certificate: "",
   });
-  console.log(value);
+  const handleAdd = (lid, cid, name, content, video, attachment, duration) => {
+    setCourses((prevUsersList) => {
+      return [
+        ...prevUsersList,
+        {
+          LID: lid,
+          CID: cid,
+          NAME: name,
+          CONTENT: content,
+          VIDEO: video,
+          ATTACHMENT: attachment,
+          DURATION: duration,
+        },
+      ];
+    });
+  };
 
-  return (
+  React.useEffect(() => {
+    const indetiPIEr = setTimeout(async () => {
+      fetchData();
+    }, 500);
+    return () => {
+      clearTimeout(indetiPIEr);
+    };
+  }, [fetchData]);
+
+  React.useEffect(() => {
+    const indetiPIEr = setTimeout(async () => {
+      setBending(true);
+      if (parseInt(params.lessonId) < courses.length) {
+        const URL = await getVideo(courses[parseInt(params.lessonId)].VIDEO);
+        setVideoURL(URL);
+      }
+
+      playNextVideo();
+
+      setValue(params.lessonId);
+
+      setBending(false);
+    }, 500);
+    return () => {
+      clearTimeout(indetiPIEr);
+    };
+  }, [params.lessonId, courses.length]);
+
+  return !bending ? (
     <>
       {detele.condition && (
         <TrashPage HandleFalse={deletefalse} onDeleteCourse={handleRemove} />
@@ -229,85 +226,40 @@ const TeacherCoursesDetails = () => {
                   >
                     Home | Courses | Course Details
                   </Text>
-                  {parseInt(params.courseId) < courses.length ? (
-                    parseInt(params.courseId) < 2 ? (
-                      <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
-                        <div className="aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
-                          <ReactPlayer
-                            className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
-                            height="100%"
-                            width="100%"
-                            playing={true}
-                            controls
-                            onEnded={() => {
-                              if (currentVideo < courses.length - 1) {
-                                navigate(`/testthu/${currentVideo + 1}`);
-                              }
-                            }}
-                            url={courses[currentVideo].video}
-                          />
-                        </div>
+                  {parseInt(params.lessonId) >= 0 &&
+                  parseInt(params.lessonId) < courses.length ? (
+                    <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
+                      <div className="aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
+                        <ReactPlayer
+                          className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
+                          height="100%"
+                          width="100%"
+                          playing={true}
+                          controls
+                          onEnded={() => {
+                            if (currentVideo < courses.length - 1) {
+                              navigate(
+                                `/TeacherCourseDetails/${params.courseId}/${
+                                  currentVideo + 1
+                                }`
+                              );
+                            }
+                          }}
+                          url={videoURL}
+                        />
+                      </div>
 
-                        <Button
-                          className=" self-center py-3 px-2 bg-indigo-600 font-note font-bold md:text-sm text-md text-white uppercase rounded-3xl md:w-[25%] w-[200px]  hover:bg-deep_purple_A201 hover:ring-yellow-400 ring-2 "
-                          onClick={() => navigate("/lesson/1")}
-                        >
-                          Move to lesson
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-[30px] items-start justify-start w-[100%]">
-                        <div className="aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
-                          {courses[parseInt(params.courseId)].type ===
-                            "video" && (
-                            <ReactPlayer
-                              className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
-                              height="100%"
-                              width="100%"
-                              playing={true}
-                              controls
-                              onEnded={() => {
-                                if (currentVideo < courses.length - 1) {
-                                  navigate(`/testthu/${currentVideo + 1}`);
-                                }
-                              }}
-                              url={courses[currentVideo].video}
-                            />
-                          )}
-                          {courses[parseInt(params.courseId)].type ===
-                            "listening" &&
-                            searchParams.get("text") !== "ok" && (
-                              <ReactPlayer
-                                className="w-full h-auto max-w-full border border-gray-200 rounded-lg dark:border-gray-700"
-                                height="100%"
-                                width="100%"
-                                playing={true}
-                                controls
-                                onEnded={() => {
-                                  setSearchParams({ text: "ok" });
-                                }}
-                                url={courses[currentVideo].video}
-                              />
-                            )}
-                          {searchParams.get("text") === "ok" && <GoogleForm />}
-                          {courses[parseInt(params.courseId)].type ===
-                            "text" && <Example></Example>}
-                          {courses[parseInt(params.courseId)].type ===
-                            "form" && <GoogleForm />}
-                        </div>
-                        <Text
-                          className="text-black_900 text-left w-[auto]"
-                          as="h5"
-                          variant="h5"
-                        >
-                          {courses[parseInt(params.courseId)].namecourse}
-                        </Text>
-                      </div>
-                    )
+                      <Button
+                        className=" self-center py-3 px-2 bg-indigo-600 font-note font-bold md:text-sm text-md text-white uppercase rounded-3xl md:w-[25%] w-[200px]  hover:bg-deep_purple_A201 hover:ring-yellow-400 ring-2 "
+                        onClick={() => navigate("/lesson/113")}
+                      >
+                        Move to lesson
+                      </Button>
+                    </div>
                   ) : (
                     <div className="flex flex-col gap-[30px] items-start justify-start w-[100%] rounded-lg">
                       <div className=" aspect-w-16 aspect-h-9 h-[455px] relative w-[100%] overflow-auto">
-                        <CustomFormPage></CustomFormPage>
+                        <CustomFormPage handleAdd={handleAdd}></CustomFormPage>
                       </div>
                     </div>
                   )}
@@ -362,11 +314,13 @@ const TeacherCoursesDetails = () => {
                                 block: "center",
                               });
 
-                              navigate(`/testthu/${index}`);
+                              navigate(
+                                `/TeacherCourseDetails/${params.courseId}/${index}`
+                              );
                             }}
                           >
                             <Img
-                              src={leucture.src}
+                              src={img}
                               className="h-[50px] md:h-[auto] object-cover rounded-[5px] w-[80px]"
                               alt="image"
                             />
@@ -375,19 +329,19 @@ const TeacherCoursesDetails = () => {
                                 className="font-semibold text-black_900 text-left w-[auto]"
                                 variant="body3"
                               >
-                                {leucture.namecourse}
+                                {leucture.NAME}
                               </Text>
                               <Text
                                 className="text-deep_orange_400 text-left w-[auto]"
                                 variant="body5"
                               >
-                                {leucture.time}
+                                {leucture.DURATION}
                               </Text>
                             </div>
                           </div>
                           <div
                             onClick={() => {
-                              deteletrue(index);
+                              deteletrue(index, leucture.LID);
                             }}
                           >
                             <Img
@@ -410,7 +364,9 @@ const TeacherCoursesDetails = () => {
                             block: "center",
                           });
 
-                          navigate(`/testthu/${courses.length}`);
+                          navigate(
+                            `/TeacherCourseDetails/${params.courseId}/${courses.length}`
+                          );
                         }}
                         className={`hover:cursor-pointer flex flex-1 items-start justify-center hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
                           valueButton === courses.length.toString()
@@ -784,6 +740,8 @@ const TeacherCoursesDetails = () => {
         </div>
       </div>
     </>
+  ) : (
+    <Loading />
   );
 };
 

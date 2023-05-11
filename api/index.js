@@ -6,6 +6,7 @@ import usersRoute from "./routes/users.js";
 import Route from "./routes/Route.js";
 import express from "express";
 import multer from "multer";
+import momoRouter from "./routes/Momo-router.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -56,6 +57,7 @@ app.use("/api", Route);
 app.post("/api/upload", upload.single("image"), (req, res) => {
   res.send("File uploaded successfully");
 });
+app.use("/api/momo", momoRouter);
 
 app.post("/api/uploadvideo", uploadvideo.single("video"), (req, res) => {
   res.send("File video uploaded successfully");

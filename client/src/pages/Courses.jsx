@@ -14,6 +14,9 @@ import { makeRequest } from "./../utils/axios";
 import { useSelector } from "react-redux";
 import ClassCard from "../components/ClassCard";
 import CustomImg from "../components/CustomImg";
+import { GetCourseInCart } from "../utils/fetchData";
+import { useCallback } from "react";
+import { GetMyCourse, AddCourseToCart } from "../utils/fetchData";
 const EduviCoursesPage = () => {
   const navigate = useNavigate();
 
@@ -42,52 +45,47 @@ const EduviCoursesPage = () => {
   const [Coures, setItems] = React.useState([]);
   const [CourseList, setCourseList] = React.useState([]);
 
-  React.useEffect(() => {
+  const fetchCourses = useCallback(async () => {
+    const dataIncourse = await GetCourseInCart(currentUser.ID);
+    localStorage.setItem("items", JSON.stringify(dataIncourse));
+    setItemsInCart(dataIncourse);
+
+    const temp = [];
+
+    const data = await GetMyCourse(currentUser.ID);
+    data.forEach((course) => temp.push(course));
+
     const items = JSON.parse(localStorage.getItem("items"));
-    if (items) {
-      setItemsInCart(items);
-    }
-    const data_courses = makeRequest({
-      url: "/course",
-      method: "get",
-    })
-      .then((res) => res.data)
-      .then((data) =>
-        //setItems(data)
-        {
-          const array = [];
+    items.forEach((course) => temp.push(course));
 
-          data.map((index) => {
-            var i = 0;
-            items.map((course) => {
-              if (course.CID === index.CID) {
-                i = i + 1;
-              }
-            });
-            if (i === 0) {
-              array.push(index);
-            }
-          });
-          console.log(array);
-          setItems(array);
+    const dataAll = await getAllCourse();
+
+    const array = [];
+    dataAll.map((index) => {
+      var i = 0;
+      temp.map((course) => {
+        if (course.CID === index.CID) {
+          i = i + 1;
         }
-      );
-
-    const data_mycourses = makeRequest({
-      url: `/mycourse/${currentUser.ID}`,
-      method: "get",
-    })
-      .then((res) => res.data)
-      .then((data) => {
-        setCourseList(data);
       });
+      if (i === 0) {
+        array.push(index);
+      }
+    });
+    setItems(array);
+    setCourseList(data);
+    console.log(array);
   }, []);
+
+  React.useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
 
   React.useEffect(() => {
     localStorage.setItem("items", JSON.stringify(itemsInCart));
   }, [itemsInCart]);
 
-  const addCourseHandler = (title, img, price, id) => {
+  const addCourseHandler = async (title, img, price, id) => {
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
@@ -100,6 +98,11 @@ const EduviCoursesPage = () => {
       ];
     });
     alert("Add success!");
+    const Data = {
+      CourseID: id,
+      UID: currentUser.ID,
+    };
+    await AddCourseToCart(Data);
     setItems((courses) => courses.filter((course) => course.CID !== id));
   };
 

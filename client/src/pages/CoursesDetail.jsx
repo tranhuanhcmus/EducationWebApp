@@ -7,6 +7,7 @@ import List from "../components/List";
 import Text from "../components/Text";
 import { Link, useNavigate } from "react-router-dom";
 import { makeRequest } from "./../utils/axios";
+import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getVideo } from "../utils/fetchData";
 
@@ -14,7 +15,12 @@ import ReactPlayer from "react-player";
 import Loading from "../utils/Loading";
 
 import { Rating } from "@mui/material";
-
+import {
+  getAllCourse,
+  GetCourseInCart,
+  GetMyCourse,
+  AddCourseToCart,
+} from "../utils/fetchData";
 const img = "/anh4.png";
 
 // function secondsToHms(d) {
@@ -43,7 +49,7 @@ const img = "/anh4.png";
 
 const CoursesDetails = () => {
   const params = useParams();
-  console.log(params);
+  const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
   const [valueButton, setValue] = React.useState(parseInt(params.lessonId));
@@ -61,14 +67,43 @@ const CoursesDetails = () => {
   };
 
   const [videoURL, setVideoURL] = React.useState("");
-
+  const [Coures, setItems] = React.useState([]);
+  const [itemsInCart, setItemsInCart] = React.useState([]);
   const fetchData = useCallback(async () => {
     setBending(true);
+    const dataIncourse = await GetCourseInCart(currentUser.ID);
+    localStorage.setItem("items", JSON.stringify(dataIncourse));
+    setItemsInCart(dataIncourse);
+
+    const temp = [];
+
+    const data = await GetMyCourse(currentUser.ID);
+    data.forEach((course) => temp.push(course));
+
+    const items = JSON.parse(localStorage.getItem("items"));
+    items.forEach((course) => temp.push(course));
+
+    const dataAll = await getAllCourse();
+
+    const array = [];
+    dataAll.map((index) => {
+      var i = 0;
+      temp.map((course) => {
+        if (course.CID === index.CID) {
+          i = i + 1;
+        }
+      });
+      if (i === 0) {
+        array.push(index);
+      }
+    });
+    setItems(array);
+
     const data_courses = await makeRequest({
       url: `/course/${params.courseId}`,
       method: "get",
     });
-    console.log(data_courses.data.length);
+
     if (data_courses.data.length > 0) {
       setCourses(() => {
         return data_courses.data;
@@ -89,6 +124,79 @@ const CoursesDetails = () => {
 
     setBending(false);
   }, []);
+
+  const addCourseHandler = async (title, img, price, id) => {
+    setItemsInCart((prevUsersList) => {
+      return [
+        ...prevUsersList,
+        {
+          Name: title,
+          IMG: img,
+          PRICE: price,
+          CID: id,
+        },
+      ];
+    });
+    alert("Add success!");
+    const Data = {
+      CourseID: id,
+      UID: currentUser.ID,
+    };
+    await AddCourseToCart(Data);
+    setItems((courses) => courses.filter((course) => course.CID !== id));
+  };
+
+  // React.useEffect(() => {
+  //   const indetiPIEr = setTimeout(() => {
+  //     setBending(true);
+  //     const data_courses = makeRequest({
+  //       url: `/course/${parseInt(params.courseId)}`,
+  //       method: "get",
+  //     })
+  //       .then((res) => res.data)
+  //       .then((data) => {
+  //         setCourses(data);
+  //         if (!bending) {
+  //           data.forEach((value) => {
+  //             loadVideo(value);
+  //           });
+  //         }
+  //       });
+  //     const loadVideo = async () => {
+  //       const URL = await getVideo(courses[0].VIDEO);
+  //       setVideoURL(URL);
+  //     };
+
+  //     setBending(false);
+  //   }, 500);
+  //   return () => {
+  //     clearTimeout(indetiPIEr);
+  //   };
+  // }, []);
+
+  // React.useEffect(() => {
+  //   const indetiPIEr = setTimeout(() => {
+  //     setBending(true);
+  //     const loadVideo = async () => {
+  //       if (parseInt(params.lessonId) >= 0) {
+  //         const URL = await getVideo(courses[parseInt(params.lessonId)].VIDEO);
+  //         setVideoURL(URL);
+  //       } else {
+  //         const URL = await getVideo(courses[0].VIDEO);
+  //         setVideoURL(URL);
+  //       }
+  //     };
+  //     playNextVideo();
+  //     loadVideo();
+
+  //     setValue(params.lessonId);
+  //     setBending(false);
+  //   }, 500);
+  //   return () => {
+  //     clearTimeout(indetiPIEr);
+  //   };
+  // }, [params.lessonId]);
+
   React.useEffect(() => {
     const indetiPIEr = setTimeout(async () => {
       fetchData();
@@ -97,6 +205,10 @@ const CoursesDetails = () => {
       clearTimeout(indetiPIEr);
     };
   }, [fetchData]);
+
+  React.useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(itemsInCart));
+  }, [itemsInCart]);
 
   React.useEffect(() => {
     const indetiPIEr = setTimeout(async () => {
@@ -535,10 +647,11 @@ const CoursesDetails = () => {
             </Text>
             <div className="flex font-inter items-start justify-start w-[100%]">
               <div className="md:gap-[20px] gap-[40px] grid md:grid-cols-1 grid-cols-2 justify-center min-h-[auto] w-[100%]">
-                {new Array(4).fill({}).map((props, index) => (
+                {Coures.map((props, index) => (
                   <React.Fragment key={`CourseCard${index}`}>
                     <CourseCard
                       className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 shadow-bs w-full"
+                      addCourseHandler={addCourseHandler}
                       {...props}
                     />
                   </React.Fragment>

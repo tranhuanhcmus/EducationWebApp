@@ -19,17 +19,31 @@ import {
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { getImage } from "../utils/fetchData";
+import { GetMyCourse, HandleGetCourseOfTeacher } from "../utils/fetchData";
 
 import { makeRequest } from "./../utils/axios";
 const Section = ({ Type, index, onAdd }) => {
   const [courses, setCourses] = useState([]);
   const [courseImgs, setCourseImgs] = useState([]);
-  var items = JSON.parse(localStorage.getItem("items"));
+
+  const currentUser = useSelector((state) => state.auth.user);
+
   const fetchCourses = useCallback(async () => {
     const array = [];
+    const temp = [];
     const res = await makeRequest({ url: "/course", method: "get" });
+
+    if (currentUser.ROLE === "student") {
+      const data = await GetMyCourse(currentUser.ID);
+      data.forEach((course) => temp.push(course));
+    } else {
+      const data = await HandleGetCourseOfTeacher(currentUser.ID);
+      data.forEach((course) => temp.push(course));
+    }
     const items = JSON.parse(localStorage.getItem("items"));
+    items.forEach((course) => temp.push(course));
     res.data.forEach(async (course) => {
       const data1 = await getImage(course.IMG);
       setCourseImgs((prev) => {
@@ -38,7 +52,7 @@ const Section = ({ Type, index, onAdd }) => {
     });
     res.data.map((index) => {
       var i = 0;
-      items.map((course) => {
+      temp.map((course) => {
         if (course.CID === index.CID) {
           i = i + 1;
         }
@@ -48,12 +62,14 @@ const Section = ({ Type, index, onAdd }) => {
       }
     });
     setCourses(array);
+    console.log(res.data);
   }, []);
   useEffect(() => {
     if (Type == "Courses") {
       fetchCourses();
     }
   }, [fetchCourses]);
+
   return (
     <Box
       sx={{
