@@ -24,12 +24,12 @@ import { getImage } from "../utils/fetchData";
 import { GetMyCourse, HandleGetCourseOfTeacher } from "../utils/fetchData";
 
 import { makeRequest } from "./../utils/axios";
+import { useQuery } from "react-query";
 const Section = ({ Type, index, onAdd }) => {
   const [courses, setCourses] = useState([]);
   const [courseImgs, setCourseImgs] = useState([]);
 
   const currentUser = useSelector((state) => state.auth.user);
-
   const fetchCourses = useCallback(async () => {
     const array = [];
     const temp = [];
@@ -70,6 +70,30 @@ const Section = ({ Type, index, onAdd }) => {
     }
   }, [fetchCourses]);
 
+  //fetch blogs
+  const {
+    isLoading,
+    error,
+    data: blogs,
+  } = useQuery(
+    "latest-blogs",
+    () => {
+      return makeRequest({
+        method: "get",
+        url: "/forum",
+      });
+    },
+    {
+      select: (data) =>
+        data.data
+          .sort(
+            (a, b) =>
+              new Date(b.DATE_ESTABLISHED) - new Date(a.DATE_ESTABLISHED)
+          )
+          .slice(0, 6),
+    }
+  );
+
   return (
     <Box
       sx={{
@@ -105,7 +129,74 @@ const Section = ({ Type, index, onAdd }) => {
         <hr />
 
         <Grid container spacing={3}>
-          {courses.length != 0 ? (
+          {Type == "Blogs" && blogs ? (
+            blogs.map((blog) => (
+              <Grid key={blog.FID} item xs={12} sm={6} lg={4}>
+                <Card>
+                  <Link to={`blogs/details/${blog.FID}`} state={{ blog }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        alt={blog.TITLE}
+                        src={"anh1.png"}
+                        sx={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "contain",
+                        }}
+                      />
+                      <CardContent>
+                        <Stack>
+                          <Typography
+                            gutterBottom
+                            variant="h6"
+                            sx={{
+                              fontWeight: "600",
+                              fontFamily: "Roboto Slab",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {blog.TITLE}
+                          </Typography>
+                          <Typography
+                            gutterBottom
+                            variant="body2"
+                            component="span"
+                            sx={{
+                              fontWeight: "300",
+                              fontFamily: "Roboto Slab",
+                            }}
+                          >
+                            {blog.CATEGORY}
+                            <br />
+                            {blog.NAME}
+                          </Typography>
+                        </Stack>
+                        {/* <Rating value={5} readOnly precision={0.5} /> */}
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{
+                            my: 2,
+                            textAlign: "left",
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            lineHeight: "1.2rem",
+                            maxHeight: "3.6rem",
+                            fontWeight: "500",
+                            fontFamily: "Poppins",
+                          }}
+                        >
+                          Time: {new Date(blog.DATE_ESTABLISHED).toDateString()}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
+                </Card>
+              </Grid>
+            ))
+          ) : courses.length != 0 && Type == "Courses" ? (
             courses.map((course, index) => {
               // const [image, setImage] = useState("");
               const image = "";
@@ -121,7 +212,7 @@ const Section = ({ Type, index, onAdd }) => {
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
                   <Card>
-                    <Link to={`coursesdetails/${course.CID}`}>
+                    <Link to={`coursesdetails/${course.CID}`} state={course}>
                       <CardActionArea>
                         <CardMedia
                           component="img"

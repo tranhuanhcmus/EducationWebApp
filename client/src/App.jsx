@@ -22,11 +22,9 @@ import TeacherCourses from "./pages/TeacherCourses";
 import TeacherCoursesDetails from "./pages/TeacherCourseDetail";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { Route } from "@mui/icons-material";
 import BlogLayout from "./pages/Blogs/BlogLayout";
 import SuccessfulPage from "./pages/PaymenySuccess";
 import { useSelector } from "react-redux";
-import { current } from "@reduxjs/toolkit";
 
 const queryClient = new QueryClient();
 function App() {
@@ -107,28 +105,6 @@ function App() {
           },
           { path: "/cart/:PayMentID", element: <Cart /> },
           { path: "/PaymentSuccess", element: <SuccessfulPage /> },
-          {
-            path: "/blogs",
-            Component: BlogLayout,
-            children: [
-              {
-                path: "/blogs/",
-                Component: Blogs,
-              },
-              {
-                path: "/blogs/details/:id",
-                Component: BlogDetails,
-              },
-              {
-                path: "/blogs/category/:name",
-                Component: Test,
-              },
-              {
-                path: "/blogs/hashtag/:name",
-                Component: Test,
-              },
-            ],
-          },
         ],
       },
 
@@ -215,7 +191,6 @@ function App() {
     return (
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={route} />
-        <ReactQueryDevtools initialIsOpen="false" />
       </QueryClientProvider>
     );
   }

@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import CourseCard from "../components/CourseCard";
 import List from "../components/List";
 import Text from "../components/Text";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { makeRequest } from "./../utils/axios";
 import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
@@ -49,6 +49,8 @@ const img = "/anh4.png";
 
 const CoursesDetails = () => {
   const params = useParams();
+  const { state } = useLocation();
+  console.log("course Detail", state);
   const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
@@ -228,8 +230,6 @@ const CoursesDetails = () => {
     };
   }, [params.lessonId]);
 
-  console.log(videoURL);
-
   return !bending ? (
     <>
       <div className="bg-gray_100 flex flex-col font-inter gap-[100px] sm:gap-[40px] md:gap-[40px] items-start justify-start mx-[auto] self-stretch sm:w-[100%] md:w-[100%] w-[auto]">
@@ -381,40 +381,13 @@ const CoursesDetails = () => {
                   as="h4"
                   variant="h4"
                 >
-                  Course Details - Writing Band 5.0
+                  {state.COURESENAME} - {state.CATEGORY}
                 </Text>
                 <Text
                   className="font-normal leading-[30.00px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  <>
-                    Dear our beloved students at PIE English, First and
-                    foremost, PIE English would like to express our sincerest
-                    gratude to all of our students for believing and choosing
-                    TW. This publication, Junior. Students Workbook, you are
-                    holding right now is a brilliant combination of carefuly
-                    selected intellectual products, created by none other than
-                    our team at PIE English. As an embodiment of our mission
-                    which is to not only help our students improve their English
-                    and develop the language beyond classroom context but also
-                    enable them to conquer the IELTS exam, this workbook shall
-                    act as a constant companion to allow students to make the
-                    most of in-class lessons. Therefore, PIE truly hopes that
-                    our students can allocate their time and energy to complete
-                    all tasks provided in this workbook so as to achieve the
-                    perfect result for each and every course they take at PIE
-                    English. Essentially complementary to this workbook is a
-                    splendidly crafted CELTA-standard visual syllabus, a product
-                    jointly owned by an elite team of teachers at PIE English
-                    and critically reviewed under the guidance and supervision
-                    of numerous IELTS experts, masters in linguistics, masters
-                    in pedagogy and many other holders of bachelor's and
-                    master's degree in Education who had studied in England and
-                    Australia. We will use our last word to thank you for
-                    placing your trust in us, whereby becoming an integral part
-                    of our success. We hope that you enjoy your time with us.
-                    PIE English Golden Standard for IELTS Preparation
-                  </>
+                  {state.DESCRIPTION}
                 </Text>
               </div>
               <div className="flex flex-col gap-[9px] items-start justify-start w-[100%]">
@@ -444,8 +417,8 @@ const CoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  This course is suitable for individuals who have scored
-                  between 4.0 and 5.0 on the IELTS test, or for those who have
+                  This course is suitable for individuals who have scored{" "}
+                  {state.CATEGORY} on the IELTS test, or for those who have
                   taken a placement test and have been assessed at this level.
                 </Text>
               </div>
@@ -516,7 +489,7 @@ const CoursesDetails = () => {
                     as="h6"
                     variant="h6"
                   >
-                    199.000 đ
+                    {state.PRICE} đồng
                   </Text>
                 </div>
                 <div className="flex flex-row items-start justify-between w-[100%]">
@@ -530,7 +503,7 @@ const CoursesDetails = () => {
                     to="/Author"
                     className="font-semibold text-[20px] text-black_900 text-right underline w-[auto]"
                   >
-                    Harry Bui
+                    {state.OWNERNAME}
                   </Link>
                 </div>
                 <div className="flex flex-row items-center justify-between w-[100%]">
@@ -567,37 +540,10 @@ const CoursesDetails = () => {
                     className="font-semibold text-black_900 text-right w-[auto]"
                     variant="body2"
                   >
-                    30
+                    {Coures.length}
                   </Text>
                 </div>
-                <div className="flex flex-row items-start justify-between w-[100%]">
-                  <Text
-                    className="font-semibold text-gray_700 text-left w-[auto]"
-                    variant="body2"
-                  >
-                    Quizzes
-                  </Text>
-                  <Text
-                    className="font-semibold text-black_900 text-right w-[auto]"
-                    variant="body2"
-                  >
-                    5
-                  </Text>
-                </div>
-                <div className="flex flex-row items-start justify-between w-[100%]">
-                  <Text
-                    className="font-semibold text-gray_700 text-left w-[auto]"
-                    variant="body2"
-                  >
-                    Certificate
-                  </Text>
-                  <Text
-                    className="font-semibold text-black_900 text-right w-[auto]"
-                    variant="body2"
-                  >
-                    Yes
-                  </Text>
-                </div>
+
                 <div className="flex flex-row items-start justify-between w-[100%]">
                   <Text
                     className="font-semibold text-gray_700 text-left w-[auto]"
