@@ -104,7 +104,7 @@ const Section = ({ Type, index, onAdd }) => {
               return (
                 <Grid key={course.CID} item xs={12} sm={6} lg={4}>
                   <Card>
-                    <Link to="coursesdetails/0">
+                    <Link to={`coursesdetails/${course.CID}`}>
                       <CardActionArea>
                         <CardMedia
                           component="img"

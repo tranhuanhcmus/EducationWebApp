@@ -22,6 +22,8 @@ import TeacherCourses from "./pages/TeacherCourses";
 import TeacherCoursesDetails from "./pages/TeacherCourseDetail";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Route } from "@mui/icons-material";
+import BlogLayout from "./pages/Blogs/BlogLayout";
 const queryClient = new QueryClient();
 function App() {
   const Layout = () => {
@@ -49,6 +51,28 @@ function App() {
           element: <Courses />,
         },
         {
+          path: "/blogs",
+          Component: BlogLayout,
+          children: [
+            {
+              path: "/blogs/",
+              Component: Blogs,
+            },
+            {
+              path: "/blogs/details/:id",
+              Component: BlogDetails,
+            },
+            {
+              path: "/blogs/category/:name",
+              Component: Test,
+            },
+            {
+              path: "/blogs/hashtag/:name",
+              Component: Test,
+            },
+          ],
+        },
+        {
           path: "/coursesdetails/:courseId",
           element: <CoursesDetails />,
         },
@@ -63,8 +87,7 @@ function App() {
           path: "/test",
           element: <Test />,
         },
-        { path: "/blogs", element: <Blogs /> },
-        { path: "/BlogDetails", element: <BlogDetails /> },
+
         { path: "/lesson/:id", element: <Lesson /> },
         { path: "/pay", element: <Pay /> },
         { path: "/testthu", element: <TeacherCoursesDetails /> },

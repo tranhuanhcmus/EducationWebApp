@@ -67,6 +67,8 @@ create table FORUM
    DATE_ESTABLISHED     datetime not null  comment '',
    CONTENT              text not null  comment '',
    IMG                  varchar(100)  comment '',
+   CATEGORY				varchar(100) comment '',
+   TAG 					varchar(100) comment '',
    primary key (FID)
 );
 

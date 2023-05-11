@@ -427,7 +427,7 @@ BEGIN
 		IF EXISTS (SELECT ID, CID FROM CART WHERE ID = UID AND CID = CourseID) THEN
 			SELECT 'This course has already existed' AS RESULT;
 		ELSE
-			INSERT INTO CART VALUES (CID, UID, false, null, null);
+			INSERT INTO CART VALUES (CourseID, UID, false, null, null);
 			SELECT 'Add successfully' AS RESULT;
 		END IF;
     COMMIT;
@@ -602,7 +602,7 @@ CREATE PROCEDURE GetForumComment(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT C.CMTID, C.FID, C.ID, C.CONTENT, C.CMT_TIME, A.NAME
+		SELECT C.CMTID, C.FID, C.CONTENT, C.CMT_TIME, A.NAME, (SELECT NAME FROM ACCOUNT ACC JOIN FORUM F ON F.ID = ACC.ID WHERE F.FID = FID) AS AUTHOR
         FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
 		WHERE C.FID = FID;
     COMMIT;
@@ -1037,7 +1037,8 @@ CREATE PROCEDURE ForumList(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT * FROM FORUM;
+		SELECT F.*, A.NAME AS AUTHOR
+        FROM FORUM F JOIN ACCOUNT A ON F.ID =  A.ID;
     COMMIT;
 END $$
 DELIMITER ;
@@ -1054,13 +1055,14 @@ CREATE PROCEDURE SpecificForum(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT * FROM FORUM
-		WHERE FID LIKE CONCAT('%', STR, '%') OR TITLE LIKE CONCAT('%', STR, '%');
+		SELECT F.*, A.NAME AS AUTHOR
+        FROM FORUM F JOIN ACCOUNT A ON F.ID =  A.ID
+		WHERE F.FID LIKE CONCAT('%', STR, '%') OR F.TITLE LIKE CONCAT('%', STR, '%');
     COMMIT;
 END $$
 DELIMITER ;
 
--- CALL SpecificForum("RELATIVE");
+-- CALL SpecificForum("tense");
 
 /*==============================================================*/
 /* Proc: Add forum                                              */
@@ -1072,17 +1074,19 @@ CREATE PROCEDURE AddForum(
 	ID varchar(22),
 	TITLE text,
 	CONTENT text,
-	IMG varchar(100)
+	IMG varchar(100),
+    CATEGORY varchar(100),
+    TAG varchar(100)
 )
 BEGIN
 	START TRANSACTION;
-		INSERT INTO FORUM VALUES (FID, ID, TITLE, NOW(), CONTENT, IMG);
+		INSERT INTO FORUM VALUES (FID, ID, TITLE, NOW(), CONTENT, IMG, CATEGORY, TAG);
 		SELECT 'Forum inserts successfully' AS RESULT;
     COMMIT;
 END $$
 DELIMITER ;
 
--- CALL AddForum();
+-- CALL AddForum("232","20127063", "FUTURE TENSE", "9+", "bth.jpg", "Future tense", "Grammar");
 
 /*==============================================================*/
 /* Proc: Update forum                                           */
@@ -1094,7 +1098,9 @@ CREATE PROCEDURE UpdateForum(
 	UID varchar(22),
 	NTITLE text,
 	NCONTENT text,
-	NIMG varchar(100)
+	NIMG varchar(100),
+    NCATEGORY varchar(100),
+    NTAG varchar(100)
 )	
 BEGIN
 	START TRANSACTION;
@@ -1102,7 +1108,9 @@ BEGIN
 		SET TITLE = NTITLE,
 			DATE_ESTABLISHED = NOW(),
 			CONTENT = NCONTENT, 
-            IMG = NIMG
+            IMG = NIMG, 
+            CATEGORY = NCATEGORY,
+            TAG = NTAG
 		WHERE FID = ForumID AND ID = UID; 
 		SELECT 'Forum updates successfully' AS RESULT;
     COMMIT;
@@ -1169,58 +1177,3 @@ BEGIN
     CLOSE cur;
 END $$
 DELIMITER ;
-
-/*============================================================================================================================*/
-/*                                                           ROLES                                                            */
-/*============================================================================================================================*/
-/*==============================================================*/
-/* Role: Visitor                                                */
-/*==============================================================*/
-CREATE ROLE IF NOT EXISTS 'visitor';
-GRANT SELECT ON IELTS.FORUM TO visitor;
-GRANT SELECT ON IELTS.COURSE TO visitor;
-GRANT SELECT ON IELTS.COMMENT TO visitor;
--- SHOW GRANTS FOR visitor;
-
-/*==============================================================*/
-/* Role: Admin                                                  */
-/*==============================================================*/
-CREATE ROLE IF NOT EXISTS 'admin';
-GRANT ALL ON IELTS.* TO admin;
--- SHOW GRANTS FOR admin;
--- CREATE USER 'pmp' identified by 'pmp';
--- ALTER USER 'pmp' IDENTIFIED BY 'pmp';
--- GRANT 'admin' TO 'pmp';
-
--- DROP ROLE admin;
-
-/*==============================================================*/
-/* Role: Teacher                                                */
-/*==============================================================*/
-CREATE ROLE IF NOT EXISTS 'teacher'; 
--- GRANT SELECT ON IELTS.FORUM TO teacher;
--- GRANT SELECT ON IELTS.COURSE TO teacher;
--- GRANT SELECT ON IELTS.COMMENT TO teacher;
--- SHOW GRANTS FOR teacher;
-
-/*==============================================================*/
-/* Role: Student                                                */
-/*==============================================================*/
-CREATE ROLE IF NOT EXISTS 'student';
--- GRANT SELECT ON IELTS.FORUM TO student;
--- GRANT SELECT ON IELTS.COURSE TO student;
--- GRANT SELECT ON IELTS.COMMENT TO student;
--- SHOW GRANTS FOR student;
-
--- SELECT user AS role_name
--- FROM mysql.user;
-
-
-
--- SET @sql := CONCAT('CREATE USER \'', 'pmp', '\'@\'localhost\' IDENTIFIED BY \'', 'pmp', '\';');
--- PREPARE stmt FROM @sql;
--- EXECUTE stmt;
--- DEALLOCATE PREPARE stmt;
--- CALL usp_CreateUser();
-
--- select host, user from mysql.user;

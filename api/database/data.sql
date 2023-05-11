@@ -34,6 +34,12 @@ INSERT INTO CART VALUES("113", "20127237", false, null, null);
 INSERT INTO CART VALUES("111", "20127507", true, NOW(), null);
 INSERT INTO CART VALUES("999", "20127507", false, null, null);
 INSERT INTO CART VALUES("113", "20127507", true, NOW(), null);
+
+-- call AddToCart('111', '20127507');
+-- call AddToCart('111', '20127237');
+-- select * from cart where id = '20127237';
+-- call DeleteFromCart('111', '20127237');
+
 -- CALL Pay("111", "20127507");
 -- select * from cart;
 -- SET @days = 15;
@@ -48,12 +54,12 @@ INSERT INTO CART VALUES("113", "20127507", true, NOW(), null);
 -- CALL CourseList();
 
 -- Forum
-INSERT INTO FORUM VALUES ("777","20127237", "PHRASED VERD", "2022-04-03", "9+", "bth.jpg");
-INSERT INTO FORUM VALUES ("888","20127507", "RELATIVE CLAUSE", "2020-03-06", "9+", "bth.jpg");
-INSERT INTO FORUM VALUES ("000","20127237", "PERFECT TENSE", "2019-01-03", "9+", "bth.jpg");
+INSERT INTO FORUM VALUES ("777","20127237", "PHRASED VERD", "2022-04-03", "9+", "bth.jpg", "Phrased verb", "Grammar");
+INSERT INTO FORUM VALUES ("888","20127507", "RELATIVE CLAUSE", "2020-03-06", "9+", "bth.jpg", "Relative clause", "Grammar");
+INSERT INTO FORUM VALUES ("000","20127237", "PERFECT TENSE", "2019-01-03", "9+", "bth.jpg", "Perfect tense", "Grammar");
 
 -- Test
-
+												
 INSERT INTO TEST VALUES ("001","227", "LISTENING", "Quizzes", "00:15:00");
 INSERT INTO TEST VALUES ("002","232", "PHRASED VERD", "Quizzes", "00:20:00");
 INSERT INTO TEST VALUES ("003","227", "PERFECT TENSE", "Listening", "00:15:00");
