@@ -1037,7 +1037,7 @@ CREATE PROCEDURE ForumList(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT F.*, A.NAME 
+		SELECT F.*, A.NAME AS AUTHOR
         FROM FORUM F JOIN ACCOUNT A ON F.ID =  A.ID;
     COMMIT;
 END $$
@@ -1055,14 +1055,14 @@ CREATE PROCEDURE SpecificForum(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT F.*, A.NAME 
+		SELECT F.*, A.NAME AS AUTHOR
         FROM FORUM F JOIN ACCOUNT A ON F.ID =  A.ID
 		WHERE F.FID LIKE CONCAT('%', STR, '%') OR F.TITLE LIKE CONCAT('%', STR, '%');
     COMMIT;
 END $$
 DELIMITER ;
 
--- CALL SpecificForum("RELATIVE");
+-- CALL SpecificForum("tense");
 
 /*==============================================================*/
 /* Proc: Add forum                                              */
