@@ -1,7 +1,6 @@
 import React, { useRef, useCallback } from "react";
 
 import Img from "../components/Img";
-import Input from "../components/Input";
 import Button from "../components/Button";
 import CourseCard from "../components/CourseCard";
 import List from "../components/List";
@@ -13,8 +12,7 @@ import { getVideo } from "../utils/fetchData";
 
 import ReactPlayer from "react-player";
 import Loading from "../utils/Loading";
-import Example from "./example";
-import GoogleForm from "./googleform";
+
 import { Rating } from "@mui/material";
 
 const img = "/anh4.png";

@@ -3,28 +3,40 @@ import { getImage } from "../utils/fetchData";
 import { useQuery } from "react-query";
 import { makeRequest } from "./../utils/axios";
 
-const CommentList = ({ CID }) => {
+const CommentList = ({ CID, FID }) => {
   const {
     isLoading,
     data: comments,
     isError,
     error,
+    refetch,
   } = useQuery(
     "comments",
     () => {
-      return makeRequest({
-        url: `/ccmt/${CID}`,
-        method: "get",
-      });
+      console.log("fetch");
+      if (CID != null)
+        return makeRequest({
+          url: `/ccmt/${CID}`,
+          method: "get",
+        });
+      if (FID != null) {
+        return makeRequest({
+          url: `/fcmt/${FID}`,
+          method: "get",
+        });
+      }
     },
     {
       select: (data) =>
         data.data.sort((a, b) => new Date(b.CMT_TIME) - new Date(a.CMT_TIME)),
+      refetchOnMount: true,
     }
   );
 
   const [images, setImages] = useState([]);
-
+  useEffect(() => {
+    refetch();
+  }, [CID, FID]);
   useEffect(() => {
     const loadImages = async () => {
       setImages([]);
