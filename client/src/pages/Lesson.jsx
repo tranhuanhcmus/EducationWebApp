@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "react-query";
 import Loading from "../utils/Loading";
 import { getImage, getVideo } from "../utils/fetchData";
+import utils from "./../utils/utils";
 
 const buttonStyle = {
   border: "solid 1px black",
@@ -224,7 +225,6 @@ const Lesson = () => {
         ID: currentUser.ID,
       },
     });
-    setCmt("");
     return res;
   };
   const { mutate: addComment } = useMutation(saveComment, {
@@ -375,17 +375,27 @@ const Lesson = () => {
         <div className="text-lg font-note font-[300] mt-3 text-justify md:m-4 m-6">
           <div className="mb-3">
             <textarea
+              value={cmt}
               onChange={(e) => setCmt(e.target.value)}
               className="m-0 p-2 text-lg font-note font-[300] text-justify  w-full h-32"
             ></textarea>
-            <div className="flex justify-end">
-              <Button
-                sx={{ ml: "auto" }}
-                variant="contained"
-                onClick={addComment}
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-3 py-2 mt-2  text-center bg-slate-300 rounded-md  ring-slate-500 hover:ring-2"
+                onClick={() => setCmt("")}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-3 py-2 mt-2  text-center bg-indigo-500 rounded-md  ring-slate-500 hover:ring-2"
+                onClick={() => {
+                  addComment();
+                  setCmt("");
+                }}
+                disabled={!utils.checkUser(currentUser)}
               >
                 Comment
-              </Button>
+              </button>
             </div>
           </div>
           <CommentList CID={CID} />
