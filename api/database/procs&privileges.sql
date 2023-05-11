@@ -602,14 +602,14 @@ CREATE PROCEDURE GetForumComment(
 )
 BEGIN
 	START TRANSACTION;
-		SELECT C.CMTID, C.FID, C.CONTENT, C.CMT_TIME, A.NAME
-        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID
+		SELECT C.CMTID, C.FID, C.CONTENT, C.CMT_TIME, A.NAME, (SELECT NAME FROM ACCOUNT ACC JOIN FORUM F ON F.ID = ACC.ID WHERE F.FID = FID) AS AUTHOR
+        FROM COMMENT C JOIN ACCOUNT A ON C.ID = A.ID 
 		WHERE C.FID = FID;
     COMMIT;
 END $$
 DELIMITER ;
 
-CALL GetForumComment('888');
+-- CALL GetForumComment('888');
 
 /*==============================================================*/
 /* Proc: Get Course Comment                                     */
@@ -1072,17 +1072,19 @@ CREATE PROCEDURE AddForum(
 	ID varchar(22),
 	TITLE text,
 	CONTENT text,
-	IMG varchar(100)
+	IMG varchar(100),
+    CATEGORY varchar(100),
+    TAG varchar(100)
 )
 BEGIN
 	START TRANSACTION;
-		INSERT INTO FORUM VALUES (FID, ID, TITLE, NOW(), CONTENT, IMG);
+		INSERT INTO FORUM VALUES (FID, ID, TITLE, NOW(), CONTENT, IMG, CATEGORY, TAG);
 		SELECT 'Forum inserts successfully' AS RESULT;
     COMMIT;
 END $$
 DELIMITER ;
 
--- CALL AddForum();
+-- CALL AddForum("232","20127063", "FUTURE TENSE", "9+", "bth.jpg", "Future tense", "Grammar");
 
 /*==============================================================*/
 /* Proc: Update forum                                           */
@@ -1094,7 +1096,9 @@ CREATE PROCEDURE UpdateForum(
 	UID varchar(22),
 	NTITLE text,
 	NCONTENT text,
-	NIMG varchar(100)
+	NIMG varchar(100),
+    NCATEGORY varchar(100),
+    NTAG varchar(100)
 )	
 BEGIN
 	START TRANSACTION;
@@ -1102,7 +1106,9 @@ BEGIN
 		SET TITLE = NTITLE,
 			DATE_ESTABLISHED = NOW(),
 			CONTENT = NCONTENT, 
-            IMG = NIMG
+            IMG = NIMG, 
+            CATEGORY = NCATEGORY,
+            TAG = NTAG
 		WHERE FID = ForumID AND ID = UID; 
 		SELECT 'Forum updates successfully' AS RESULT;
     COMMIT;
