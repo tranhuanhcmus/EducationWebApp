@@ -1,7 +1,6 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import Login from "./pages/Login";
-import Blogs from "./pages/Blogs";
 import Register from "./pages/Register";
 import Header from "./layouts/Header";
 import Footer from "./layouts/Footer";
@@ -16,15 +15,17 @@ import ErrorPage from "./pages/404page";
 import React from "react";
 import CoursesDetails from "./pages/CoursesDetail";
 import Courses from "./pages/Courses";
-import BlogDetails from "./pages/BlogDetails";
 import Pay from "./pages/Pay";
 import TeacherCourses from "./pages/TeacherCourses";
 import TeacherCoursesDetails from "./pages/TeacherCourseDetail";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
-import BlogLayout from "./pages/Blogs/BlogLayout";
 import SuccessfulPage from "./pages/PaymenySuccess";
 import { useSelector } from "react-redux";
+import BlogLayout from "./pages/Blogs/BlogLayout";
+import Blogs from "./pages/Blogs/Blogs";
+import BlogDetails from "./pages/Blogs/BlogDetails";
+import BlogListSearch from "./components/BlogsListSearch";
 
 const queryClient = new QueryClient();
 function App() {
@@ -84,7 +85,7 @@ function App() {
               },
               {
                 path: "/blogs/category/:name",
-                Component: Test,
+                Component: BlogListSearch,
               },
               {
                 path: "/blogs/hashtag/:name",
@@ -164,7 +165,7 @@ function App() {
               },
               {
                 path: "/blogs/category/:name",
-                Component: Test,
+                Component: BlogListSearch,
               },
               {
                 path: "/blogs/hashtag/:name",
@@ -191,6 +192,7 @@ function App() {
     return (
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={route} />
+        <ReactQueryDevtools initialIsOpen="false" />
       </QueryClientProvider>
     );
   }

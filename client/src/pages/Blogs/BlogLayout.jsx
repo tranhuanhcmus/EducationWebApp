@@ -142,7 +142,7 @@ const Right = () => {
                 <i className="mr-2 fa-solid fa-caret-right text-xs break-words"></i>
                 {blog.TITLE}
               </Link>
-              <p className="mt-1 ml-3 text-slate-500">Author: {blog.NAME} </p>
+              <p className="mt-1 ml-3 text-slate-500">Author: {blog.AUTHOR} </p>
               <p className="mt-1 ml-3 text-slate-500">
                 {new Date(blog.DATE_ESTABLISHED).toDateString()}
               </p>

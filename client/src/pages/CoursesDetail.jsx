@@ -50,7 +50,6 @@ const img = "/anh4.png";
 const CoursesDetails = () => {
   const params = useParams();
   const { state } = useLocation();
-  console.log("course Detail", state);
   const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
@@ -258,7 +257,10 @@ const CoursesDetails = () => {
                               navigate(
                                 `/coursesdetails/${params.courseId}/${
                                   currentVideo + 1
-                                }`
+                                }`,
+                                {
+                                  state: state,
+                                }
                               );
                             }
                           }}
@@ -275,8 +277,8 @@ const CoursesDetails = () => {
                             state: {
                               CID,
                               LID,
-                              author: "Harry Bui",
-                              courseImage: "bth.jpg",
+                              author: state.OWNERNAME,
+                              courseImage: state.IMAGE,
                             },
                           });
                         }}
@@ -333,7 +335,10 @@ const CoursesDetails = () => {
                             });
 
                             navigate(
-                              `/coursesdetails/${params.courseId}/${index}`
+                              `/coursesdetails/${params.courseId}/${index}`,
+                              {
+                                state: state,
+                              }
                             );
                           }}
                           className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
@@ -515,20 +520,7 @@ const CoursesDetails = () => {
                   </Text>
                   <Rating value={4} />
                 </div>
-                <div className="flex flex-row items-start justify-between w-[100%]">
-                  <Text
-                    className="font-semibold text-gray_700 text-left w-[auto]"
-                    variant="body2"
-                  >
-                    Durations
-                  </Text>
-                  <Text
-                    className="font-semibold text-black_900 text-right w-[auto]"
-                    variant="body2"
-                  >
-                    10 Days
-                  </Text>
-                </div>
+
                 <div className="flex flex-row items-start justify-between w-[100%]">
                   <Text
                     className="font-semibold text-gray_700 text-left w-[auto]"
@@ -540,7 +532,7 @@ const CoursesDetails = () => {
                     className="font-semibold text-black_900 text-right w-[auto]"
                     variant="body2"
                   >
-                    {Coures.length}
+                    {courses.length}
                   </Text>
                 </div>
 

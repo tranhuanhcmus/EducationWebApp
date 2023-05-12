@@ -1,9 +1,9 @@
 import { useState } from "react";
-import BlogList from "./../components/BlogList";
 import { useQueryClient, useMutation } from "react-query";
 import { useSelector } from "react-redux";
-import { makeRequest } from "./../utils/axios";
-import utils from "./../utils/utils";
+import BlogList from "./../../components/BlogList";
+import { makeRequest } from "./../../utils/axios";
+import utils from "./../../utils/utils";
 const Blogs = () => {
   const queryClient = useQueryClient();
   const currentUser = useSelector((state) => state.auth.user);
