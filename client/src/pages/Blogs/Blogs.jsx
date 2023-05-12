@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQueryClient, useMutation } from "react-query";
 import { useSelector } from "react-redux";
+import { handleFileUpload } from "../../utils/fetchData";
 import BlogList from "./../../components/BlogList";
 import { makeRequest } from "./../../utils/axios";
 import utils from "./../../utils/utils";
@@ -9,13 +10,21 @@ const Blogs = () => {
   const currentUser = useSelector((state) => state.auth.user);
 
   const [hashTags, setHashTags] = useState("");
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState("Tips and Tricks");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const saveBlog = async () => {
     const currentDate = (+new Date()).toString(36);
     const FID = currentDate + currentUser.ID;
+
+    let fileName = "";
+    if (selectedImage) {
+      fileName = `${FID}.png`;
+      await handleFileUpload(selectedImage, fileName);
+    }
 
     const res = await makeRequest({
       url: "/af",
@@ -25,7 +34,7 @@ const Blogs = () => {
         Content: ` ${content}`,
         Title: title,
         ID: currentUser.ID,
-        Img: "",
+        Img: fileName,
         Tag: hashTags,
         Category: category,
       },
@@ -33,7 +42,8 @@ const Blogs = () => {
     setHashTags("");
     setTitle("");
     setContent("");
-    setCategory(null);
+    setCategory("Tips and Tricks");
+    setSelectedImage(null);
     return res;
   };
   const { mutate: addBlog } = useMutation(saveBlog, {
@@ -41,6 +51,11 @@ const Blogs = () => {
       queryClient.invalidateQueries("blogs");
     },
   });
+  const imageChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
 
   return (
     <div className="mid col-span-6 md:col-span-1 bg-white  ">
@@ -72,10 +87,22 @@ const Blogs = () => {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>
+          {selectedImage && (
+            <img
+              className="object-contain object-center w-full "
+              src={URL.createObjectURL(selectedImage)}
+              alt="Image-Blog"
+            />
+          )}
           <div className="actions flex-col gap-3 items-center ">
             <div className=" p-2 flex gap-3 md:flex-col">
-              <button className="px-5 py-1 text-center font-mono  duration-200 hover:shadow-md bg-slate-200 rounded-md hover:bg-indigo-200  hover:scale-105 text-sm uppercase ">
-                <i className=" fa-solid fa-image"></i>
+              <button className="px-5 py-1 text-center font-mono  duration-200 hover:shadow-md bg-slate-200 rounded-md hover:bg-indigo-200  hover:scale-105 text-sm uppercase relative ">
+                <i className=" fa-solid fa-image "></i>
+                <input
+                  type="file"
+                  className="absolute opacity-0 top-0 left-0 w-full h-full"
+                  onChange={imageChange}
+                />
               </button>
               <button className="px-5 py-1 text-center font-mono  duration-200 hover:shadow-md bg-slate-200 rounded-md hover:bg-indigo-200  hover:scale-105 text-sm uppercase ">
                 <i className=" fa-solid fa-file"></i>
@@ -93,6 +120,7 @@ const Blogs = () => {
                 onChange={(e) => setHashTags(e.target.value)}
               />
               <select
+                value={category}
                 className="flex-1"
                 name="Categories"
                 id="Categories"

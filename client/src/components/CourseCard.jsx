@@ -17,7 +17,6 @@ const CourseCard = (props) => {
     loadImage();
   }, []);
   const info = { PRICE: `$ ${props?.PRICE}.00`, CATEGORY: props.CATEGORY };
-  console.log(props);
   return (
     <>
       <div className={props.className}>
@@ -32,6 +31,7 @@ const CourseCard = (props) => {
                 DESCRIPTION: props?.DESCRIPTION,
                 OWNERNAME: props?.OWNERNAME,
                 PRICE: props?.PRICE,
+                IMG: props?.IMG,
               },
             });
             localStorage.setItem("Info", JSON.stringify(info));
