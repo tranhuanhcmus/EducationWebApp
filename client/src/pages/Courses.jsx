@@ -36,6 +36,7 @@ const EduviCoursesPage = () => {
       clearTimeout(indetifier);
     };
   }, [valuePage]);
+
   const [inputvalue, setInputvalue] = React.useState("");
 
   const currentUser = useSelector((state) => state.auth.user);
