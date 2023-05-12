@@ -83,7 +83,7 @@ create table LESSON
    NAME                 text not null  comment '',
    CONTENT              text not null  comment '',
    VIDEO                varchar(100) not null  comment '',
-   ATTACHMENT           varchar(100) not null  comment '',
+   ATTACHMENT           varchar(100) comment '',
    DURATION             time not null  comment '', -- numbers of days
    primary key (LID)
 );
