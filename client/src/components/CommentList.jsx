@@ -43,6 +43,7 @@ const CommentList = ({ CID, FID }) => {
       if (comments) {
         for (var i = 0; i < comments.length; i++) {
           const image = await getImage(`${comments[i].ID}.png`);
+          console.log(comments[i]);
           setImages((images) => [...images, image]);
         }
       }

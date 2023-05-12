@@ -163,83 +163,78 @@ const Profile = () => {
 
   return (
     <Container>
-      <Grid container spacing={2} my={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ border: "0.5rem solid orange" }}>
-            <CardHeader
-              sx={{ bgcolor: "#a7c4cb" }}
-              avatar={<AccountBoxIcon fontSize="large" />}
-              title={
-                <Typography sx={{ fontWeight: 600 }} variant="h5">
-                  {currentUser.NAME}
-                </Typography>
-              }
-            ></CardHeader>
-            <CardMedia
-              sx={{ objectFit: "contain" }}
-              component={"img"}
-              title="avatar"
-              image={image}
-            />
-            <CardContent>
-              <Stack
-                direction={"row"}
-                spacing={2}
-                sx={{ display: "flex", alignItems: "center" }}
+      <Grid container spacing={2} my={3} className="flex justify-center">
+        <Card sx={{ border: "0.5rem solid orange" }}>
+          <CardHeader
+            sx={{ bgcolor: "#a7c4cb" }}
+            avatar={<AccountBoxIcon fontSize="large" />}
+            title={
+              <Typography sx={{ fontWeight: 600 }} variant="h5">
+                {currentUser.NAME}
+              </Typography>
+            }
+          ></CardHeader>
+          <CardMedia
+            sx={{ objectFit: "contain" }}
+            component={"img"}
+            title="avatar"
+            image={image}
+          />
+          <CardContent>
+            <Stack
+              direction={"row"}
+              spacing={2}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <ContactPhoneIcon />
+              <Typography
+                gutterBottom
+                variant="body1"
+                component="div"
+                aria-valuetext="phone"
               >
-                <ContactPhoneIcon />
-                <Typography
-                  gutterBottom
-                  variant="body1"
-                  component="div"
-                  aria-valuetext="phone"
-                >
-                  {currentUser.PHONE}
-                </Typography>
-              </Stack>
-              <Stack
-                direction={"row"}
-                spacing={2}
-                sx={{ display: "flex", alignItems: "center" }}
+                {currentUser.PHONE}
+              </Typography>
+            </Stack>
+            <Stack
+              direction={"row"}
+              spacing={2}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <EmailIcon />
+              <Typography
+                gutterBottom
+                variant="body1"
+                component="div"
+                aria-valuetext="name"
               >
-                <EmailIcon />
-                <Typography
-                  gutterBottom
-                  variant="body1"
-                  component="div"
-                  aria-valuetext="name"
-                >
-                  {currentUser.MAIL}
-                </Typography>
-              </Stack>
-              <Stack
-                direction={"row"}
-                spacing={2}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  textTransform: "uppercase",
-                }}
+                {currentUser.MAIL}
+              </Typography>
+            </Stack>
+            <Stack
+              direction={"row"}
+              spacing={2}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                textTransform: "uppercase",
+              }}
+            >
+              <ContactPageIcon />
+              <Typography
+                gutterBottom
+                variant="body1"
+                component="div"
+                aria-valuetext="name"
               >
-                <ContactPageIcon />
-                <Typography
-                  gutterBottom
-                  variant="body1"
-                  component="div"
-                  aria-valuetext="name"
-                >
-                  {currentUser.ROLE}
-                </Typography>
-              </Stack>
-            </CardContent>
-            <CardActions>
-              <Button onClick={handleClickOpen}>Edit</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Cart />
-        </Grid>
+                {currentUser.ROLE}
+              </Typography>
+            </Stack>
+          </CardContent>
+          <CardActions>
+            <Button onClick={handleClickOpen}>Edit</Button>
+          </CardActions>
+        </Card>
       </Grid>
       <FormDialog
         open={open}

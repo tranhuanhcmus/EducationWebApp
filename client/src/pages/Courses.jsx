@@ -74,7 +74,6 @@ const EduviCoursesPage = () => {
     });
     setItems(array);
     setCourseList(data);
-    console.log(array);
   }, []);
 
   React.useEffect(() => {

@@ -6,10 +6,10 @@ import Text from "./Text";
 import { useNavigate } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
 const ClassCard = (props) => {
+  // console.log("class card", props);
   const navigate = useNavigate();
   const [courseImgs, setCourseImgs] = React.useState("");
   React.useEffect(() => {
-    console.log(props.IMG);
     const loadImage = async () => {
       const newImage = await getImage(props.IMG);
       setCourseImgs(newImage);
@@ -37,11 +37,25 @@ const ClassCard = (props) => {
             {
               props.Teacher
                 ? navigate(`/TeacherCourseDetails/${props.CID}`)
-                : navigate(`/coursesdetails/${props.CID}`);
+                : navigate(`/coursesdetails/${props.CID}`, {
+                    state: {
+                      CATEGORY: props?.CATEGORY,
+                      CID: props.CID,
+                      COURESENAME: props?.COURESENAME,
+                      DESCRIPTION: props?.DESCRIPTION,
+                      OWNERNAME: props?.AUTHOR,
+                      PRICE: props?.PRICE,
+                      IMAGE: props?.IMG,
+                    },
+                  });
             }
           }}
         >
-          <Img src={courseImgs} className="h-[50px] w-[50px]" alt="download" />
+          <Img
+            src={courseImgs}
+            className="w-full object-contain"
+            alt="download"
+          />
           <div className="flex flex-col gap-[10px] items-center justify-start w-[100%]">
             <Text
               className="font-inter text-center text-gray_900 w-[auto]"

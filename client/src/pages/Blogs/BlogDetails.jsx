@@ -1,11 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import CommentList from "../components/CommentList";
 import { useLocation } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import utils from "./../utils/utils";
-import { makeRequest } from "./../utils/axios";
+import CommentList from "./../../components/CommentList";
+import utils from "./../../utils/utils";
+import { makeRequest } from "./../../utils/axios";
 
 const BlogDetails = () => {
   const currentUser = useSelector((state) => state.auth.user);
@@ -57,7 +57,7 @@ const BlogDetails = () => {
                   className="rounded-full w-10 h-10 object-cover object-center"
                 />
                 <div className="flex-col justify-center">
-                  <p className="font-semibold">@{blog.NAME}</p>
+                  <p className="font-semibold">@{blog.AUTHOR}</p>
                   <p className="text-xs text-slate-400">
                     {new Date(blog.DATE_ESTABLISHED).toDateString()}
                   </p>

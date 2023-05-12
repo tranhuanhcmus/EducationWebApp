@@ -24,7 +24,16 @@ const CourseCard = (props) => {
         <div
           className="flex flex-1 sm:flex-col flex-row gap-[15px] items-center justify-start w-[100%]"
           onClick={() => {
-            navigate(`/coursesdetails/${props.CID}`);
+            navigate(`/coursesdetails/${props.CID}`, {
+              state: {
+                CATEGORY: props?.CATEGORY,
+                CID: props.CID,
+                COURESENAME: props?.NAME,
+                DESCRIPTION: props?.DESCRIPTION,
+                OWNERNAME: props?.OWNERNAME,
+                PRICE: props?.PRICE,
+              },
+            });
             localStorage.setItem("Info", JSON.stringify(info));
           }}
         >

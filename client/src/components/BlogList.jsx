@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { makeRequest } from "./../utils/axios";
+import { useState, useEffect } from "react";
+import { getImage } from "../utils/fetchData";
 const BlogList = () => {
   const {
     isLoading,
@@ -21,12 +23,27 @@ const BlogList = () => {
         ),
     }
   );
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      setImages([]);
+      if (blogs) {
+        for (var i = 0; i < blogs.length; i++) {
+          const image = await getImage(`${blogs[i].ID}.png`);
+          setImages((images) => [...images, image]);
+        }
+      }
+    };
+    loadImages();
+  }, [blogs]);
+
   if (error) return <p>{error.message}</p>;
   if (isLoading) return <p>Loading...</p>;
   return blogs.length == 0 ? (
     <p>No Blogs</p>
   ) : (
-    blogs.map((blog) => (
+    blogs.map((blog, index) => (
       <div
         key={blog.FID}
         className="item px-3 py-2 rounded-md  ring-2 ring-slate-400  hover:shadow-md "
@@ -34,12 +51,12 @@ const BlogList = () => {
         <div className="header flex justify-between">
           <div className="user flex items-center gap-3">
             <img
-              src="anh4.png"
+              src={images[index]}
               alt="user Avatar"
               className="rounded-full w-10 h-10 object-cover object-center"
             />
             <div className="flex-col justify-center">
-              <p className="font-semibold">@{blog.NAME}</p>
+              <p className="font-semibold">@{blog.AUTHOR}</p>
               <p className="text-xs text-slate-400">
                 {new Date(blog.DATE_ESTABLISHED).toDateString()}
               </p>
@@ -54,7 +71,7 @@ const BlogList = () => {
             <Link
               to={`details/${blog.FID}`}
               state={{ blog }}
-              className="hover:cursor-pointer hover:text-orange-400"
+              className="hover:cursor-pointer hover:text-orange-400 uppercase"
             >
               {blog.TITLE}
             </Link>
