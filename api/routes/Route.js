@@ -4,6 +4,7 @@ const router = express.Router();
 
 //------------------------------------COURSE------------------------------------//
 router.get("/course", controller.course); //toàn bộ course
+router.get("/inforcourse/:id", controller.course); //thông tin 1 course
 router.get("/course/:id", controller.courseLesson); //lessons của 1 course
 router.get("/mycourse/:id", controller.myCourse); //my course của student
 router.get("/mycart/:id", controller.myCart); //cart của student
@@ -49,10 +50,10 @@ router.put("/uq", controller.updateQuestion); //sửa quiz trong lesson
 router.delete("/dq/:id", controller.deleteQuestion); //xóa quiz trong lesson
 
 //-------------------------------------FORUM------------------------------------//
-router.get("/forum", controller.forumList); //lấy solution của 1 quiz
-router.get("/forum/:id", controller.specificForum); //lấy solution của 1 quiz
-router.post("/af", controller.addForum); //thêm solution của 1 quiz
-router.put("/uf", controller.updateForum); //sửa solution của 1 quiz
-router.delete("/df", controller.deleteForum); //xóa solution của 1 quiz
+router.get("/forum", controller.forumList); //lấy ds forum
+router.get("/forum/:id", controller.specificForum); //lấy 1 forum
+router.post("/af", controller.addForum); //thêm 1 forum
+router.put("/uf", controller.updateForum); //sửa 1 forum
+router.delete("/df", controller.deleteForum); //xóa 1 forum
 
 export default router;

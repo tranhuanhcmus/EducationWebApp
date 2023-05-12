@@ -11,7 +11,7 @@ INSERT INTO COURSE VALUES ("CS0001","Beginner English course", "Elementary", "Th
 							"2000000", "elementary-english.jpg", "20127063", null);
 INSERT INTO COURSE VALUES ("CS0002","Intermediate English Course", "Intermediate", "This intermediate English course has been created to give intermediate level English students complete and comprehensive lessons to help them to level to an advanced level of English.", 
                             "3000000", "Intermediate_english.jpg", "20127063", null);
-INSERT INTO COURSE VALUES ("CS0003","Upper-Intermediate/Advanced English Course", "Upper Intermediate", "These free video lessons for studying English are designed for Upper-Intermediate and Advanced level learners. You will find lessons on English vocabulary and grammar.", 
+INSERT INTO COURSE VALUES ("CS0003","Advanced English Course", "Advanced", "These free video lessons for studying English are designed for Advanced level learners. You will find lessons on English vocabulary and grammar.", 
                             "4500000", "Upper-Intermediate.jpg", "20127063", null);
 
 -- CALL CourseList();
@@ -20,11 +20,18 @@ INSERT INTO COURSE VALUES ("CS0003","Upper-Intermediate/Advanced English Course"
 
 
 -- Lesson
-INSERT INTO LESSON VALUES("LS0001", "CS0001", "STARTER", "GROUP6", "vid1.mp4", "TL.pdf", "00:30:00");
-INSERT INTO LESSON VALUES("LS0002", "CS0001", "MOVER", "GROUP6", "vid2.mp4", "TL.pdf", "00:45:00");
-INSERT INTO LESSON VALUES("LS0003", "CS0001", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "01:00:00");
-INSERT INTO LESSON VALUES("LS0004", "CS0002", "KET", "GROUP6", "vid3.mp4", "TL.pdf", "02:00:00");
-INSERT INTO LESSON VALUES("LS0005", "CS0002", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:45:00");
+INSERT INTO LESSON VALUES("LS0001", "CS0001", "Consonants and Vowels", "Consonants and Vowels in English", "English Consonants + Vowels.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0002", "CS0001", "Noun", "A/An + Noun", "English Grammar- a - an + Noun.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0003", "CS0001", "Noun (continuous)", "Singular and Plural Nouns", "English Grammar- Singular + Plural Nouns.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0004", "CS0001", "Subjective Pronouns", "Subjective Pronouns in English", "English Grammar- Subjective Pronouns.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0005", "CS0002", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0006", "CS0002", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0007", "CS0002", "KET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0008", "CS0002", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0009", "CS0003", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0010", "CS0003", "KET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0011", "CS0003", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0012", "CS0003", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
 -- DELETE FROM LESSON WHERE CID = "113"; 
 
 -- Note
