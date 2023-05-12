@@ -24,14 +24,14 @@ INSERT INTO LESSON VALUES("LS0001", "CS0001", "Consonants and Vowels", "Consonan
 INSERT INTO LESSON VALUES("LS0002", "CS0001", "Noun", "A/An + Noun", "English Grammar- a - an + Noun.mp4", "", "00:15:00");
 INSERT INTO LESSON VALUES("LS0003", "CS0001", "Noun (continuous)", "Singular and Plural Nouns", "English Grammar- Singular + Plural Nouns.mp4", "", "00:15:00");
 INSERT INTO LESSON VALUES("LS0004", "CS0001", "Subjective Pronouns", "Subjective Pronouns in English", "English Grammar- Subjective Pronouns.mp4", "", "00:15:00");
-INSERT INTO LESSON VALUES("LS0005", "CS0002", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0006", "CS0002", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0007", "CS0002", "KET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0008", "CS0002", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0009", "CS0003", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0010", "CS0003", "KET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0011", "CS0003", "PET", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
-INSERT INTO LESSON VALUES("LS0012", "CS0003", "FLYER", "GROUP6", "vid3.mp4", "TL.pdf", "00:15:00");
+INSERT INTO LESSON VALUES("LS0005", "CS0002", "Formal Vs Informal English", "Greetings and Responses", "Formal Vs Informal English- Greetings and Responses.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0006", "CS0002", "Must - Have To - Have Got To", "What's The Difference?", "Must - Have To - Have Got To. What's The Difference-.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0007", "CS0002", "Prepositions Of Place & Precise Prepositional Phrases", "Prepositions Of Place & Precise Prepositional Phrases", "Prepositions Of Place & Precise Prepositional Phrases - Learn To Speak English Like A Native.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0008", "CS0002", "Question Tag", "Question Tag", "Question Tag English Grammar Lesson.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0009", "CS0003", "English grammar", "Future perfect tense", "Future perfect tense.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0010", "CS0003", "English grammar", "Comparative structures", "Comparative structures.mp4", "", "00:15:00");
+-- INSERT INTO LESSON VALUES("LS0011", "CS0003", "English grammar", "Unreal past (if, if only, wish, it's time)", "UNREAL PAST (if, if only, wish, it's time).mp4", "", "00:15:00");
+-- INSERT INTO LESSON VALUES("LS0012", "CS0003", "English grammar", "Position of adverbs", "Position of adverbs.mp4", "", "00:15:00");
 -- DELETE FROM LESSON WHERE CID = "113"; 
 
 -- Note
