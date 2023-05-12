@@ -17,7 +17,11 @@ import CustomFormPage from "../components/CustomForm";
 import TrashPage from "../components/Trash";
 import EditText from "../components/EditText";
 import Loading from "../utils/Loading";
-import { HandleDeleteLessonOfTeacher } from "../utils/fetchData";
+import {
+  HandleDeleteLessonOfTeacher,
+  HandleUpdateCourse,
+  GetMyCourse,
+} from "../utils/fetchData";
 
 // function secondsToHms(d) {
 //   d = Number(d);
@@ -57,9 +61,11 @@ const TeacherCoursesDetails = () => {
   const [courses, setCourses] = React.useState([]);
   const [bending, setBending] = React.useState(false);
   const [videoURL, setVideoURL] = React.useState("");
+  const [Coures, setItems] = React.useState([]);
 
   const fetchData = React.useCallback(async () => {
     setBending(true);
+
     const data_courses = await makeRequest({
       url: `/course/${params.courseId}`,
       method: "get",
@@ -179,6 +185,17 @@ const TeacherCoursesDetails = () => {
         },
       ];
     });
+  };
+  const HandleUpdateCourses = async () => {
+    const data = {
+      CourseID: params.courseId,
+      Name: value.Instructor,
+      Price: value.Price,
+      Category: value.Lesson,
+      Description: value.Certificate,
+    };
+
+    await HandleUpdateCourse(data);
   };
 
   React.useEffect(() => {
@@ -708,7 +725,7 @@ const TeacherCoursesDetails = () => {
               </div>
               <Button
                 className="common-pointer bg-red_300 cursor-pointer font-medium px-[126px] sm:px-[20px] md:px-[40px] py-[20px] rounded-[5px] text-[18px] text-center text-white_A700 w-[100%]"
-                onClick={() => navigate("/eduvicoursespricing")}
+                onClick={() => HandleUpdateCourses()}
               >
                 Purchase Course
               </Button>
@@ -726,7 +743,7 @@ const TeacherCoursesDetails = () => {
             </Text>
             <div className="flex font-inter items-start justify-start w-[100%]">
               <div className="md:gap-[20px] gap-[40px] grid md:grid-cols-1 grid-cols-2 justify-center min-h-[auto] w-[100%]">
-                {new Array(4).fill({}).map((props, index) => (
+                {Coures.map((props, index) => (
                   <React.Fragment key={`CourseCard${index}`}>
                     <CourseCard
                       className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-row items-end justify-between p-[15px] rounded-[10px] hover:shadow-bs1 shadow-bs w-full"

@@ -35,7 +35,7 @@ const CartItem = (props) => {
       </div>
 
       <Text className="font-semibold text-black_900 text-left text-lg tracking-[-0.50px] w-auto">
-        {`$ ${props?.PRICE}.00`}
+        {`${props?.PRICE}.000`}
       </Text>
       <div
         className="cursor-pointer"
