@@ -186,6 +186,25 @@ DELIMITER ;
 -- CALL CourseList();
 
 /*==============================================================*/
+/* Proc: Get course detail                                        */
+/*==============================================================*/
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `CourseDetail`$$
+CREATE PROCEDURE CourseDetail(
+	CourseID varchar(22)
+)
+BEGIN
+	START TRANSACTION;
+		SELECT C.CID, C.NAME AS COURESENAME, C.CATEGORY, C.DESCRIPTION, C.PRICE, C.IMG, C.RATING, A.NAME AS OWNERNAME
+        FROM COURSE C JOIN ACCOUNT A ON C.OWNERID = A.ID; 
+        WHERE C.CID = CourseID;
+    COMMIT;
+END $$
+DELIMITER ;
+
+-- CALL CourseDetail('CS0001');
+
+/*==============================================================*/
 /* Proc: Get course by name                                              */
 /*==============================================================*/
 DELIMITER $$
@@ -629,7 +648,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CALL GetCourseComment('');
+-- CALL GetCourseComment('CS0001');
 
 /*==============================================================*/
 /* Proc: Get Test Comment                                       */

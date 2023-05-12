@@ -12,6 +12,15 @@ const controller = {
             res.status(400).json({ msg: error.message });
         }
     },
+    inforCourse: async(req, res) => {
+        try {
+            const courseID = req.params.id;
+            const courseDetail = await model.inforCourse(courseID);
+            res.status(200).json(courseDetail);
+        } catch (error) {
+            res.status(400).json({ msg: error.message });
+        }
+    },
     courseLesson: async(req, res) => {
         try {
             const courseID = req.params.id;

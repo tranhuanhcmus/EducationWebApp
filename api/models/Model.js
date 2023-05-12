@@ -18,6 +18,18 @@ const model = {
             return error.message;
         }
     },
+    inforCourse: async(courseId) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise().query(sqlQuery.CourseDetail, [courseId]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
     courseLesson: async(courseId) => {
         try {
             const sqlQuery = await loadSqlQueries('request');

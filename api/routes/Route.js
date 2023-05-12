@@ -4,7 +4,7 @@ const router = express.Router();
 
 //------------------------------------COURSE------------------------------------//
 router.get("/course", controller.course); //toàn bộ course
-router.get("/inforcourse/:id", controller.course); //thông tin 1 course
+router.get("/inforcourse/:id", controller.inforCourse); //thông tin 1 course
 router.get("/course/:id", controller.courseLesson); //lessons của 1 course
 router.get("/mycourse/:id", controller.myCourse); //my course của student
 router.get("/mycart/:id", controller.myCart); //cart của student
