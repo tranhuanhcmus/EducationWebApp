@@ -17,7 +17,7 @@ const CourseCard = (props) => {
     loadImage();
   }, []);
   const info = { PRICE: `$ ${props?.PRICE}.00`, CATEGORY: props.CATEGORY };
-
+  console.log(props);
   return (
     <>
       <div className={props.className}>
@@ -28,7 +28,7 @@ const CourseCard = (props) => {
               state: {
                 CATEGORY: props?.CATEGORY,
                 CID: props.CID,
-                COURESENAME: props?.NAME,
+                COURESENAME: props?.COURESENAME,
                 DESCRIPTION: props?.DESCRIPTION,
                 OWNERNAME: props?.OWNERNAME,
                 PRICE: props?.PRICE,
