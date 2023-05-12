@@ -44,7 +44,7 @@ const ClassCard = (props) => {
                       DESCRIPTION: props?.DESCRIPTION,
                       OWNERNAME: props?.AUTHOR,
                       PRICE: props?.PRICE,
-                      IMAGE: props?.IMG,
+                      IMG: props?.IMG,
                     },
                   });
             }

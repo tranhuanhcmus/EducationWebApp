@@ -10,16 +10,16 @@ const BlogListSearch = () => {
   useEffect(() => {
     switch (location.pathname.split("/")[3]) {
       case "questions":
-        setCategory("Question");
+        setCategory("Questions");
         break;
       case "tips-and-trick":
-        setCategory("Tips and Trick");
+        setCategory("Tips and Tricks");
         break;
       case "articles":
         setCategory("Articles");
         break;
       default:
-        setCategory("");
+        setCategory("Search");
         break;
     }
   }, [location]);
@@ -36,13 +36,26 @@ const BlogListSearch = () => {
       });
     },
     {
-      select: (data) =>
-        data.data
-          .filter((data) => data.CATEGORY == category)
-          .sort(
-            (a, b) =>
-              new Date(b.DATE_ESTABLISHED) - new Date(a.DATE_ESTABLISHED)
-          ),
+      select: (data) => {
+        if (category == "Search") {
+          const { state: keyword } = location;
+
+          return data.data
+            .filter((data) =>
+              data.TITLE.toUpperCase().includes(keyword.toUpperCase())
+            )
+            .sort(
+              (a, b) =>
+                new Date(b.DATE_ESTABLISHED) - new Date(a.DATE_ESTABLISHED)
+            );
+        } else
+          return data.data
+            .filter((data) => data.CATEGORY == category)
+            .sort(
+              (a, b) =>
+                new Date(b.DATE_ESTABLISHED) - new Date(a.DATE_ESTABLISHED)
+            );
+      },
     }
   );
 

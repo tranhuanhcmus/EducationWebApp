@@ -13,7 +13,6 @@ const CommentList = ({ CID, FID }) => {
   } = useQuery(
     "comments",
     () => {
-      console.log("fetch");
       if (CID != null)
         return makeRequest({
           url: `/ccmt/${CID}`,
@@ -43,7 +42,6 @@ const CommentList = ({ CID, FID }) => {
       if (comments) {
         for (var i = 0; i < comments.length; i++) {
           const image = await getImage(`${comments[i].ID}.png`);
-          console.log(comments[i]);
           setImages((images) => [...images, image]);
         }
       }
@@ -87,12 +85,12 @@ const CommentList = ({ CID, FID }) => {
               {comment.CONTENT}
             </p>
             <hr />
-            <div className="actions flex gap-4 items-center p-3">
+            <div className="actions flex gap-4 items-center p-3 justify-end">
               <div>
-                15 <i className="fa-regular fa-thumbs-up"></i>
+                <i className="fa-regular fa-thumbs-up"></i>
               </div>
               <div>
-                15 <i className="fa-regular fa-thumbs-up rotate-180"></i>
+                <i className="fa-regular fa-thumbs-up rotate-180"></i>
               </div>
             </div>
           </div>

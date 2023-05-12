@@ -93,7 +93,6 @@ const Section = ({ Type, index, onAdd }) => {
           .slice(0, 6),
     }
   );
-
   return (
     <Box
       sx={{
@@ -167,9 +166,16 @@ const Section = ({ Type, index, onAdd }) => {
                               fontFamily: "Roboto Slab",
                             }}
                           >
-                            {blog.CATEGORY}
-                            <br />
-                            {blog.NAME}
+                            <span className=" flex items-center">
+                              {" "}
+                              <i className="my-1 mr-2 fa-solid fa-bars"></i>
+                              {blog.CATEGORY}
+                            </span>
+
+                            <span className=" flex items-center">
+                              <i className="my-1 mr-2 fa-solid fa-user-tie"></i>
+                              {blog.AUTHOR}
+                            </span>
                           </Typography>
                         </Stack>
                         {/* <Rating value={5} readOnly precision={0.5} /> */}
@@ -188,7 +194,10 @@ const Section = ({ Type, index, onAdd }) => {
                             fontFamily: "Poppins",
                           }}
                         >
-                          Time: {new Date(blog.DATE_ESTABLISHED).toDateString()}
+                          <span className=" flex items-center">
+                            <i className=" mr-2 fa-solid fa-calendar-days"></i>
+                            {new Date(blog.DATE_ESTABLISHED).toDateString()}
+                          </span>
                         </Typography>
                       </CardContent>
                     </CardActionArea>

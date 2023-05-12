@@ -6,17 +6,25 @@ import { useSelector } from "react-redux";
 import CommentList from "./../../components/CommentList";
 import utils from "./../../utils/utils";
 import { makeRequest } from "./../../utils/axios";
+import { getImage } from "../../utils/fetchData";
 
 const BlogDetails = () => {
   const currentUser = useSelector((state) => state.auth.user);
   const [liked, setLiked] = useState(false);
   const [cmt, setCmt] = useState("");
   const [blog, setBlog] = useState(null);
+  const [image, setImage] = React.useState("not yet");
 
   const location = useLocation();
+
   useEffect(() => {
     const { blog } = location.state;
     setBlog(blog);
+    const loadImage = async () => {
+      const newImage = await getImage(blog?.IMG);
+      setImage(newImage);
+    };
+    loadImage();
   }, [location]);
 
   const queryClient = useQueryClient();
@@ -98,6 +106,13 @@ const BlogDetails = () => {
               100 Likes
             </button>
             <p className="mt-3 p-2 text-justify break-words">{blog.CONTENT}</p>
+            {blog.IMG && (
+              <img
+                className="object-contain object-center w-full "
+                src={image}
+                alt="Image-Blog"
+              />
+            )}
           </div>
         </section>
         <div className="comment font-Poppins">

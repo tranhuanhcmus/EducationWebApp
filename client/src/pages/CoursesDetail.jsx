@@ -23,34 +23,9 @@ import {
 } from "../utils/fetchData";
 const img = "/anh4.png";
 
-// function secondsToHms(d) {
-//   d = Number(d);
-//   var h = Math.floor(d / 3600);
-//   var m = Math.floor((d % 3600) / 60);
-//   var s = Math.floor((d % 3600) % 60);
-
-//   var hDisplay = h > 0 ? h + (h == 1 ? "h" : "h") : "";
-//   var mDisplay = m > 0 ? m + (m == 1 ? "m" : "m") : "";
-//   var sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "";
-//   return hDisplay + mDisplay + sDisplay;
-// }
-
-// courses.forEach((item) => {
-//   if (item.type === "video" || item.type === "listening") {
-//     const videoElement = document.createElement("video");
-//     videoElement.src = item.video;
-//     videoElement.addEventListener("loadedmetadata", () => {
-//       item.time = `${secondsToHms(
-//         parseInt(videoElement.duration, 10)
-//       ).toString()}`;
-//     });
-//   }
-// });
-
 const CoursesDetails = () => {
   const params = useParams();
   const { state } = useLocation();
-  console.log(state);
   const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
@@ -148,57 +123,6 @@ const CoursesDetails = () => {
     setItems((courses) => courses.filter((course) => course.CID !== id));
   };
 
-  // React.useEffect(() => {
-  //   const indetiPIEr = setTimeout(() => {
-  //     setBending(true);
-  //     const data_courses = makeRequest({
-  //       url: `/course/${parseInt(params.courseId)}`,
-  //       method: "get",
-  //     })
-  //       .then((res) => res.data)
-  //       .then((data) => {
-  //         setCourses(data);
-  //         if (!bending) {
-  //           data.forEach((value) => {
-  //             loadVideo(value);
-  //           });
-  //         }
-  //       });
-  //     const loadVideo = async () => {
-  //       const URL = await getVideo(courses[0].VIDEO);
-  //       setVideoURL(URL);
-  //     };
-
-  //     setBending(false);
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(indetiPIEr);
-  //   };
-  // }, []);
-
-  // React.useEffect(() => {
-  //   const indetiPIEr = setTimeout(() => {
-  //     setBending(true);
-  //     const loadVideo = async () => {
-  //       if (parseInt(params.lessonId) >= 0) {
-  //         const URL = await getVideo(courses[parseInt(params.lessonId)].VIDEO);
-  //         setVideoURL(URL);
-  //       } else {
-  //         const URL = await getVideo(courses[0].VIDEO);
-  //         setVideoURL(URL);
-  //       }
-  //     };
-  //     playNextVideo();
-  //     loadVideo();
-
-  //     setValue(params.lessonId);
-  //     setBending(false);
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(indetiPIEr);
-  //   };
-  // }, [params.lessonId]);
-
   React.useEffect(() => {
     const indetiPIEr = setTimeout(async () => {
       fetchData();
@@ -229,7 +153,6 @@ const CoursesDetails = () => {
       clearTimeout(indetiPIEr);
     };
   }, [params.lessonId]);
-
   return !bending ? (
     <>
       <div className="bg-gray_100 flex flex-col font-inter gap-[100px] sm:gap-[40px] md:gap-[40px] items-start justify-start mx-[auto] self-stretch sm:w-[100%] md:w-[100%] w-[auto]">
@@ -279,7 +202,7 @@ const CoursesDetails = () => {
                               CID,
                               LID,
                               author: state.OWNERNAME,
-                              courseImage: state.IMAGE,
+                              courseImage: state.IMG,
                             },
                           });
                         }}
