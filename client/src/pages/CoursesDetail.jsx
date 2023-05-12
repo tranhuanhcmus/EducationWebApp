@@ -50,6 +50,7 @@ const img = "/anh4.png";
 const CoursesDetails = () => {
   const params = useParams();
   const { state } = useLocation();
+  console.log(state);
   const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();

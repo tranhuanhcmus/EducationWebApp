@@ -6,7 +6,6 @@ import Text from "./Text";
 import { useNavigate } from "react-router-dom";
 import { getImage } from "../utils/fetchData";
 const ClassCard = (props) => {
-  // console.log("class card", props);
   const navigate = useNavigate();
   const [courseImgs, setCourseImgs] = React.useState("");
   React.useEffect(() => {
@@ -41,7 +40,7 @@ const ClassCard = (props) => {
                     state: {
                       CATEGORY: props?.CATEGORY,
                       CID: props.CID,
-                      COURESENAME: props?.COURESENAME,
+                      COURESENAME: props?.NAME,
                       DESCRIPTION: props?.DESCRIPTION,
                       OWNERNAME: props?.AUTHOR,
                       PRICE: props?.PRICE,
