@@ -56,4 +56,7 @@ router.post("/af", controller.addForum); //thêm 1 forum
 router.put("/uf", controller.updateForum); //sửa 1 forum
 router.delete("/df", controller.deleteForum); //xóa 1 forum
 
+//-------------------------------------USER------------------------------------//
+router.post("/uu", controller.updateUser); //update thông tin user
+
 export default router;

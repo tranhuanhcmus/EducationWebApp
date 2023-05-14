@@ -545,5 +545,18 @@ const model = {
             return error.message;
         }
     },
+    updateUser: async(data) => {
+        try {
+            const sqlQuery = await loadSqlQueries('request');
+            const [rows, fields] = await db.promise()
+                                        .query(sqlQuery.UpdateUser, [data.UserID, data.PASSWORD, data.NAME, data.PHONE, data.MAIL]);
+            console.log(rows);
+            return rows[0];
+        }   
+        catch (error){
+            console.log(error.message);
+            return error.message;
+        }
+    },
 };
 export default model;

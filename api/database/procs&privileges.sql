@@ -62,24 +62,18 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS `UpdateAccount`$$
 CREATE PROCEDURE UpdateAccount(
 	UserID varchar(22),
-	NUSERNAME varchar(30),
 	NPASSWORD varchar(30),
 	NNAME text,
 	NPHONE varchar(15),
-	NMAIL varchar(30),
-	NAVA varchar(100),
-	NROLE varchar(12)
+	NMAIL varchar(30)
 )	
 BEGIN
 	START TRANSACTION;
 		UPDATE ACCOUNT     
-		SET USERNAME = NUSERNAME,   
-			PASSWORD = NPASSWORD,
+		SET PASSWORD = NPASSWORD,
 			NAME = NNAME,
 			PHONE = NPHONE, 
-			MAIL = NMAIL, 
-			AVA = NAVA,
-			ROLE = NROLE
+			MAIL = NMAIL
 		WHERE ID = UserID; 
 		SELECT 'Account updates successfully' AS RESULT;
     COMMIT;

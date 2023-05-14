@@ -7,12 +7,21 @@ INSERT INTO ACCOUNT VALUES("20127507", "PeMeo", "PeMeo", "Bùi Trần Huân", "1
 -- select * from ACCOUNT;
 
 -- Course
-INSERT INTO COURSE VALUES ("CS0001","Beginner English course", "Elementary", "The Beginner English course is an excellent and easy way to learn basic English grammar. There are 25 English videos in this series. After you watch all 25 videos, you will have a great understanding of English.", 
+INSERT INTO COURSE VALUES ("CS0001","Foundation English course", "Foundation", "The Beginner English course is an excellent and easy way to learn basic English grammar. There are 25 English videos in this series. After you watch all 25 videos, you will have a great understanding of English.", 
+							"1500000", "English-Foundation-Course.png", "20127063", null);
+INSERT INTO COURSE VALUES ("CS0002","Elementary English course", "Elementary", "The Elementary English course is an excellent and easy way to learn basic English grammar. There are 25 English videos in this series. After you watch all 25 videos, you will have a great understanding of English.", 
 							"2000000", "elementary-english.jpg", "20127063", null);
-INSERT INTO COURSE VALUES ("CS0002","Intermediate English Course", "Intermediate", "This intermediate English course has been created to give intermediate level English students complete and comprehensive lessons to help them to level to an advanced level of English.", 
-                            "3000000", "Intermediate_english.jpg", "20127063", null);
-INSERT INTO COURSE VALUES ("CS0003","Advanced English Course", "Advanced", "These free video lessons for studying English are designed for Advanced level learners. You will find lessons on English vocabulary and grammar.", 
-                            "4500000", "Upper-Intermediate.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("CS0003","Pre Intermediate English Course", "Pre Intermediate", "These free video lessons for studying English are designed for Advanced level learners. You will find lessons on English vocabulary and grammar.", 
+                            "3000000", "pre-intermediate.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("CS0004","Intermediate English Course", "Intermediate", "This intermediate English course has been created to give intermediate level English students complete and comprehensive lessons to help them to level to an advanced level of English.", 
+                            "3500000", "Intermediate_english.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("CS0005","Upper Intermediate Course", "Upper Intermediate", "These free video lessons for studying English are designed for Upper Intermediate level learners. You will find lessons on English vocabulary and grammar.", 
+                            "4000000", "Upper-Intermediate.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("CS0006","Advanced English Course", "Advanced", "These free video lessons for studying English are designed for Advanced level learners. You will find lessons on English vocabulary and grammar.", 
+                            "4500000", "Advanced.jpg", "20127063", null);
+INSERT INTO COURSE VALUES ("CS0007","Proficiency English Course", "Proficiency", "These free video lessons for studying English are designed for Proficiency  level learners. You will find lessons on English vocabulary and grammar.", 
+                            "5000000", "EnglishCourses.jpg", "20127063", null);
+
 
 -- CALL CourseList();
 -- CALL UpdateCourse("111","LIS 9.0", "LISTENING-9.0", "EZ 9+", "90.00", "bth.jpg", "20127063");
@@ -30,6 +39,16 @@ INSERT INTO LESSON VALUES("LS0007", "CS0002", "Prepositions Of Place & Precise P
 INSERT INTO LESSON VALUES("LS0008", "CS0002", "Question Tag", "Question Tag", "Question Tag English Grammar Lesson.mp4", "", "00:15:00");
 INSERT INTO LESSON VALUES("LS0009", "CS0003", "English grammar", "Future perfect tense", "Future perfect tense.mp4", "", "00:15:00");
 INSERT INTO LESSON VALUES("LS0010", "CS0003", "English grammar", "Comparative structures", "Comparative structures.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0011", "CS0004", "Consonants and Vowels", "Consonants and Vowels in English", "English Consonants + Vowels.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0012", "CS0004", "Noun", "A/An + Noun", "English Grammar- a - an + Noun.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0013", "CS0004", "Noun (continuous)", "Singular and Plural Nouns", "English Grammar- Singular + Plural Nouns.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0014", "CS0005", "Subjective Pronouns", "Subjective Pronouns in English", "English Grammar- Subjective Pronouns.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0015", "CS0005", "Formal Vs Informal English", "Greetings and Responses", "Formal Vs Informal English- Greetings and Responses.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0016", "CS0006", "Must - Have To - Have Got To", "What's The Difference?", "Must - Have To - Have Got To. What's The Difference-.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0017", "CS0006", "Prepositions Of Place & Precise Prepositional Phrases", "Prepositions Of Place & Precise Prepositional Phrases", "Prepositions Of Place & Precise Prepositional Phrases - Learn To Speak English Like A Native.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0018", "CS0007", "Question Tag", "Question Tag", "Question Tag English Grammar Lesson.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0019", "CS0007", "English grammar", "Future perfect tense", "Future perfect tense.mp4", "", "00:15:00");
+INSERT INTO LESSON VALUES("LS0020", "CS0007", "English grammar", "Comparative structures", "Comparative structures.mp4", "", "00:15:00");
 -- INSERT INTO LESSON VALUES("LS0011", "CS0003", "English grammar", "Unreal past (if, if only, wish, it's time)", "UNREAL PAST (if, if only, wish, it's time).mp4", "", "00:15:00");
 -- INSERT INTO LESSON VALUES("LS0012", "CS0003", "English grammar", "Position of adverbs", "Position of adverbs.mp4", "", "00:15:00");
 -- DELETE FROM LESSON WHERE CID = "113"; 
