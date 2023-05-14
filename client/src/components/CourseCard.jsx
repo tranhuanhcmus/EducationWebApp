@@ -16,7 +16,12 @@ const CourseCard = (props) => {
 
     loadImage();
   }, [props]);
-  const info = { PRICE: `$ ${props?.PRICE}.00`, CATEGORY: props.CATEGORY };
+
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+
   return (
     <>
       <div className={props.className}>
