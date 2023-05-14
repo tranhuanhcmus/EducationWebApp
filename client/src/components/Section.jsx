@@ -179,7 +179,7 @@ const Section = ({ Type, index, onAdd }) => {
                             </span>
                           </Typography>
                         </Stack>
-                        {/* <Rating value={5} readOnly precision={0.5} /> */}
+                        <Rating value={5} readOnly precision={0.5} />
                         <Typography
                           variant="body2"
                           color="text.secondary"

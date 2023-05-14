@@ -33,6 +33,7 @@ const CoursesDetails = () => {
   const navigate = useNavigate();
   const [valueButton, setValue] = React.useState(parseInt(params.lessonId));
   const myref = useRef([]);
+  const [payed, setPayed] = React.useState(false);
 
   const [currentVideo, setCurrentVideo] = React.useState(0);
 
@@ -44,6 +45,16 @@ const CoursesDetails = () => {
       setCurrentVideo(parseInt(params.lessonId));
     }
   };
+  const updateInCart = async () => {
+    const dataIncourse = await GetCourseInCart(currentUser.ID);
+    dataIncourse.forEach((course) => {
+      console.log(course.CID, params.courseId);
+      if (course.CID == params.courseId) {
+        console.log("update");
+        setPayed(true);
+      }
+    });
+  };
 
   const [videoURL, setVideoURL] = React.useState("");
   const [Coures, setItems] = React.useState([]);
@@ -51,7 +62,9 @@ const CoursesDetails = () => {
   const [CheckCoursePayed, setCheckCoursePayed] = React.useState(0);
   const fetchData = useCallback(async () => {
     setBending(true);
+    updateInCart();
     const dataIncourse = await GetCourseInCart(currentUser.ID);
+
     localStorage.setItem("items", JSON.stringify(dataIncourse));
     setItemsInCart(dataIncourse);
 
@@ -538,7 +551,6 @@ const CoursesDetails = () => {
                   >
                     Ratings
                   </Text>
-                  <Rating value={4} />
                 </div>
 
                 <div className="flex flex-row items-start justify-between w-[100%]">
@@ -586,11 +598,24 @@ const CoursesDetails = () => {
                 </div>
               </div>
               <Button
-                className="common-pointer bg-red_300 cursor-pointer font-medium px-[126px] sm:px-[20px] md:px-[40px] py-[20px] rounded-[5px] text-[18px] text-center text-white_A700 w-[100%]"
-                onClick={() => navigate("/eduvicoursespricing")}
+                className={`common-pointer bg-red_300 cursor-pointer font-medium px-[126px] sm:px-[20px] md:px-[40px] py-[20px] rounded-[5px] text-[18px] text-center text-white_A700 w-[100%] ${
+                  CheckCoursePayed == 1 || payed ? `hidden` : ""
+                }`}
+                onClick={() => {
+                  addCourseHandler(
+                    state.COURESENAME,
+                    state.IMG,
+                    state.PRICE,
+                    state.CID
+                  );
+                  updateInCart();
+                  window.location.reload();
+                }}
               >
-                Purchase Course
+                Add to Cart
               </Button>
+
+              <Rating />
             </div>
           </div>
         </div>

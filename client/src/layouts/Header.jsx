@@ -42,10 +42,6 @@ const Header = () => {
       href: "/courses",
     },
     {
-      name: "Tests",
-      href: "/tests",
-    },
-    {
       name: "Blogs",
       href: "/blogs",
     },

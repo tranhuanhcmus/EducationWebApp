@@ -88,14 +88,14 @@ const Home = () => {
               Listening
             </a>
             <a
-              href="https://ieltsonlinetests.com/ielts-mock-test-2023-january-listening-practice-test-2"
+              href="https://ieltsonlinetests.com/ielts-mock-test-2023-january-reading-practice-test-1"
               target={"_blank"}
               className="w-[400px] text-center sm:w-[200px] p-2 bg-green-300 rounded-sm ring-2 ring-slate-600 hover:bg-white hover:text-black"
             >
               Reading
             </a>
             <a
-              href="https://ieltsonlinetests.com/ielts-mock-test-2023-january-listening-practice-test-2"
+              href="https://ieltsonlinetests.com/ielts-mock-test-2023-january-writing-practice-test-1"
               target={"_blank"}
               className="w-[400px] text-center sm:w-[200px] p-2 bg-orange-300 rounded-sm ring-2 ring-slate-600 hover:bg-white hover:text-black"
             >
