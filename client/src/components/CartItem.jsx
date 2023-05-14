@@ -7,13 +7,17 @@ import { getImage } from "../utils/fetchData";
 const CartItem = (props) => {
   const [courseImgs, setCourseImgs] = React.useState("");
   React.useEffect(() => {
-    console.log(props.IMG);
     const loadImage = async () => {
       const newImage = await getImage(props.IMG);
       setCourseImgs(newImage);
     };
     loadImage();
   }, []);
+
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
   return (
     <div className="flex flex-1 md:flex-col flex-row gap-[49px] items-center justify-start my-0 w-full">
       <div className="flex flex-1 sm:flex-col flex-row gap-5 items-center justify-start w-full">
@@ -35,7 +39,7 @@ const CartItem = (props) => {
       </div>
 
       <Text className="font-semibold text-black_900 text-left text-lg tracking-[-0.50px] w-auto">
-        {`${props?.PRICE}.000`}
+        {VND.format(props.PRICE)}
       </Text>
       <div
         className="cursor-pointer"

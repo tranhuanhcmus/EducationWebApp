@@ -18,6 +18,7 @@ import {
   handleFileUpload,
   HandleDeleteCourseOfTeacher,
   getAllCourse,
+  AddCourseToCart,
 } from "../utils/fetchData";
 
 import ClassCard from "../components/ClassCard";
@@ -40,24 +41,25 @@ const TeacherCoursesPage = () => {
   const [valuePage, setValuePage] = React.useState(0);
   const [itemsInCart, setItemsInCart] = React.useState([]);
 
-  const CourseHandle = (e) => {
-    if (e.target.value !== valueButton) {
-      setValue(e.target.value);
-    }
-  };
   const [bending, setBending] = React.useState(false);
 
   const fetchData = useCallback(async () => {
     setBending(true);
+
+    const temp = [];
+
     const items = JSON.parse(localStorage.getItem("items"));
+    items.forEach((course) => temp.push(course));
 
     const data = await HandleGetCourseOfTeacher(currentUser.ID);
+    data.forEach((course) => temp.push(course));
+
     const dataAllCourse = await getAllCourse();
     const array = [];
 
     dataAllCourse.map((index) => {
       var i = 0;
-      items.map((course) => {
+      temp.map((course) => {
         if (course.CID === index.CID) {
           i = i + 1;
         }
@@ -105,7 +107,29 @@ const TeacherCoursesPage = () => {
   const addHandleFalse = () => {
     setadd(false);
   };
-
+  const CourseHandle = async (e) => {
+    if (e.target.value !== valueButton) {
+      setValue(e.target.value);
+    }
+    if (e.target.value == "All Courses") {
+      const data = await HandleGetCourseOfTeacher(currentUser.ID);
+      data.forEach((element) => {
+        element.Teacher = true;
+      });
+      setCourseList(data);
+    } else {
+      const data = await HandleGetCourseOfTeacher(currentUser.ID);
+      data.forEach((element) => {
+        element.Teacher = true;
+      });
+      console.log(data);
+      setCourseList(() =>
+        data.filter((course) =>
+          e.target.value.includes(course.CATEGORY.substring(5, 8))
+        )
+      );
+    }
+  };
   const addCourseHandler = async (title, price, img, detail, band) => {
     console.log(title, price, img, detail, band);
     const fileName = `${(+new Date()).toString(36)}.png`;
@@ -140,7 +164,7 @@ const TeacherCoursesPage = () => {
     index: 0,
     removeIn: "",
   });
-  const addCourseInCartHandler = (title, img, price, id) => {
+  const addCourseInCartHandler = async (title, img, price, id) => {
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
@@ -153,6 +177,11 @@ const TeacherCoursesPage = () => {
       ];
     });
     alert("Add success!");
+    const Data = {
+      CourseID: id,
+      UID: currentUser.ID,
+    };
+    await AddCourseToCart(Data);
     setItems((courses) => courses.filter((course) => course.CID !== id));
   };
 
@@ -255,13 +284,13 @@ const TeacherCoursesPage = () => {
                 6.0-7.0
               </Button>
               <Button
-                value="More Courses"
+                value="8.0"
                 onClick={CourseHandle}
                 className={`bg-white_A700 cursor-pointer font-medium min-w-[148px] sm:px-[20px] px-[30px] py-[20px] rounded-[10px] text-[16px] text-center text-gray_900 w-[auto] ${
-                  "More Courses" === valueButton ? "choose" : ""
+                  "8.0" === valueButton ? "choose" : ""
                 }`}
               >
-                More Courses
+                8.0
               </Button>
             </div>
           </div>

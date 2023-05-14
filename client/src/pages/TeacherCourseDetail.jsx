@@ -16,12 +16,14 @@ import { getVideo } from "../utils/fetchData";
 import CustomFormPage from "../components/CustomForm";
 import TrashPage from "../components/Trash";
 import EditText from "../components/EditText";
+import { Rating } from "@mui/material";
 import Loading from "../utils/Loading";
 import {
   HandleDeleteLessonOfTeacher,
   HandleUpdateCourse,
-  GetMyCourse,
+  GetCourseDetail,
 } from "../utils/fetchData";
+import { useSelector } from "react-redux";
 
 // function secondsToHms(d) {
 //   d = Number(d);
@@ -51,6 +53,7 @@ const img = "/anh4.png";
 
 const TeacherCoursesDetails = () => {
   const params = useParams();
+  const currentUser = useSelector((state) => state.auth.user);
 
   //const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
@@ -62,6 +65,13 @@ const TeacherCoursesDetails = () => {
   const [bending, setBending] = React.useState(false);
   const [videoURL, setVideoURL] = React.useState("");
   const [Coures, setItems] = React.useState([]);
+  const [details, setDetails] = React.useState("");
+  const [value, setValueInf] = React.useState({
+    Price: "",
+    Category: "",
+    Name: "",
+    Description: "",
+  });
 
   const fetchData = React.useCallback(async () => {
     setBending(true);
@@ -69,6 +79,16 @@ const TeacherCoursesDetails = () => {
     const data_courses = await makeRequest({
       url: `/course/${params.courseId}`,
       method: "get",
+    });
+
+    const courserdetail = await GetCourseDetail(params.courseId);
+    setDetails(courserdetail[0]);
+
+    setValueInf({
+      Price: courserdetail[0].PRICE,
+      Category: courserdetail[0].CATEGORY,
+      Name: courserdetail[0].COURESENAME,
+      Description: courserdetail[0].DESCRIPTION,
     });
 
     if (data_courses.data.length > 0) {
@@ -130,7 +150,7 @@ const TeacherCoursesDetails = () => {
       courses.filter((course) => courses.indexOf(course) !== detele.index)
     );
     deletefalse();
-    console.log(detele.removeIn);
+
     await HandleDeleteLessonOfTeacher(detele.removeIn);
     if (detele.index < currentVideo) {
       setCurrentVideo(currentVideo - 1);
@@ -162,14 +182,6 @@ const TeacherCoursesDetails = () => {
     setCourses(copyListItems);
   };
 
-  const [value, setValueInf] = React.useState({
-    Price: "",
-    Instructor: "",
-    Duration: "",
-    Lesson: "",
-    Quizzes: "",
-    Certificate: "",
-  });
   const handleAdd = (lid, cid, name, content, video, attachment, duration) => {
     setCourses((prevUsersList) => {
       return [
@@ -187,12 +199,15 @@ const TeacherCoursesDetails = () => {
     });
   };
   const HandleUpdateCourses = async () => {
+    const owner = currentUser.ID;
     const data = {
       CourseID: params.courseId,
-      Name: value.Instructor,
+      Name: value.Name,
       Price: value.Price,
-      Category: value.Lesson,
-      Description: value.Certificate,
+      Category: value.Category,
+      Description: value.Description,
+      Img: details.IMG,
+      OwnerID: owner,
     };
 
     await HandleUpdateCourse(data);
@@ -418,49 +433,25 @@ const TeacherCoursesDetails = () => {
           <div className="flex md:flex-col flex-row gap-[40px] items-start justify-start max-w-[1280px] mx-[auto] w-[100%]">
             <div className="flex flex-1 flex-col gap-[25px] items-start justify-start max-w-[840px] w-[100%]">
               <div className="flex flex-col gap-[9px] items-start justify-start w-[100%]">
-                <Text
+                <EditText
                   className="font-semibold text-black_900 text-left w-[auto]"
                   as="h4"
                   variant="h4"
+                  handleSave={(val) => {
+                    setValueInf({ ...value, Name: val });
+                  }}
                 >
-                  Course Details
-                </Text>
-                <Text
+                  {details.COURESENAME}
+                </EditText>
+                <EditText
                   className="font-normal leading-[30.00px] not-italic text-gray_700 text-left"
                   variant="body4"
+                  handleSave={(val) => {
+                    setValueInf({ ...value, Description: val });
+                  }}
                 >
-                  <>
-                    Dear our beloved students at FIE English, First and
-                    foremost, FIE English would like to express our sincerest
-                    gratude to all of our students for believing and choosing
-                    TW. This publication, Junior. Students Workbook, you are
-                    holding right now is a brilliant combination of carefuly
-                    selected intellectual products, created by none other than
-                    our team at FIE English. As an embodiment of our mission
-                    which is to not only help our students improve their English
-                    and develop the language beyond classroom context but also
-                    enable them to conquer the IELTS exam, this workbook shall
-                    act as a constant companion to allow students to make the
-                    most of in-class lessons. Therefore, FIE truly hopes that
-                    our students can allocate their time and energy to complete
-                    all tasks provided in this workbook so as to achieve the
-                    perfect result for each and every course they take at FIE
-                    English. Essentially complementary to this workbook is a
-                    splendidly crafted CELTA-standard visual syllabus, a product
-                    jointly owned by an elite team of teachers at FIE English
-                    and critically reviewed under the guidance and supervision
-                    of numerous IELTS experts, masters in linguistics, masters
-                    in pedagogy and many other holders of bachelor's and
-                    master's degree in Education who had studied in England and
-                    Australia. We will use our last word to thank you for
-                    placing your trust in us, whereby becoming an integral part
-                    of our success. We hope that you enjoy your time with us.
-                    FIE English Golden Standard for IELTS Preparation
-                    <br />
-                    import Lesson from './Lesson'; Get Udemy certificate by
-                    completing entire course
-                  </>
-                </Text>
+                  {details.DESCRIPTION}
+                </EditText>
               </div>
               <div className="flex flex-col gap-[9px] items-start justify-start w-[100%]">
                 <Text
@@ -474,7 +465,7 @@ const TeacherCoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  Get FIE certificate by completing entire course
+                  Get PIE certificate by completing entire course
                 </Text>
               </div>
               <div className="flex flex-col gap-[9px] items-start justify-start w-[100%]">
@@ -489,27 +480,9 @@ const TeacherCoursesDetails = () => {
                   className="font-normal leading-[30.00px] md:max-w-[100%] max-w-[840px] not-italic text-gray_700 text-left"
                   variant="body4"
                 >
-                  This course is suitable for individuals who have scored
-                  between 4.0 and 5.0 on the IELTS test, or for those who have
+                  This course is suitable for individuals who have scored{" "}
+                  {details.CATEGORY} on the IELTS test, or for those who have
                   taken a placement test and have been assessed at this level.
-                  The course will focus on developing the specific language
-                  skills required to improve the individual's overall IELTS
-                  score. This may include improving vocabulary, grammar, and
-                  pronunciation, as well as building reading, writing,
-                  listening, and speaking skills. The IELTS 4.0-5.0 course is
-                  typically offered by language schools, universities, or
-                  private language institutes. It may be taught in-person or
-                  online, and can be tailored to the needs of specific groups,
-                  such as business professionals or healthcare workers.
-                  Individuals who take the IELTS 4.0-5.0 course can expect to
-                  improve their English language proficiency and feel more
-                  confident in their ability to communicate effectively in
-                  English. They will also be better prepared to achieve their
-                  goals in academic, professional, or immigration contexts that
-                  require a higher level of English language proficiency.
-                  Overall, the IELTS 4.0-5.0 course is a valuable investment for
-                  non-native English speakers seeking to improve their English
-                  language skills and achieve success in their chosen field.
                 </Text>
               </div>
               <div className="flex flex-col gap-[10px] items-start justify-start w-[100%]">
@@ -563,17 +536,6 @@ const TeacherCoursesDetails = () => {
                     general texts, and develop strategies for understanding
                   </Text>
                 </div>
-                <div className="flex sm:flex-col flex-row gap-[10px] items-center justify-start w-[100%]">
-                  <div className="bg-deep_orange_400 h-[10px] rounded-[50%] w-[10px]"></div>
-                  <Text
-                    className="font-normal not-italic text-black_900 text-left w-[auto]"
-                    variant="body4"
-                  >
-                    Speaking: You will practice speaking English in a variety of
-                    contexts, including discussions, presentations, and
-                    interviews.
-                  </Text>
-                </div>
               </div>
             </div>
             <div className="flex flex-1 flex-col gap-[23px] items-start justify-start w-[100%]">
@@ -593,7 +555,7 @@ const TeacherCoursesDetails = () => {
                       setValueInf({ ...value, Price: val });
                     }}
                   >
-                    {value.Price}
+                    {details.PRICE}
                   </EditText>
                 </div>
                 <div className="flex flex-row items-start justify-between w-[100%]">
@@ -603,14 +565,26 @@ const TeacherCoursesDetails = () => {
                   >
                     Instructor
                   </Text>
+                  <Text className="font-semibold text-[20px] text-black_900 text-right underline w-[auto]">
+                    {details.OWNERNAME}
+                  </Text>
+                </div>
+                <div className="flex flex-row items-center justify-between w-[100%]">
+                  <Text
+                    className="font-semibold text-gray_700 text-left w-[auto]"
+                    variant="body2"
+                  >
+                    Category
+                  </Text>
                   <EditText
-                    to="/Author"
-                    className="font-semibold text-[20px] text-black_900 text-right underline w-[auto]"
+                    className="text-black_900 text-right w-[auto]"
+                    as="h6"
+                    variant="h6"
                     handleSave={(val) => {
-                      setValueInf({ ...value, Instructor: val });
+                      setValueInf({ ...value, Category: val });
                     }}
                   >
-                    {value.Instructor}
+                    {details.CATEGORY}
                   </EditText>
                 </div>
                 <div className="flex flex-row items-center justify-between w-[100%]">
@@ -620,28 +594,7 @@ const TeacherCoursesDetails = () => {
                   >
                     Ratings
                   </Text>
-                  <Img
-                    src="./anh2.svg"
-                    className="h-[16px] w-[92px]"
-                    alt="mobile"
-                  />
-                </div>
-                <div className="flex flex-row items-start justify-between w-[100%]">
-                  <Text
-                    className="font-semibold text-gray_700 text-left w-[auto]"
-                    variant="body2"
-                  >
-                    Durations
-                  </Text>
-                  <EditText
-                    className="font-semibold text-black_900 text-right w-[auto]"
-                    variant="body2"
-                    handleSave={(val) => {
-                      setValueInf({ ...value, Duration: val });
-                    }}
-                  >
-                    {value.Duration}
-                  </EditText>
+                  <Rating value={4} />
                 </div>
                 <div className="flex flex-row items-start justify-between w-[100%]">
                   <Text
@@ -650,49 +603,12 @@ const TeacherCoursesDetails = () => {
                   >
                     Lessons
                   </Text>
-                  <EditText
-                    className="font-semibold text-black_900 text-right w-[auto]"
-                    variant="body2"
-                    handleSave={(val) => {
-                      setValueInf({ ...value, Lesson: val });
-                    }}
-                  >
-                    {value.Lesson}
-                  </EditText>
-                </div>
-                <div className="flex flex-row items-start justify-between w-[100%]">
                   <Text
-                    className="font-semibold text-gray_700 text-left w-[auto]"
-                    variant="body2"
-                  >
-                    Quizzes
-                  </Text>
-                  <EditText
                     className="font-semibold text-black_900 text-right w-[auto]"
                     variant="body2"
-                    handleSave={(val) => {
-                      setValueInf({ ...value, Quizzes: val });
-                    }}
                   >
-                    {value.Quizzes}
-                  </EditText>
-                </div>
-                <div className="flex flex-row items-start justify-between w-[100%]">
-                  <Text
-                    className="font-semibold text-gray_700 text-left w-[auto]"
-                    variant="body2"
-                  >
-                    Certificate
+                    {courses.length}
                   </Text>
-                  <EditText
-                    className="font-semibold text-black_900 text-right w-[auto]"
-                    variant="body2"
-                    handleSave={(val) => {
-                      setValueInf({ ...value, Certificate: val });
-                    }}
-                  >
-                    {value.Certificate}
-                  </EditText>
                 </div>
                 <div className="flex flex-row items-start justify-between w-[100%]">
                   <Text

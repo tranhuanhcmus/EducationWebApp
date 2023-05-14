@@ -75,6 +75,10 @@ const CartPage = () => {
       alert("you should add item to cart");
     }
   };
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 
   return (
     <>
@@ -107,7 +111,7 @@ const CartPage = () => {
                       Subtotal
                     </Text>
                     <Text className="font-poppins font-semibold text-black_900 text-left text-xl tracking-[-0.50px] w-auto">
-                      {`${totalprice}.000 đ`}
+                      {VND.format(totalprice)}
                     </Text>
                   </div>
                   <div className="flex flex-row items-start justify-start w-full">
@@ -128,7 +132,7 @@ const CartPage = () => {
                     Total
                   </Text>
                   <Text className="font-poppins font-semibold text-black_900 text-left text-xl tracking-[-0.50px] w-auto">
-                    {`${totalprice}.000 đ`}
+                    {VND.format(totalprice)}
                   </Text>
                 </div>
                 <Button

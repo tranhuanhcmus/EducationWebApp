@@ -221,6 +221,19 @@ const HandleUpdateCourse = async (data) => {
     console.error(error);
   }
 };
+const GetCourseDetail = async (id) => {
+  try {
+    const response = await makeRequest({
+      method: "get",
+      url: `/inforcourse/${id}`,
+    });
+
+    const blob = await response.data;
+    return blob;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export {
   getImage,
@@ -239,4 +252,5 @@ export {
   HandleDeleteItemInCart,
   HandlePayMent,
   HandleUpdateCourse,
+  GetCourseDetail,
 };

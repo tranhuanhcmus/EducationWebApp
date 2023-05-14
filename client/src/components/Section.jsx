@@ -29,19 +29,20 @@ const Section = ({ Type, index, onAdd }) => {
   const [courses, setCourses] = useState([]);
   const [courseImgs, setCourseImgs] = useState([]);
 
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+
   const currentUser = useSelector((state) => state.auth.user);
   const fetchCourses = useCallback(async () => {
     const array = [];
     const temp = [];
     const res = await makeRequest({ url: "/course", method: "get" });
 
-    if (currentUser.ROLE === "student") {
-      const data = await GetMyCourse(currentUser.ID);
-      data.forEach((course) => temp.push(course));
-    } else {
-      const data = await HandleGetCourseOfTeacher(currentUser.ID);
-      data.forEach((course) => temp.push(course));
-    }
+    const data = await GetMyCourse(currentUser.ID);
+    data.forEach((course) => temp.push(course));
+
     const items = JSON.parse(localStorage.getItem("items"));
     items.forEach((course) => temp.push(course));
     res.data.forEach(async (course) => {
@@ -308,7 +309,7 @@ const Section = ({ Type, index, onAdd }) => {
                           variant="body1"
                           sx={{ mr: "auto", fontWeight: "500" }}
                         >
-                          {course.PRICE}đ
+                          {VND.format(course.PRICE)}
                         </Typography>
                         <Button size="small" color="primary">
                           View

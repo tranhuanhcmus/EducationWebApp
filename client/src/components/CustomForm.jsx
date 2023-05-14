@@ -61,7 +61,7 @@ const CustomFormPage = (props) => {
     // data.Attachment = "NO";
     // data.Duration = "00:30:00";
     await handleAddLesson(data);
-    //window.location.reload();
+    window.location.reload();
   };
 
   const changeHandler = (event) => {

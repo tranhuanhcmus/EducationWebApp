@@ -20,12 +20,14 @@ import {
   GetCourseInCart,
   GetMyCourse,
   AddCourseToCart,
+  GetCourseDetail,
 } from "../utils/fetchData";
 const img = "/anh4.png";
 
 const CoursesDetails = () => {
   const params = useParams();
   const { state } = useLocation();
+
   const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
@@ -269,7 +271,10 @@ const CoursesDetails = () => {
                                 });
 
                                 navigate(
-                                  `/coursesdetails/${params.courseId}/${index}`
+                                  `/coursesdetails/${params.courseId}/${index}`,
+                                  {
+                                    state: state,
+                                  }
                                 );
                               }}
                               className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
@@ -316,7 +321,10 @@ const CoursesDetails = () => {
                                   });
 
                                   navigate(
-                                    `/coursesdetails/${params.courseId}/${index}`
+                                    `/coursesdetails/${params.courseId}/${index}`,
+                                    {
+                                      state: state,
+                                    }
                                   );
                                 }}
                                 className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${

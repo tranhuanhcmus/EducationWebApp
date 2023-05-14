@@ -16,7 +16,7 @@ export const momo = async (req, res, next) => {
   var orderInfo = `${userName} pay with MoMo`;
   var redirectUrl = `http://localhost:4000/api/momo/${userId}/success`;
   var ipnUrl = "http://localhost:4000/api/momo/result";
-  var amount = `${TotalAmount}000`;
+  var amount = `${TotalAmount}`;
   var requestType = "captureWallet";
   var extraData = ""; //pass empty value if your merchant does not have stores
 
@@ -124,19 +124,16 @@ export const payment = async (req, res, next) => {
     return res.status(404).json({ userId, array });
   }
   if (req.query.resultCode == 0) {
-    try {
-      array.forEach(async (element) => {
-        const Data = {
-          CourseID: element.CID,
-          UID: userId,
-        };
-        await model.enrollCourse(Data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    res.redirect(`http://localhost:3000/PaymentSuccess`);
-  }
+    array.forEach(async (element) => {
+      const Data = {
+        CourseID: element.CID,
+        UID: userId,
+      };
+      await model.enrollCourse(Data);
+    });
 
-  res.redirect(`http://localhost:3000/Cart`);
+    res.redirect(`http://localhost:3000/PaymentSuccess`);
+  } else {
+    res.redirect(`http://localhost:3000/Cart`);
+  }
 };
