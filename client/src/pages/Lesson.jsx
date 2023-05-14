@@ -86,6 +86,7 @@ const Lesson = () => {
   const currentUser = useSelector((state) => state.auth.user);
 
   const location = useLocation();
+  console.log(location.state);
   const CID = location.state.CID;
   const LID = location.state.LID;
   const author = location.state.author;
