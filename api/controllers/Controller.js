@@ -427,6 +427,15 @@ const controller = {
       res.status(400).json({ msg: error.message });
     }
   },
+  updateUser: async (req, res) => {
+    try {
+      const data = req.body;
+      const result = await model.updateUser(data);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json({ msg: error.message });
+    }
+  },
 };
 
 export default controller;

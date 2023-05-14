@@ -25,6 +25,7 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import Cart from "./Cart";
 import Loading from "../utils/Loading";
 import { getImage, handleFileUpload } from "../utils/fetchData";
+import { makeRequest } from "./../utils/axios";
 
 const FormDialog = ({ open, handleClose, currentUser }) => {
   const [inputs, setInputs] = React.useState({
@@ -53,6 +54,7 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
     setBending((state) => true);
     const fileName = `${currentUser.ID}.png`;
     await handleFileUpload(selectedImage, fileName);
+
     setBending((state) => false);
     window.location.reload();
   };
@@ -71,8 +73,9 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
             spacing={2}
             id="Profile"
             onSubmit={handleSubmit}
+            className="hidden"
           >
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 onChange={handleInput}
                 fullWidth
@@ -81,6 +84,7 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
                 label="Name"
                 name="name"
                 autoFocus
+                className="hidden"
               />
             </Grid>
             <Grid item xs={12}>
@@ -93,6 +97,7 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
                 name="phone"
                 type="tel"
                 inputProps={{ pattern: "[0-9]{10}" }}
+                className="hidden"
               />
             </Grid>
             <Grid item xs={12}>
@@ -104,8 +109,21 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
                 label="Email"
                 name="email"
                 type={"email"}
+                className="hidden"
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                onChange={handleInput}
+                fullWidth
+                margin="normal"
+                id="password"
+                label="Password"
+                name="password"
+                type={"password"}
+                className="hidden"
+              />
+            </Grid> */}
             <Grid item xs={12}>
               <Box
                 component="input"
