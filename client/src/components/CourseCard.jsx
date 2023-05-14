@@ -15,8 +15,13 @@ const CourseCard = (props) => {
     };
 
     loadImage();
-  }, []);
-  const info = { PRICE: `$ ${props?.PRICE}.00`, CATEGORY: props.CATEGORY };
+  }, [props]);
+
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+
   return (
     <>
       <div className={props.className}>
@@ -34,7 +39,6 @@ const CourseCard = (props) => {
                 IMG: props?.IMG,
               },
             });
-            localStorage.setItem("Info", JSON.stringify(info));
           }}
         >
           <Img
@@ -60,7 +64,7 @@ const CourseCard = (props) => {
               as="h6"
               variant="h6"
             >
-              {`$ ${props?.PRICE}.00`}
+              {VND.format(props.PRICE)}
             </List>
           </div>
         </div>
@@ -69,7 +73,7 @@ const CourseCard = (props) => {
           onClick={() => {
             props.addCourseHandler(
               props.COURESENAME,
-              props.image,
+              props.IMG,
               props.PRICE,
               props.CID
             );

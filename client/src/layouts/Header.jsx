@@ -51,6 +51,13 @@ const Header = () => {
     },
   ];
 
+  const pagesTeacher = [
+    {
+      name: "TeacherCourses",
+      href: "/TeacherCourse",
+    },
+  ];
+
   const [showMenu, setShowMenu] = React.useState(false);
 
   const toggleDrawer = (open) => (event) => {
@@ -174,6 +181,31 @@ const Header = () => {
                 {page.name}
               </Typography>
             ))}
+            {currentUser.ROLE == "teacher" &&
+              pagesTeacher.map((page) => (
+                <Typography
+                  component="a"
+                  sx={{
+                    display: {
+                      xs: "none",
+                      md: "flex",
+                    },
+                    color: "inherit",
+                    "&:hover": {
+                      color: "inherit",
+                      translate: "0 -10%",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                      transition: "ease 0.2s",
+                    },
+                  }}
+                  href={page.href}
+                  key={page.name}
+                  textAlign={"center"}
+                >
+                  {page.name}
+                </Typography>
+              ))}
           </Stack>
 
           {/* User Button */}

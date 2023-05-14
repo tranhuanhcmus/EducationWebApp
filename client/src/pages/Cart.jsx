@@ -8,6 +8,7 @@ import List from "../components/List";
 import Text from "../components/Text";
 import CartItem from "../components/CartItem";
 import { useSelector } from "react-redux";
+import utils from "../utils/utils";
 import {
   HandleDeleteItemInCart,
   HandlePayMent,
@@ -69,11 +70,15 @@ const CartPage = () => {
       const data = { id, name, price, itemsInCart };
       const message = await sendRequest(data);
       SetPayMentID(message);
-      alert("You can close this window after payment.");
+      alert("Action completed. You can now close this page.");
     } else {
       alert("you should add item to cart");
     }
   };
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 
   return (
     <>
@@ -106,7 +111,7 @@ const CartPage = () => {
                       Subtotal
                     </Text>
                     <Text className="font-poppins font-semibold text-black_900 text-left text-xl tracking-[-0.50px] w-auto">
-                      {`${totalprice}.000 đ`}
+                      {VND.format(totalprice)}
                     </Text>
                   </div>
                   <div className="flex flex-row items-start justify-start w-full">
@@ -127,7 +132,7 @@ const CartPage = () => {
                     Total
                   </Text>
                   <Text className="font-poppins font-semibold text-black_900 text-left text-xl tracking-[-0.50px] w-auto">
-                    {`$ ${totalprice}.000 đ`}
+                    {VND.format(totalprice)}
                   </Text>
                 </div>
                 <Button

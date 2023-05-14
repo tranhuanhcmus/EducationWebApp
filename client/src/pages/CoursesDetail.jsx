@@ -20,12 +20,14 @@ import {
   GetCourseInCart,
   GetMyCourse,
   AddCourseToCart,
+  GetCourseDetail,
 } from "../utils/fetchData";
 const img = "/anh4.png";
 
 const CoursesDetails = () => {
   const params = useParams();
   const { state } = useLocation();
+
   const currentUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams("");
   const navigate = useNavigate();
@@ -46,6 +48,7 @@ const CoursesDetails = () => {
   const [videoURL, setVideoURL] = React.useState("");
   const [Coures, setItems] = React.useState([]);
   const [itemsInCart, setItemsInCart] = React.useState([]);
+  const [CheckCoursePayed, setCheckCoursePayed] = React.useState(0);
   const fetchData = useCallback(async () => {
     setBending(true);
     const dataIncourse = await GetCourseInCart(currentUser.ID);
@@ -56,6 +59,14 @@ const CoursesDetails = () => {
 
     const data = await GetMyCourse(currentUser.ID);
     data.forEach((course) => temp.push(course));
+
+    data.forEach((course) => {
+      console.log(course.CID, params.courseId);
+      if (course.CID == params.courseId) {
+        setCheckCoursePayed(1);
+        return;
+      }
+    });
 
     const items = JSON.parse(localStorage.getItem("items"));
     items.forEach((course) => temp.push(course));
@@ -245,55 +256,140 @@ const CoursesDetails = () => {
                       className="flex-col gap-[16px] grid items-start w-[100%]"
                       orientation="vertical"
                     >
-                      {courses.map((leucture, index) => (
-                        <div
-                          ref={(element) => {
-                            myref.current[index] = element;
-                          }}
-                          key={index}
-                          onClick={() => {
-                            setValue(index.toString());
-                            myref.current[index].scrollIntoView({
-                              behavior: "smooth",
-                              block: "center",
-                            });
+                      {CheckCoursePayed == 1
+                        ? courses.map((leucture, index) => (
+                            <div
+                              ref={(element) => {
+                                myref.current[index] = element;
+                              }}
+                              key={index}
+                              onClick={() => {
+                                setValue(index.toString());
+                                myref.current[index].scrollIntoView({
+                                  behavior: "smooth",
+                                  block: "center",
+                                });
 
-                            navigate(
-                              `/coursesdetails/${params.courseId}/${index}`,
-                              {
-                                state: state,
-                              }
-                            );
-                          }}
-                          className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
-                            valueButton === index.toString()
-                              ? "choose"
-                              : "bg-white"
-                          }`}
-                        >
-                          <div className="flex flex-row gap-[10px] items-center justify-start self-stretch w-[auto]">
-                            <Img
-                              src={img}
-                              className="h-[50px] md:h-[auto] object-cover rounded-[5px] w-[80px]"
-                              alt="image"
-                            />
-                            <div className="flex flex-col gap-[3px] items-start justify-start self-stretch w-[auto]">
-                              <Text
-                                className="font-semibold text-black_900 text-left w-[auto]"
-                                variant="body3"
-                              >
-                                {leucture.NAME}
-                              </Text>
-                              <Text
-                                className="text-deep_orange_400 text-left w-[auto]"
-                                variant="body5"
-                              >
-                                {leucture.DURATION}
-                              </Text>
+                                navigate(
+                                  `/coursesdetails/${params.courseId}/${index}`,
+                                  {
+                                    state: state,
+                                  }
+                                );
+                              }}
+                              className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
+                                valueButton === index.toString()
+                                  ? "choose"
+                                  : "bg-white"
+                              }`}
+                            >
+                              <div className="flex flex-row gap-[10px] items-center justify-start self-stretch w-[auto]">
+                                <Img
+                                  src={img}
+                                  className="h-[50px] md:h-[auto] object-cover rounded-[5px] w-[80px]"
+                                  alt="image"
+                                />
+                                <div className="flex flex-col gap-[3px] items-start justify-start self-stretch w-[auto]">
+                                  <Text
+                                    className="font-semibold text-black_900 text-left w-[auto]"
+                                    variant="body3"
+                                  >
+                                    {leucture.NAME}
+                                  </Text>
+                                  <Text
+                                    className="text-deep_orange_400 text-left w-[auto]"
+                                    variant="body5"
+                                  >
+                                    {leucture.DURATION}
+                                  </Text>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      ))}
+                          ))
+                        : courses.map((leucture, index) =>
+                            index < 2 ? (
+                              <div
+                                ref={(element) => {
+                                  myref.current[index] = element;
+                                }}
+                                key={index}
+                                onClick={() => {
+                                  setValue(index.toString());
+                                  myref.current[index].scrollIntoView({
+                                    behavior: "smooth",
+                                    block: "center",
+                                  });
+
+                                  navigate(
+                                    `/coursesdetails/${params.courseId}/${index}`,
+                                    {
+                                      state: state,
+                                    }
+                                  );
+                                }}
+                                className={`hover:cursor-pointer flex flex-1 items-start justify-start hover:my-[0] my-[0] p-[10px] rounded-[10px] hover:shadow-bs w-[100%] ${
+                                  valueButton === index.toString()
+                                    ? "choose"
+                                    : "bg-white"
+                                }`}
+                              >
+                                <div className="flex flex-row gap-[10px] items-center justify-start self-stretch w-[auto]">
+                                  <Img
+                                    src={img}
+                                    className="h-[50px] md:h-[auto] object-cover rounded-[5px] w-[80px]"
+                                    alt="image"
+                                  />
+                                  <div className="flex flex-col gap-[3px] items-start justify-start self-stretch w-[auto]">
+                                    <Text
+                                      className="font-semibold text-black_900 text-left w-[auto]"
+                                      variant="body3"
+                                    >
+                                      {leucture.NAME}
+                                    </Text>
+                                    <Text
+                                      className="text-deep_orange_400 text-left w-[auto]"
+                                      variant="body5"
+                                    >
+                                      {leucture.DURATION}
+                                    </Text>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="bg-white_A700 hover:cursor-pointer flex flex-1 flex-col items-start justify-start hover:my-0 my-0 p-2.5 rounded-[10px] hover:shadow-bs w-full">
+                                <div className="flex flex-row gap-2.5 items-center justify-start self-stretch w-auto">
+                                  <div className="h-[50px] relative w-20">
+                                    <Img
+                                      src={img}
+                                      className="h-[50px] m-auto object-cover rounded-[5px] w-20 sm:w-full"
+                                      alt="image"
+                                    />
+                                    <div className="absolute bg-white_A700_87 flex flex-col h-max inset-[0] items-center justify-center m-auto p-1 rounded-[50%] w-[18px]">
+                                      <Img
+                                        src="/img_lock_red_300.svg"
+                                        className="h-2.5 w-2.5"
+                                        alt="lock"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col gap-[3px] items-start justify-start self-stretch w-auto">
+                                    <Text
+                                      className="font-semibold text-black_900_87 text-left w-auto"
+                                      variant="body3"
+                                    >
+                                      {leucture.NAME}
+                                    </Text>
+                                    <Text
+                                      className="text-deep_orange_400_87 text-left w-auto"
+                                      variant="body5"
+                                    >
+                                      {leucture.DURATION}
+                                    </Text>
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          )}
                     </List>
                   </div>
                 </div>

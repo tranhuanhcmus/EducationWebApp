@@ -23,11 +23,6 @@ const EduviCoursesPage = () => {
   const [valueButton, setValue] = React.useState("");
   const [valuePage, setValuePage] = React.useState(0);
 
-  const CourseHandle = (e) => {
-    if (e.target.value !== valueButton) {
-      setValue(e.target.value);
-    }
-  };
   React.useEffect(() => {
     const indetifier = setTimeout(() => {
       //navigate(`/courses/${valuePage}`);
@@ -36,6 +31,7 @@ const EduviCoursesPage = () => {
       clearTimeout(indetifier);
     };
   }, [valuePage]);
+
   const [inputvalue, setInputvalue] = React.useState("");
 
   const currentUser = useSelector((state) => state.auth.user);
@@ -44,6 +40,7 @@ const EduviCoursesPage = () => {
 
   const [Coures, setItems] = React.useState([]);
   const [CourseList, setCourseList] = React.useState([]);
+  const [ListCourseFull, setListCourseFull] = React.useState([]);
 
   const fetchCourses = useCallback(async () => {
     const dataIncourse = await GetCourseInCart(currentUser.ID);
@@ -73,6 +70,7 @@ const EduviCoursesPage = () => {
       }
     });
     setItems(array);
+    setListCourseFull(array);
     setCourseList(data);
   }, []);
 
@@ -84,12 +82,29 @@ const EduviCoursesPage = () => {
     localStorage.setItem("items", JSON.stringify(itemsInCart));
   }, [itemsInCart]);
 
+  const CourseHandle = async (e) => {
+    if (e.target.value !== valueButton) {
+      setValue(e.target.value);
+    }
+    if (e.target.value == "All Courses") {
+      const data = await GetMyCourse(currentUser.ID);
+      setCourseList(data);
+    } else {
+      const data = await GetMyCourse(currentUser.ID);
+      setCourseList(() =>
+        data.filter((course) =>
+          e.target.value.includes(course.CATEGORY.substring(5, 8))
+        )
+      );
+    }
+  };
+
   const addCourseHandler = async (title, img, price, id) => {
     setItemsInCart((prevUsersList) => {
       return [
         ...prevUsersList,
         {
-          Name: title,
+          NAME: title,
           IMG: img,
           PRICE: price,
           CID: id,
@@ -178,13 +193,13 @@ const EduviCoursesPage = () => {
                 6.0-7.0
               </Button>
               <Button
-                value="More Courses"
+                value="8.0"
                 onClick={CourseHandle}
                 className={`bg-white_A700 cursor-pointer font-medium min-w-[148px] sm:px-[20px] px-[30px] py-[20px] rounded-[10px] text-[16px] text-center text-gray_900 w-[auto] ${
-                  "More Courses" === valueButton ? "choose" : ""
+                  "8.0" === valueButton ? "choose" : ""
                 }`}
               >
-                More Courses
+                8.0
               </Button>
             </div>
           </div>
@@ -226,7 +241,21 @@ const EduviCoursesPage = () => {
                 <div className="flex md:flex-col flex-row gap-[42px] items-start justify-start w-[100%]">
                   <Input
                     value={inputvalue}
-                    onChange={(e) => setInputvalue(e?.target?.value)}
+                    onChange={(e) => {
+                      setInputvalue(e?.target?.value);
+                      if (e.target.value == "") {
+                        setItems(() =>
+                          ListCourseFull.filter((course) =>
+                            course.COURESENAME.includes(e.target.value)
+                          )
+                        );
+                      }
+                      setItems(() =>
+                        ListCourseFull.filter((course) =>
+                          course.COURESENAME.includes(e.target.value)
+                        )
+                      );
+                    }}
                     wrapClassName="bg-white_A700 flex flex-1 max-w-[838px] pl-[20px] pr-[7px] py-[7px] rounded-[10px] w-[100%]"
                     className="font-medium gap-[222px] leading-[normal] p-[0] placeholder:text-gray_700_99 text-[16px] text-gray_700_99 text-left w-[100%]"
                     name="search"
@@ -235,7 +264,10 @@ const EduviCoursesPage = () => {
                       inputvalue?.length > 0 ? (
                         <CloseSVG
                           className="cursor-pointer ml-[35px] my-[auto]"
-                          onClick={() => setInputvalue("")}
+                          onClick={() => {
+                            setInputvalue("");
+                            setItems(ListCourseFull);
+                          }}
                           fillColor="#995d5a6f"
                           height={24}
                           width={24}

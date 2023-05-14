@@ -208,6 +208,33 @@ const HandlePayMent = async (data) => {
   }
 };
 
+const HandleUpdateCourse = async (data) => {
+  try {
+    const response = await makeRequest({
+      method: "put",
+      url: "/updatecourse",
+      data: data,
+    });
+
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+const GetCourseDetail = async (id) => {
+  try {
+    const response = await makeRequest({
+      method: "get",
+      url: `/inforcourse/${id}`,
+    });
+
+    const blob = await response.data;
+    return blob;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   getImage,
   handleFileUpload,
@@ -224,4 +251,6 @@ export {
   GetMyCourse,
   HandleDeleteItemInCart,
   HandlePayMent,
+  HandleUpdateCourse,
+  GetCourseDetail,
 };

@@ -14,7 +14,7 @@ const ClassCard = (props) => {
       setCourseImgs(newImage);
     };
     loadImage();
-  }, []);
+  }, [props]);
 
   return (
     <>
