@@ -110,7 +110,7 @@ const BlogListSearch = () => {
             <div className="content my-3 mx-2">
               <h6 className="p-2 font-bold w-full break-words text-xl">
                 <Link
-                  to={`details/${blog.FID}`}
+                  to={`/blogs/details/${blog.FID}`}
                   state={{ blog }}
                   className="hover:cursor-pointer hover:text-orange-400"
                 >

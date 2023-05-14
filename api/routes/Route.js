@@ -1,6 +1,7 @@
 import express from "express";
 import controller from "../controllers/Controller.js";
 const router = express.Router();
+//------------------------------------USER------------------------------------//
 
 //------------------------------------COURSE------------------------------------//
 router.get("/course", controller.course); //toàn bộ course

@@ -56,7 +56,7 @@ const FormDialog = ({ open, handleClose, currentUser }) => {
     setBending((state) => false);
     window.location.reload();
   };
-
+  console.log(inputs);
   return bending ? (
     <Loading />
   ) : (
