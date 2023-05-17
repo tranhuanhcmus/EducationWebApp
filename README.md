@@ -4,16 +4,16 @@
 </p>
 <h1 align="center"> Education English Web App </h1>
 
-##Introduce about app:
+## Introduce about app:
 
 1. Front-end :smile:: **REACT**, **TailwindCSS**, **MaterialUI**
 2.  Back-end :smile:: **NodeJs (Express)**
    
-##Role: 
+## Role: 
 1. Student
 2. Teacher
 
-##Main Function:
+## Main Function:
 
 1.  User learning English by in Course by video which is upload by teacher
 2.  User register, login and buy Course (Cart support -> checkout by MOMO)
