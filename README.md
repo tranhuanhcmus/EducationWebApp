@@ -8,6 +8,7 @@
 
 1. Front-end :smile:: **REACT**, **TailwindCSS**, **MaterialUI**
 2.  Back-end :smile:: **NodeJs (Express)**
+3.  My activities: Front-end in sections: Courses, Lessons, Blogs, Authorization, Main Page, Back-end in buid APIs, Procedures in DB
    
 ## Role: 
 1. Student
